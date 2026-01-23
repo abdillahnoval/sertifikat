@@ -14,7 +14,7 @@ const defaultData = [
         "thumbnail": "thumbnail/Seminar.png",
         "link_download": "unduh.html",
         "template_img": "draf/sertifikat1.pdf",
-        "google_sheet_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTi4-GK61bb1DuA2slzN6Z2fCDmlKtR01NZYSAEwlzrcr5l1So1C3NPIRQUcB1iInU-eWD4u53R9fY9/pub?gid=0&single=true&output=csv",
+        "google_sheet_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vSUVFsnZVJjINRGrMQz_ebopi5z-VBzE1D_yILKy14pWaObVclk39tb_kQlg4CEq1Jtmq1MW07HEQOu/pub?gid=0&single=true&output=csv",
         "layout": [
             {
                 "id": 1,
