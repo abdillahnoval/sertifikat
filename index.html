@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Sertifikat - PGRI Situbondo</title>
+    <link rel="icon" type="image/png" href="assets/Logo PGRI.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    
+    <style>
+        /* GLOBAL RESET & VARIABLES */
+        * { box-sizing: border-box; }
+
+        :root {
+            --primary-green: #10b981; --primary-hover: #059669; --bg-body: #f1f5f9;
+            --bg-card: #ffffff; --text-main: #1e293b; --text-muted: #64748b;
+            --border-color: #e2e8f0; --input-bg: #f8fafc;
+            --navbar-height: 70px;
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* DARK MODE */
+        body.dark-mode {
+            --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f1f5f9;
+            --text-muted: #94a3b8; --border-color: #334155; --input-bg: #334155;
+            --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif; background-color: var(--bg-body);
+            color: var(--text-main); margin: 0; min-height: 100vh;
+            display: flex; flex-direction: column; font-size: 13px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            height: var(--navbar-height); background: var(--bg-card);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center;
+            padding: 0 25px; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border-color);
+        }
+        
+        .brand-identity {
+            font-size: 16px; font-weight: 700; color: var(--text-main);
+            letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px;
+            text-decoration: none;
+        }
+        .brand-identity i { color: var(--primary-green); font-size: 18px; }
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        
+        /* TOMBOL CEK SERTIFIKAT (Revisi: Sama persis dengan tombol Kembali) */
+        .btn-scan {
+            background: rgba(16, 185, 129, 0.1); /* Soft Green */
+            color: var(--primary-green);
+            padding: 8px 16px; /* Padding lebih ringkas */
+            border-radius: 8px; /* Sudut tumpul (bukan bulat penuh/50px) */
+            font-size: 12px; font-weight: 600; /* Font size dikecilkan dikit */
+            text-decoration: none; transition: 0.2s; border: none; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; 
+        }
+        .btn-scan:hover { 
+            background: var(--primary-green); 
+            color: white; 
+            transform: translateY(-1px);
+        }
+
+        .theme-toggle {
+            background: var(--input-bg); border: 1px solid var(--border-color);
+            color: var(--text-main); width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
+        }
+        .theme-toggle:hover { background: #e2e8f0; color: var(--primary-green); }
+
+        /* HERO SECTION */
+        .hero {
+            text-align: center; padding: 50px 20px 40px;
+            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-body) 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .hero h1 { font-size: 24px; margin: 0 0 8px; color: var(--text-main); font-weight: 700; }
+        .hero p { color: var(--text-muted); max-width: 500px; margin: 0 auto 25px; font-size: 13px; line-height: 1.6; }
+        .hero span { color: var(--primary-green); }
+
+        /* SEARCH */
+        .search-box { position: relative; max-width: 450px; margin: 0 auto; }
+        .search-input {
+            width: 100%; padding: 12px 20px 12px 45px;
+            border: 1px solid var(--border-color); border-radius: 50px;
+            background: var(--bg-card); font-size: 13px; color: var(--text-main);
+            box-shadow: var(--shadow-sm); outline: none; transition: 0.3s;
+        }
+        .search-input:focus { border-color: var(--primary-green); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 18px; }
+
+        /* GRID CONTAINER */
+        .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; flex: 1; width: 100%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+        /* CARD DESIGN */
+        .card {
+            background: var(--bg-card); border-radius: 12px; overflow: hidden;
+            box-shadow: var(--shadow-card); border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column;
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); border-color: var(--primary-green); }
+
+        .card-thumb { width: 100%; height: 150px; object-fit: cover; background: #e2e8f0; border-bottom: 1px solid var(--border-color); }
+        .card-body { padding: 15px; flex: 1; display: flex; flex-direction: column; }
+        
+        .status-badge {
+            display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase;
+            padding: 3px 8px; border-radius: 6px; margin-bottom: 8px; width: fit-content; letter-spacing: 0.3px;
+        }
+        .badge-aktif { background: #ecfdf5; color: #047857; border: 1px solid #d1fae5; }
+        .badge-non { background: #f3f4f6; color: #4b5563; border: 1px solid #e5e7eb; }
+
+        .card-title { font-size: 14px; font-weight: 700; margin: 0 0 6px; color: var(--text-main); line-height: 1.4; }
+        .card-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; }
+        
+        .meta-info { 
+            font-size: 11px; color: var(--text-muted); margin-top: auto; 
+            padding-top: 12px; border-top: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 6px; font-weight: 500;
+        }
+
+        .btn-download {
+            display: flex; justify-content: center; align-items: center; gap: 6px;
+            width: 100%; text-align: center; background: var(--primary-green); color: white;
+            padding: 10px; border-radius: 8px; font-weight: 600; text-decoration: none;
+            margin-top: 15px; transition: 0.2s; border: none; font-size: 12px;
+        }
+        .btn-download:hover { background: var(--primary-hover); }
+        .btn-disabled { background: #e2e8f0 !important; color: #94a3b8 !important; cursor: not-allowed; pointer-events: none; }
+        body.dark-mode .btn-disabled { background: #334155 !important; color: #64748b !important; }
+
+        /* FOOTER */
+        footer { text-align: center; padding: 25px; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border-color); background: var(--bg-card); }
+        .admin-link { color: var(--text-muted); text-decoration: none; font-weight: 600; margin-left: 5px; }
+        .admin-link:hover { color: var(--primary-green); }
+
+        /* --- SCANNER MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 100; display: none;
+            align-items: center; justify-content: center; backdrop-filter: blur(5px);
+        }
+        .scanner-card {
+            background: var(--bg-card); width: 90%; max-width: 400px;
+            border-radius: 20px; overflow: hidden; position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex; flex-direction: column; 
+        }
+        .scanner-header {
+            padding: 15px 20px; background: var(--bg-card); border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center; z-index: 2;
+        }
+        
+        .scanner-body { 
+            position: relative; width: 100%; aspect-ratio: 1/1; 
+            background: #000; overflow: hidden;
+        }
+        #reader { width: 100%; height: 100%; object-fit: cover; }
+        
+        .scanner-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 10;
+            background: 
+                linear-gradient(to right, var(--primary-green) 4px, transparent 4px) 0 0,
+                linear-gradient(to bottom, var(--primary-green) 4px, transparent 4px) 0 0,
+                linear-gradient(to left, var(--primary-green) 4px, transparent 4px) 100% 0,
+                linear-gradient(to bottom, var(--primary-green) 4px, transparent 4px) 100% 0,
+                linear-gradient(to right, var(--primary-green) 4px, transparent 4px) 0 100%,
+                linear-gradient(to top, var(--primary-green) 4px, transparent 4px) 0 100%,
+                linear-gradient(to left, var(--primary-green) 4px, transparent 4px) 100% 100%,
+                linear-gradient(to top, var(--primary-green) 4px, transparent 4px) 100% 100%;
+            background-repeat: no-repeat;
+            background-size: 40px 40px;
+            margin: 20px; width: calc(100% - 40px); height: calc(100% - 40px);
+            opacity: 0.6; box-shadow: 0 0 0 100vmax rgba(0,0,0,0.5); 
+        }
+
+        .close-scanner {
+            background: rgba(0,0,0,0.05); border: none; color: var(--text-main);
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .close-scanner:hover { background: rgba(0,0,0,0.1); color: #ef4444; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 20px; } .grid { grid-template-columns: 1fr; } .container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="#" class="brand-identity">
+            <i class="ph ph-certificate"></i>
+            <span>Sertifikat Builder</span>
+        </a>
+        <div class="nav-right">
+            <button class="theme-toggle" onclick="toggleDarkMode()">
+                <i class="ph ph-moon" id="themeIcon"></i>
+            </button>
+            <button class="btn-scan" onclick="openScanner()">
+                <i class="ph ph-qr-code" style="font-size:16px;"></i> 
+                <span>Cek Sertifikat</span>
+            </button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Portal <span>E-Sertifikat</span> Resmi</h1>
+        <p>Unduh sertifikat kegiatan seminar dan workshop PGRI Kabupaten Situbondo dengan mudah dan cepat.</p>
+        <div class="search-box">
+            <i class="ph ph-magnifying-glass search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari nama kegiatan..." onkeyup="filterData()">
+        </div>
+    </section>
+
+    <div class="container">
+        <div id="certGrid" class="grid"></div>
+        <div id="emptyState" style="display:none; text-align:center; padding:40px; color:var(--text-muted);">
+            <i class="ph ph-warning-circle" style="font-size:32px; margin-bottom:10px;"></i><br>
+            Tidak ada kegiatan yang ditemukan.
+        </div>
+    </div>
+
+    <div id="scanModal" class="modal-overlay">
+        <div class="scanner-card">
+            <div class="scanner-header">
+                <h4 style="margin:0; font-size:16px; font-weight:700; color:var(--text-main);">Scan QR Code</h4>
+                <button onclick="closeScanner()" class="close-scanner"><i class="ph ph-x" style="font-size:18px;"></i></button>
+            </div>
+            
+            <div class="scanner-body">
+                <div id="reader"></div>
+                <div class="scanner-overlay"></div>
+            </div>
+
+            <div style="padding:15px; text-align:center; color:var(--text-muted); font-size:12px; background:var(--bg-card); border-top:1px solid var(--border-color);">
+                Arahkan kamera ke QR Code. Pastikan cahaya cukup.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 PGRI Kabupaten Situbondo. All rights reserved. 
+        <a href="#" class="admin-link"><i class="ph ph-lock-key"></i> Noval Abdillah</a>
+    </footer>
+
+    <script>
+        var versi = new Date().getTime();
+        document.write('<script src="js/db_sertifikat.js?v=' + versi + '"><\/script>');
+    </script>
+
+    <script>
+        // 1. THEME MODE
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('themeIcon');
+            const isDark = document.body.classList.contains('dark-mode');
+            icon.classList.replace(isDark ? 'ph-moon' : 'ph-sun', isDark ? 'ph-sun' : 'ph-moon');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+        if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
+
+        // 2. RENDER DATA
+        function renderCertificates(data) {
+            const grid = document.getElementById('certGrid');
+            const empty = document.getElementById('emptyState');
+            grid.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                grid.style.display = 'none'; empty.style.display = 'block'; return;
+            }
+
+            grid.style.display = 'grid'; empty.style.display = 'none';
+
+            data.forEach(item => {
+                const isActive = item.status === "Aktif";
+                const badgeClass = isActive ? "badge-aktif" : "badge-non";
+                const btnClass = isActive ? "btn-download" : "btn-download btn-disabled";
+                const btnText = isActive ? "Unduh Sertifikat" : "Belum Tersedia";
+                const btnLink = isActive ? `unduh.html?id=${item.id}` : "#"; 
+                const thumb = item.thumbnail || "https://placehold.co/600x400/e2e8f0/1e293b?text=No+Image";
+
+                const cardHTML = `
+                    <div class="card">
+                        <img src="${thumb}" class="card-thumb" onerror="this.src='https://placehold.co/600x400/e2e8f0/1e293b?text=Image+Error'">
+                        <div class="card-body">
+                            <span class="status-badge ${badgeClass}">${item.status}</span>
+                            <h3 class="card-title">${item.judul}</h3>
+                            <p class="card-desc">${item.deskripsi ? item.deskripsi : 'Tidak ada deskripsi.'}</p>
+                            <div class="meta-info">
+                                <i class="ph ph-calendar-blank"></i> ${item.tgl_mulai || '-'}
+                                <span style="margin:0 5px">•</span>
+                                <i class="ph ph-microphone-stage"></i> ${item.narasumber || '-'}
+                            </div>
+                            <a href="${btnLink}" class="${btnClass}">
+                                ${isActive ? '<i class="ph ph-download-simple"></i>' : '<i class="ph ph-lock-key"></i>'} ${btnText}
+                            </a>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+
+        // --- 3. SCANNER LOGIC ---
+        let html5QrCode;
+
+        function openScanner() {
+            document.getElementById('scanModal').style.display = 'flex';
+            setTimeout(() => {
+                if (html5QrCode) {
+                    html5QrCode.stop().then(() => { html5QrCode.clear(); startCamera(); }).catch(() => startCamera());
+                } else {
+                    startCamera();
+                }
+            }, 200);
+        }
+
+        function startCamera() {
+            html5QrCode = new Html5Qrcode("reader");
+            const config = { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
+            html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
+            .catch(err => {
+                console.error("Gagal akses kamera", err);
+                alert("Gagal mengakses kamera. Pastikan izin kamera diberikan.");
+                closeScanner();
+            });
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            if(html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    html5QrCode.clear();
+                    document.getElementById('scanModal').style.display = 'none';
+                    if (decodedText.startsWith("http")) {
+                        window.location.href = decodedText;
+                    } else {
+                        window.location.href = "ceksertifikat.html?id=" + encodeURIComponent(decodedText);
+                    }
+                }).catch(err => console.error("Failed to stop scanner", err));
+            }
+        }
+
+        function onScanFailure(error) {}
+
+        function closeScanner() {
+            document.getElementById('scanModal').style.display = 'none';
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => html5QrCode.clear()).catch(err => console.log("Stop failed", err));
+            }
+        }
+
+        // 4. FILTER
+        function filterData() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if(typeof dbSertifikat === 'undefined') return;
+            const filtered = dbSertifikat.filter(item => 
+                item.judul.toLowerCase().includes(query) || (item.deskripsi && item.deskripsi.toLowerCase().includes(query))
+            );
+            renderCertificates(filtered);
+        }
+
+        // 5. INIT
+        setTimeout(() => {
+            if(typeof dbSertifikat !== 'undefined') { renderCertificates(dbSertifikat); } 
+            else { document.getElementById('certGrid').innerHTML = '<p style="text-align:center;">Gagal memuat database.</p>'; }
+        }, 100);
+
+    </script>
+</body>
+</html>

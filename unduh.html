@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unduh Sertifikat - PGRI Situbondo</title>
+    <link rel="icon" type="image/png" href="assets/Logo PGRI.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        /* GLOBAL RESET & VARIABLES */
+        * { box-sizing: border-box; }
+
+        :root {
+            /* COLORS */
+            --primary-green: #10b981;
+            --primary-hover: #059669;
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --input-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            
+            /* DIMENSIONS */
+            --navbar-height: 70px;
+            
+            /* SHADOWS */
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* DARK MODE */
+        body.dark-mode {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --input-bg: #334155;
+            --border-color: #334155;
+            --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            font-size: 13px; /* Disamakan dengan Setting & Admin */
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            height: var(--navbar-height);
+            background: var(--bg-card);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.02); 
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 25px; 
+            position: sticky; top: 0; z-index: 50;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .brand-identity {
+            font-size: 16px; font-weight: 700; color: var(--text-main);
+            letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px;
+            text-decoration: none;
+        }
+        .brand-identity i { color: var(--primary-green); font-size: 18px; }
+        
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        
+        .btn-back {
+            background: rgba(16, 185, 129, 0.1); color: var(--primary-green);
+            padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
+            text-decoration: none; transition: 0.2s; display: flex; align-items: center; gap: 6px;
+        }
+        .btn-back:hover { background: var(--primary-green); color: white; }
+
+        .theme-toggle {
+            background: var(--input-bg); border: 1px solid var(--border-color);
+            color: var(--text-main); width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
+        }
+        .theme-toggle:hover { background: #e2e8f0; color: var(--primary-green); }
+
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            padding: 40px 20px; max-width: 800px; margin: 0 auto; width: 100%;
+        }
+
+        .title-section { text-align: center; margin-bottom: 30px; }
+        .title-section h1 { font-size: 24px; margin: 0 0 8px; color: var(--text-main); font-weight: 700; }
+        .title-section p { color: var(--text-muted); font-size: 13px; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        .highlight { color: var(--primary-green); }
+
+        /* --- SEARCH CARD --- */
+        .search-card {
+            background: var(--bg-card); width: 100%; padding: 30px;
+            border-radius: 12px; box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color); text-align: center;
+            transition: 0.3s;
+        }
+
+        .search-box {
+            position: relative; max-width: 450px; margin: 0 auto 20px;
+        }
+        .search-input {
+            width: 100%; padding: 12px 20px 12px 45px;
+            border: 1px solid var(--border-color); border-radius: 50px;
+            background: var(--input-bg); font-size: 13px; color: var(--text-main);
+            outline: none; transition: 0.3s;
+        }
+        .search-input:focus { border-color: var(--primary-green); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); background: var(--bg-card); }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 18px; }
+
+        .btn-search {
+            background: var(--primary-green); color: white; border: none;
+            padding: 10px 25px; border-radius: 50px; font-weight: 600; cursor: pointer;
+            font-size: 13px; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); transition: 0.2s;
+        }
+        .btn-search:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        /* RESULT LIST */
+        .result-list { margin-top: 25px; list-style: none; padding: 0; text-align: left; }
+        .result-item {
+            background: var(--bg-body); border: 1px solid var(--border-color);
+            padding: 12px 18px; border-radius: 8px; margin-bottom: 8px;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            transition: 0.2s;
+        }
+        .result-item:hover { border-color: var(--primary-green); background: rgba(16, 185, 129, 0.05); }
+        .user-name { font-weight: 600; color: var(--text-main); display: block; font-size: 13px; }
+        .user-inst { font-size: 11px; color: var(--text-muted); }
+
+        /* --- PREVIEW SECTION --- */
+        .preview-section {
+            display: none; width: 100%;
+            background: var(--bg-card); padding: 30px;
+            border-radius: 12px; box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color); text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .canvas-wrapper {
+            background: var(--bg-body); padding: 15px; border-radius: 8px;
+            overflow: auto; margin-bottom: 25px; border: 1px solid var(--border-color);
+        }
+        canvas { max-width: 100%; height: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        .btn-download {
+            background: #2563eb; color: white; padding: 12px 35px;
+            border-radius: 50px; font-weight: 600; border: none; cursor: pointer;
+            font-size: 14px; display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); transition: 0.2s;
+        }
+        .btn-download:hover { background: #1d4ed8; transform: translateY(-2px); }
+        .btn-cancel {
+            background: transparent; color: var(--text-muted); border: 1px solid var(--border-color);
+            padding: 12px 25px; border-radius: 50px; font-weight: 600; cursor: pointer; margin-right: 10px; font-size: 13px;
+        }
+        .btn-cancel:hover { background: var(--bg-body); color: var(--text-main); }
+
+        .loader { color: var(--primary-green); font-weight: 600; margin-top: 20px; display: none; font-size: 13px; }
+        .error-msg { color: #ef4444; margin-top: 15px; font-size: 12px; display: none; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .title-section h1 { font-size: 20px; }
+            .search-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand-identity">
+            <i class="ph ph-certificate"></i>
+            <span>Sertifikat Builder</span>
+        </a>
+        <div class="nav-right">
+            <button class="theme-toggle" onclick="toggleDarkMode()">
+                <i class="ph ph-moon" id="themeIcon"></i>
+            </button>
+            <a href="index.html" class="btn-back"><i class="ph ph-arrow-left"></i> Kembali</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        
+        <div class="title-section">
+            <h1 id="pageTitle">Memuat Kegiatan...</h1>
+            <p id="pageDesc">Silakan tunggu sebentar, kami sedang menyiapkan data sertifikat Anda.</p>
+        </div>
+
+        <div id="searchPanel" class="search-card">
+            <div class="search-box">
+                <i class="ph ph-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Masukkan nama lengkap Anda..." onkeypress="handleEnter(event)">
+            </div>
+            <button class="btn-search" onclick="cariData()">Cari Sertifikat</button>
+            
+            <div id="loader" class="loader"><i class="ph ph-spinner ph-spin"></i> Mencari data...</div>
+            <div id="errorBox" class="error-msg"></div>
+            <ul id="resultList" class="result-list"></ul>
+        </div>
+
+        <div id="previewPanel" class="preview-section">
+            <h2 style="margin-top:0; font-size:18px; color:var(--text-main);">Preview Sertifikat</h2>
+            <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Pastikan data nama dan instansi sudah benar.</p>
+            
+            <div class="canvas-wrapper">
+                <canvas id="previewCanvas"></canvas>
+            </div>
+
+            <button class="btn-cancel" onclick="resetSearch()">Cari Nama Lain</button>
+            <button id="btnDownload" class="btn-download" onclick="downloadPDF()">
+                <i class="ph ph-download-simple"></i> Download PDF (HD)
+            </button>
+            <div id="processMsg" style="margin-top:15px; color:var(--primary-green); font-size:12px; display:none;">
+                <i class="ph ph-spinner ph-spin"></i> Sedang memproses PDF kualitas tinggi...
+            </div>
+        </div>
+
+    </div>
+
+    <div id="qr-generator" style="display:none;"></div>
+
+    <script>
+        var versi = new Date().getTime();
+        document.write('<script src="js/db_sertifikat.js?v=' + versi + '"><\/script>');
+    </script>
+
+    <script>
+        // --- 1. SETUP & INIT ---
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        const { jsPDF } = window.jspdf;
+
+        let currentCert = null; 
+        let csvData = []; 
+        let csvHeader = [];
+        let selectedRow = null; 
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const certId = urlParams.get('id');
+
+        window.onload = function() {
+            if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
+
+            setTimeout(() => {
+                if (typeof dbSertifikat === 'undefined') {
+                    showError("Gagal memuat database sistem."); return;
+                }
+                
+                // Cari Data Kegiatan
+                currentCert = dbSertifikat.find(x => x.id === certId);
+
+                if (!currentCert) {
+                    // Fallback (Development Only)
+                    if(dbSertifikat.length > 0) currentCert = dbSertifikat[0];
+                    else return alert("Data kegiatan kosong.");
+                }
+
+                if (currentCert.status !== "Aktif") {
+                    alert("Sertifikat belum aktif.");
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                document.getElementById('pageTitle').innerHTML = `Unduh Sertifikat <span class="highlight">${currentCert.judul}</span>`;
+                document.getElementById('pageDesc').innerText = currentCert.deskripsi;
+
+            }, 200);
+        };
+
+        // --- 2. PARSER CSV (Simple) ---
+        function parseCSVLine(text) {
+            return text.split(',').map(s => s.trim().replace(/^"|"$/g, ''));
+        }
+
+        // --- 3. SEARCH LOGIC ---
+        async function cariData() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const list = document.getElementById('resultList');
+            const loader = document.getElementById('loader');
+            const errBox = document.getElementById('errorBox');
+
+            if (!keyword) return alert("Masukkan nama Anda!");
+            if (!currentCert.google_sheet_url) return showError("Database belum diatur.");
+
+            list.innerHTML = '';
+            errBox.style.display = 'none';
+            loader.style.display = 'block';
+
+            try {
+                if (csvData.length === 0) {
+                    const resp = await fetch(currentCert.google_sheet_url);
+                    if (!resp.ok) throw new Error("Gagal akses CSV (Cek Link).");
+                    
+                    const text = await resp.text();
+                    const rows = text.split('\n').filter(r => r.trim() !== '');
+                    
+                    if(rows.length === 0) throw new Error("Data CSV Kosong.");
+
+                    csvHeader = parseCSVLine(rows[0]).map(h => h.toLowerCase());
+                    csvData = rows.slice(1).map(r => parseCSVLine(r));
+                }
+
+                const results = csvData.filter(r => r.join(' ').toLowerCase().includes(keyword));
+                loader.style.display = 'none';
+
+                if (results.length === 0) {
+                    list.innerHTML = `<li style="text-align:center; padding:20px; color:var(--text-muted);">Data tidak ditemukan.</li>`;
+                } else {
+                    results.forEach(row => {
+                        let idxNama = csvHeader.findIndex(h => h.includes('nama'));
+                        if(idxNama === -1) idxNama = 1; 
+                        let idxInst = csvHeader.findIndex(h => h.includes('instansi') || h.includes('sekolah'));
+                        if(idxInst === -1) idxInst = 2; 
+
+                        const valNama = row[idxNama] || "Tanpa Nama";
+                        const valInst = row[idxInst] || "-";
+                        
+                        const li = document.createElement('li');
+                        li.className = 'result-item';
+                        li.innerHTML = `
+                            <div>
+                                <span class="user-name">${valNama}</span>
+                                <span class="user-inst">${valInst}</span>
+                            </div>
+                            <i class="ph ph-caret-right" style="color:var(--primary-green);"></i>
+                        `;
+                        li.onclick = () => showPreview(row);
+                        list.appendChild(li);
+                    });
+                }
+
+            } catch (err) {
+                loader.style.display = 'none';
+                showError("Error: " + err.message);
+            }
+        }
+
+        function handleEnter(e) { if(e.key === 'Enter') cariData(); }
+
+        // --- 4. PREVIEW & OVERLAY ---
+        async function showPreview(row) {
+            selectedRow = row;
+            document.getElementById('searchPanel').style.display = 'none';
+            document.getElementById('previewPanel').style.display = 'block';
+            
+            const canvas = document.getElementById('previewCanvas');
+            await renderPageToCanvas(1, canvas, true);
+        }
+
+        async function renderPageToCanvas(pageNum, targetCanvas, withOverlay) {
+            const ctx = targetCanvas.getContext('2d');
+            const pdfUrl = currentCert.template_img || "draf/draf_sertifikat1.pdf";
+
+            const loadingTask = pdfjsLib.getDocument(pdfUrl);
+            const pdf = await loadingTask.promise;
+            const page = await pdf.getPage(pageNum);
+
+            const scale = 1.5; 
+            const viewport = page.getViewport({scale: scale});
+
+            targetCanvas.width = viewport.width;
+            targetCanvas.height = viewport.height;
+
+            await page.render({canvasContext: ctx, viewport: viewport}).promise;
+
+            if (withOverlay && currentCert.layout) {
+                await drawOverlay(ctx, scale);
+            }
+        }
+
+        async function drawOverlay(ctx, scaleFactor) {
+            const clean = (val) => val ? val.replace(/"/g, '').trim() : '';
+
+            const getDataByHeader = (keyRaw) => {
+                const key = keyRaw.trim().toLowerCase();
+                let colIdx = csvHeader.findIndex(h => h === key || h.includes(key));
+                
+                if (colIdx === -1) {
+                    if (key.includes('nama')) colIdx = 1;
+                    else if (key.includes('instansi')) colIdx = 2;
+                    else if (key.includes('kecamatan')) colIdx = 3; 
+                    else if (key.includes('kabupaten')) colIdx = 4;
+                    else if (key.includes('id') || key.includes('nomor')) colIdx = 0;
+                }
+
+                if (colIdx !== -1 && selectedRow[colIdx]) return clean(selectedRow[colIdx]);
+                return `[${keyRaw}?]`;
+            };
+
+            for (let el of currentCert.layout) {
+                const x = el.x * scaleFactor;
+                const y = el.y * scaleFactor;
+                const size = el.size * scaleFactor;
+
+                if (el.type === 'text') {
+                    let textToDraw = el.text;
+                    textToDraw = textToDraw.replace(/<<([^>>]+)>>/g, (match, keyContent) => {
+                        return getDataByHeader(keyContent);
+                    });
+
+                    ctx.save();
+                    const fontStyle = el.bold ? "bold" : "normal";
+                    ctx.font = `${fontStyle} ${size}px ${el.font || 'Poppins'}`;
+                    ctx.fillStyle = el.color || '#000';
+                    ctx.textAlign = el.align || 'left';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(textToDraw, x, y);
+                    ctx.restore();
+                } 
+                else if (el.type === 'qr') {
+                    // --- UPDATE: QR CODE LOGIC (URL Validasi + ID) ---
+                    const baseUrl = currentCert.base_url_validasi || "https://pgri-situbondo.or.id/cek?id=";
+                    
+                    // Cari ID dari CSV (prioritas kolom 'id', 'no', 'nomor')
+                    let idPeserta = getDataByHeader('id');
+                    if (idPeserta.includes("?")) idPeserta = getDataByHeader('no'); 
+                    
+                    // Jika masih tidak ketemu, gunakan Nama (Not Recommended tapi better than nothing)
+                    if (idPeserta.includes("?")) idPeserta = encodeURIComponent(getDataByHeader('nama'));
+
+                    const qrText = baseUrl + idPeserta;
+                    
+                    const qrImg = await createQR(qrText);
+                    if(qrImg) ctx.drawImage(qrImg, x, y, size, size);
+                }
+            }
+        }
+
+        // --- 5. DOWNLOAD PDF (FIXED BLANK PAGE) ---
+        async function downloadPDF() {
+            const btn = document.getElementById('btnDownload');
+            const msg = document.getElementById('processMsg');
+            btn.style.opacity = '0.5'; btn.style.pointerEvents = 'none';
+            msg.style.display = 'block';
+
+            try {
+                const pdfUrl = currentCert.template_img;
+                const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+                
+                const page1 = await pdf.getPage(1);
+                const viewport1 = page1.getViewport({scale: 1.0});
+                const width = viewport1.width;
+                const height = viewport1.height;
+                const orient = width > height ? 'l' : 'p';
+
+                // Inisialisasi jsPDF
+                const doc = new jsPDF({ orientation: orient, unit: 'pt', format: [width, height] });
+
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    // Logic Halaman: Jika bukan halaman pertama, tambah halaman baru
+                    if (i > 1) {
+                        doc.addPage([width, height], orient);
+                    }
+
+                    const page = await pdf.getPage(i);
+                    const scale = 3.0; // High Quality
+                    const viewport = page.getViewport({scale: scale});
+                    
+                    const canvas = document.createElement('canvas');
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    const ctx = canvas.getContext('2d');
+
+                    await page.render({canvasContext: ctx, viewport: viewport}).promise;
+
+                    if (i === 1 && currentCert.layout) {
+                        await drawOverlay(ctx, scale);
+                    }
+
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    
+                    // Masukkan gambar ke halaman saat ini
+                    doc.setPage(i);
+                    doc.addImage(imgData, 'JPEG', 0, 0, width, height);
+                }
+
+                // Nama File Dinamis
+                let idxNama = csvHeader.findIndex(h => h.includes('nama'));
+                if(idxNama === -1) idxNama = 1;
+                let namaFile = selectedRow[idxNama] ? selectedRow[idxNama].replace(/[^a-zA-Z0-9]/g, '_') : 'Sertifikat';
+                
+                doc.save(`Sertifikat_${namaFile}.pdf`);
+
+            } catch (err) {
+                alert("Gagal download: " + err.message);
+                console.error(err);
+            } finally {
+                btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
+                msg.style.display = 'none';
+            }
+        }
+
+        // Helper
+        function createQR(text) {
+            return new Promise(resolve => {
+                const div = document.getElementById('qr-generator');
+                div.innerHTML = '';
+                new QRCode(div, { text: text, width: 500, height: 500 });
+                setTimeout(() => {
+                    const img = div.querySelector('img');
+                    if(img) resolve(img); else resolve(null);
+                }, 100);
+            });
+        }
+
+        function resetSearch() {
+            document.getElementById('searchPanel').style.display = 'block';
+            document.getElementById('previewPanel').style.display = 'none';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('resultList').innerHTML = '';
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('errorBox');
+            el.style.display = 'block';
+            el.innerHTML = msg;
+        }
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('themeIcon');
+            const isDark = document.body.classList.contains('dark-mode');
+            icon.classList.replace(isDark ? 'ph-moon' : 'ph-sun', isDark ? 'ph-sun' : 'ph-moon');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+    </script>
+</body>
+</html>

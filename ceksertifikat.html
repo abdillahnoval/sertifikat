@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validasi Sertifikat - PGRI Situbondo</title>
+    <link rel="icon" type="image/png" href="assets/Logo PGRI.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        /* GLOBAL RESET & VARIABLES (Konsisten dengan Unduh/Index) */
+        * { box-sizing: border-box; }
+
+        :root {
+            /* COLORS */
+            --primary-green: #10b981;
+            --primary-hover: #059669;
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --input-bg: #f8fafc;
+            
+            /* DIMENSIONS */
+            --navbar-height: 70px;
+            
+            /* SHADOWS */
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            
+            /* STATUS COLORS */
+            --status-valid-bg: #dcfce7; --status-valid-text: #166534;
+            --status-invalid-bg: #fee2e2; --status-invalid-text: #991b1b;
+        }
+
+        /* DARK MODE */
+        body.dark-mode {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --input-bg: #334155;
+            --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --status-valid-bg: #064e3b; --status-valid-text: #6ee7b7;
+            --status-invalid-bg: #7f1d1d; --status-invalid-text: #fca5a5;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            font-size: 13px; /* Standar Ukuran Font */
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* --- NAVBAR (Sama Persis dengan Index/Unduh) --- */
+        .navbar {
+            height: var(--navbar-height);
+            background: var(--bg-card);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.02); 
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 25px; 
+            position: sticky; top: 0; z-index: 50;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .brand-identity {
+            font-size: 16px; font-weight: 700; color: var(--text-main);
+            letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px;
+            text-decoration: none;
+        }
+        .brand-identity i { color: var(--primary-green); font-size: 18px; }
+        
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        
+        .theme-toggle {
+            background: var(--input-bg); border: 1px solid var(--border-color);
+            color: var(--text-main); width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
+        }
+        .theme-toggle:hover { background: #e2e8f0; color: var(--primary-green); }
+
+        /* --- MAIN CONTENT --- */
+        .main-container {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px 20px; width: 100%;
+        }
+
+        /* --- VALIDATION CARD --- */
+        .validation-card {
+            background: var(--bg-card); width: 100%; max-width: 480px;
+            border-radius: 16px; box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color); text-align: center;
+            overflow: hidden; position: relative;
+            animation: slideUp 0.5s ease;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card-header { padding: 35px 30px 20px; border-bottom: 1px dashed var(--border-color); }
+        
+        .status-icon {
+            width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px;
+        }
+        .icon-valid { background: var(--status-valid-bg); color: var(--status-valid-text); }
+        .icon-invalid { background: var(--status-invalid-bg); color: var(--status-invalid-text); }
+
+        .status-title { font-size: 18px; font-weight: 700; margin: 0 0 5px; color: var(--text-main); }
+        .status-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0; }
+
+        /* DATA DETAILS */
+        .data-container { padding: 25px 30px; text-align: left; }
+        
+        .data-row {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 12px; font-size: 13px;
+        }
+        .data-row:last-child { margin-bottom: 0; }
+        
+        .label { color: var(--text-muted); width: 110px; font-weight: 500; flex-shrink: 0; }
+        .value { color: var(--text-main); font-weight: 600; flex: 1; text-align: right; word-break: break-word;}
+
+        .event-info {
+            margin-top: 20px; text-align: center; 
+            background: var(--input-bg); padding: 15px; border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .event-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 5px; }
+        .event-title { font-weight: 700; font-size: 13px; color: var(--primary-green); margin-bottom: 4px; display: block; line-height: 1.4;}
+        .event-date { font-size: 12px; color: var(--text-muted); }
+
+        /* LOADER */
+        .loader-container { text-align: center; }
+        .spinner { font-size: 32px; color: var(--primary-green); animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* FOOTER */
+        footer {
+            text-align: center; padding: 25px; color: var(--text-muted); font-size: 12px;
+            margin-top: auto; border-top: 1px solid var(--border-color); background: var(--bg-card);
+            width: 100%;
+        }
+        
+        /* BTN BACK HOME */
+        .btn-home {
+            display: inline-flex; align-items: center; gap: 8px;
+            margin-top: 20px; padding: 10px 20px;
+            background: var(--input-bg); color: var(--text-main);
+            border-radius: 50px; text-decoration: none; font-weight: 600;
+            font-size: 12px; border: 1px solid var(--border-color); transition: 0.2s;
+        }
+        .btn-home:hover { background: var(--border-color); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand-identity">
+            <i class="ph ph-certificate"></i>
+            <span>Sertifikat Builder</span>
+        </a>
+        <div class="nav-right">
+            <button class="theme-toggle" onclick="toggleDarkMode()">
+                <i class="ph ph-moon" id="themeIcon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        
+        <div id="loadingView" class="loader-container">
+            <i class="ph ph-spinner spinner"></i>
+            <h3 style="margin:0; font-size:16px; color:var(--text-main);">Memverifikasi Data...</h3>
+            <p style="color:var(--text-muted); font-size:13px; margin-top:5px;">Mohon tunggu sebentar.</p>
+        </div>
+
+        <div id="validView" class="validation-card" style="display:none;">
+            <div class="card-header">
+                <div class="status-icon icon-valid"><i class="ph ph-seal-check"></i></div>
+                <h2 class="status-title">Sertifikat Valid</h2>
+                <p class="status-desc">Dokumen ini tercatat resmi di database<br>PGRI Kabupaten Situbondo.</p>
+            </div>
+            
+            <div class="data-container">
+                <div class="data-row">
+                    <span class="label">ID Peserta</span>
+                    <span class="value" id="valID">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">Nama Lengkap</span>
+                    <span class="value" id="valNama">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">Instansi</span>
+                    <span class="value" id="valInstansi">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="label">Kecamatan</span>
+                    <span class="value" id="valKecamatan">-</span>
+                </div>
+
+                <div class="event-info">
+                    <span class="event-label">Kegiatan</span>
+                    <span class="event-title" id="valEventTitle">-</span>
+                    <span class="event-date" id="valEventDate">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="invalidView" class="validation-card" style="display:none;">
+            <div class="card-header">
+                <div class="status-icon icon-invalid"><i class="ph ph-warning-circle"></i></div>
+                <h2 class="status-title">Data Tidak Ditemukan</h2>
+                <p class="status-desc">Maaf, ID atau data sertifikat ini tidak ditemukan di database kami.</p>
+            </div>
+            <div class="data-container" style="text-align:center;">
+                <p style="font-size:13px; color:var(--text-muted); margin-bottom:10px;">
+                    Pastikan Anda memindai QR Code yang benar dari sertifikat asli.
+                </p>
+                <a href="index.html" class="btn-home">
+                    <i class="ph ph-house"></i> Kembali ke Beranda
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2026 PGRI Kabupaten Situbondo. <br>Halaman Validasi Keaslian Dokumen Digital.
+    </footer>
+
+    <script>
+        var versi = new Date().getTime();
+        document.write('<script src="js/db_sertifikat.js?v=' + versi + '"><\/script>');
+    </script>
+
+    <script>
+        // --- 1. THEME ---
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('themeIcon');
+            const isDark = document.body.classList.contains('dark-mode');
+            icon.classList.replace(isDark ? 'ph-moon' : 'ph-sun', isDark ? 'ph-sun' : 'ph-moon');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+        if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
+
+        // --- 2. CSV PARSER ---
+        function parseCSVLine(text) {
+            return text.split(',').map(s => s.trim().replace(/^"|"$/g, ''));
+        }
+
+        // --- 3. VALIDATION LOGIC ---
+        window.onload = async function() {
+            setTimeout(async () => {
+                if (typeof dbSertifikat === 'undefined') {
+                    showError(); return;
+                }
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                const searchId = urlParams.get('id'); 
+
+                if (!searchId) {
+                    showError(); return;
+                }
+
+                let foundData = null;
+                let foundEvent = null;
+
+                // LOOP EVENT
+                for (const event of dbSertifikat) {
+                    if (event.status !== 'Aktif' || !event.google_sheet_url) continue;
+
+                    try {
+                        const resp = await fetch(event.google_sheet_url);
+                        if (!resp.ok) continue;
+
+                        const text = await resp.text();
+                        const rows = text.split('\n').filter(r => r.trim() !== '');
+                        if (rows.length < 2) continue;
+
+                        // Analisa Header
+                        const headers = parseCSVLine(rows[0]).map(h => h.toLowerCase());
+                        
+                        // Mapping Kolom
+                        let idxID = headers.findIndex(h => h.includes('id') || h.includes('no') || h.includes('nomor'));
+                        if (idxID === -1) idxID = 0; 
+
+                        let idxNama = headers.findIndex(h => h.includes('nama'));
+                        if (idxNama === -1) idxNama = 1;
+
+                        let idxInst = headers.findIndex(h => h.includes('instansi') || h.includes('sekolah'));
+                        if (idxInst === -1) idxInst = 2;
+
+                        // Tambahan: Cari Kolom Kecamatan
+                        let idxKec = headers.findIndex(h => h.includes('kecamatan') || h.includes('wilayah'));
+                        if (idxKec === -1) idxKec = 3; // Default guess column 3
+
+                        // Loop Data Baris
+                        for (let i = 1; i < rows.length; i++) {
+                            const row = parseCSVLine(rows[i]);
+                            const rowID = row[idxID] ? row[idxID].toLowerCase() : '';
+                            
+                            // Cek ID (Case Insensitive & URL Encoded Safe)
+                            if (rowID === searchId.toLowerCase() || encodeURIComponent(rowID) === searchId) {
+                                foundData = {
+                                    nama: row[idxNama] || 'Tidak Diketahui',
+                                    id: row[idxID] || '-',
+                                    instansi: row[idxInst] || '-',
+                                    kecamatan: row[idxKec] || '-' // Ambil data kecamatan
+                                };
+                                foundEvent = event;
+                                break; 
+                            }
+                        }
+                    } catch (err) {
+                        console.error("Gagal baca CSV:", event.judul);
+                    }
+
+                    if (foundData) break; 
+                }
+
+                // TAMPILKAN HASIL
+                document.getElementById('loadingView').style.display = 'none';
+                
+                if (foundData) {
+                    document.getElementById('validView').style.display = 'block';
+                    document.getElementById('valNama').innerText = foundData.nama;
+                    document.getElementById('valID').innerText = foundData.id;
+                    document.getElementById('valInstansi').innerText = foundData.instansi;
+                    document.getElementById('valKecamatan').innerText = foundData.kecamatan; // Tampilkan Kecamatan
+                    
+                    document.getElementById('valEventTitle').innerText = foundEvent.judul;
+                    document.getElementById('valEventDate').innerText = `${foundEvent.tgl_mulai} s.d ${foundEvent.tgl_selesai}`;
+                } else {
+                    showError();
+                }
+
+            }, 800); 
+        };
+
+        function showError() {
+            document.getElementById('loadingView').style.display = 'none';
+            document.getElementById('invalidView').style.display = 'block';
+        }
+
+    </script>
+</body>
+</html>
