@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unduh Sertifikat - PGRI Situbondo</title>
-    <link rel="icon" type="image/png" href="assets/Logo PGRI.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
@@ -153,6 +152,7 @@
         .canvas-wrapper {
             background: var(--bg-body); padding: 15px; border-radius: 8px;
             overflow: auto; margin-bottom: 25px; border: 1px solid var(--border-color);
+            display: flex; justify-content: center; /* Center Canvas */
         }
         canvas { max-width: 100%; height: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
@@ -176,6 +176,7 @@
         @media (max-width: 600px) {
             .title-section h1 { font-size: 20px; }
             .search-card { padding: 20px; }
+            .preview-section { padding: 20px; }
         }
     </style>
 </head>
@@ -281,39 +282,29 @@
             }, 200);
         };
 
-        // --- 2. PARSER CSV (ROBUST / PINTAR) ---
-        // Fungsi ini bisa membaca data yang mengandung koma (misal gelar) dengan benar
+        // --- 2. PARSER CSV (Simple) ---
         function parseCSVLine(text) {
+            // Logic Parser yang benar (mengatasi koma dalam kutip)
             const result = [];
             let current = '';
             let inQuotes = false;
             
             for (let i = 0; i < text.length; i++) {
                 const char = text[i];
-                
-                // Jika ketemu tanda kutip
                 if (char === '"') {
-                    // Cek apakah ini tanda kutip ganda (escaped quote) atau penutup/pembuka
                     if (i + 1 < text.length && text[i + 1] === '"') {
-                        current += '"'; // Masukkan satu kutip
-                        i++; // Skip kutip berikutnya
+                        current += '"'; i++; 
                     } else {
-                        inQuotes = !inQuotes; // Toggle status quote
+                        inQuotes = !inQuotes;
                     }
-                } 
-                // Jika ketemu koma DAN tidak sedang dalam kutip -> Ganti Kolom
-                else if (char === ',' && !inQuotes) {
+                } else if (char === ',' && !inQuotes) {
                     result.push(current.trim());
                     current = '';
-                } 
-                // Karakter biasa
-                else {
+                } else {
                     current += char;
                 }
             }
-            // Masukkan kolom terakhir
             result.push(current.trim());
-            
             return result;
         }
 
@@ -382,17 +373,18 @@
 
         function handleEnter(e) { if(e.key === 'Enter') cariData(); }
 
-        // --- 4. PREVIEW & OVERLAY ---
+        // --- 4. PREVIEW & OVERLAY (RESPONSIVE FIX) ---
         async function showPreview(row) {
             selectedRow = row;
             document.getElementById('searchPanel').style.display = 'none';
             document.getElementById('previewPanel').style.display = 'block';
             
             const canvas = document.getElementById('previewCanvas');
-            await renderPageToCanvas(1, canvas, true);
+            // FIX: Gunakan logic 'false' untuk overlay di renderPageToCanvas agar kita bisa kontrol manual setelahnya
+            await renderPageToCanvas(1, canvas);
         }
 
-        async function renderPageToCanvas(pageNum, targetCanvas, withOverlay) {
+        async function renderPageToCanvas(pageNum, targetCanvas) {
             const ctx = targetCanvas.getContext('2d');
             const pdfUrl = currentCert.template_img || "draf/draf_sertifikat1.pdf";
 
@@ -400,7 +392,13 @@
             const pdf = await loadingTask.promise;
             const page = await pdf.getPage(pageNum);
 
-            const scale = 1.5; 
+            // --- RESPONSIVE SCALE LOGIC ---
+            // Di HP, kita render dengan resolusi lebih kecil agar QR code tidak 'lari' karena koordinat mismatch
+            // Tapi untuk preview yang tajam, kita gunakan scale yang proporsional.
+            // Triknya: Render canvas dengan ukuran asli PDF (Scale 1.0) atau Scale 1.5,
+            // CSS 'max-width: 100%' yang akan mengecilkan visualnya di layar HP.
+            
+            const scale = 1.5; // Scale render internal (ketajaman)
             const viewport = page.getViewport({scale: scale});
 
             targetCanvas.width = viewport.width;
@@ -408,7 +406,8 @@
 
             await page.render({canvasContext: ctx, viewport: viewport}).promise;
 
-            if (withOverlay && currentCert.layout) {
+            // Gambar Overlay setelah PDF selesai dirender
+            if (currentCert.layout) {
                 await drawOverlay(ctx, scale);
             }
         }
@@ -433,6 +432,8 @@
             };
 
             for (let el of currentCert.layout) {
+                // Koordinat dari DB adalah 'Base Coordinate' (biasanya pada scale 1.0 atau scale editor)
+                // Kita kalikan dengan scaleFactor saat render preview
                 const x = el.x * scaleFactor;
                 const y = el.y * scaleFactor;
                 const size = el.size * scaleFactor;
@@ -453,25 +454,24 @@
                     ctx.restore();
                 } 
                 else if (el.type === 'qr') {
-                    // --- UPDATE: QR CODE LOGIC (URL Validasi + ID) ---
                     const baseUrl = currentCert.base_url_validasi || "https://pgri-situbondo.or.id/cek?id=";
                     
-                    // Cari ID dari CSV (prioritas kolom 'id', 'no', 'nomor')
                     let idPeserta = getDataByHeader('id');
                     if (idPeserta.includes("?")) idPeserta = getDataByHeader('no'); 
-                    
-                    // Jika masih tidak ketemu, gunakan Nama (Not Recommended tapi better than nothing)
                     if (idPeserta.includes("?")) idPeserta = encodeURIComponent(getDataByHeader('nama'));
 
                     const qrText = baseUrl + idPeserta;
                     
+                    // Pastikan QR digambar di atas canvas yang sudah ada
                     const qrImg = await createQR(qrText);
-                    if(qrImg) ctx.drawImage(qrImg, x, y, size, size);
+                    if(qrImg) {
+                        ctx.drawImage(qrImg, x, y, size, size);
+                    }
                 }
             }
         }
 
-        // --- 5. DOWNLOAD PDF (FIXED BLANK PAGE) ---
+        // --- 5. DOWNLOAD PDF ---
         async function downloadPDF() {
             const btn = document.getElementById('btnDownload');
             const msg = document.getElementById('processMsg');
@@ -488,14 +488,10 @@
                 const height = viewport1.height;
                 const orient = width > height ? 'l' : 'p';
 
-                // Inisialisasi jsPDF
                 const doc = new jsPDF({ orientation: orient, unit: 'pt', format: [width, height] });
 
                 for (let i = 1; i <= pdf.numPages; i++) {
-                    // Logic Halaman: Jika bukan halaman pertama, tambah halaman baru
-                    if (i > 1) {
-                        doc.addPage([width, height], orient);
-                    }
+                    if (i > 1) doc.addPage([width, height], orient);
 
                     const page = await pdf.getPage(i);
                     const scale = 3.0; // High Quality
@@ -513,13 +509,10 @@
                     }
 
                     const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                    
-                    // Masukkan gambar ke halaman saat ini
                     doc.setPage(i);
                     doc.addImage(imgData, 'JPEG', 0, 0, width, height);
                 }
 
-                // Nama File Dinamis
                 let idxNama = csvHeader.findIndex(h => h.includes('nama'));
                 if(idxNama === -1) idxNama = 1;
                 let namaFile = selectedRow[idxNama] ? selectedRow[idxNama].replace(/[^a-zA-Z0-9]/g, '_') : 'Sertifikat';
@@ -540,11 +533,29 @@
             return new Promise(resolve => {
                 const div = document.getElementById('qr-generator');
                 div.innerHTML = '';
-                new QRCode(div, { text: text, width: 500, height: 500 });
+                new QRCode(div, { text: text, width: 500, height: 500 }); // Render besar agar tajam saat di-resize
+                
+                // Beri jeda sedikit agar library selesai render
                 setTimeout(() => {
                     const img = div.querySelector('img');
-                    if(img) resolve(img); else resolve(null);
-                }, 100);
+                    if(img && img.src) {
+                        // Pastikan image sudah loaded sebelum resolve
+                        const loadedImg = new Image();
+                        loadedImg.onload = () => resolve(loadedImg);
+                        loadedImg.src = img.src;
+                    } else {
+                        // Fallback ke Canvas jika IMG belum ada (kadang QRCodeJS render ke Canvas dulu)
+                        const canvasQR = div.querySelector('canvas');
+                        if (canvasQR) {
+                            const dataUrl = canvasQR.toDataURL();
+                            const i = new Image();
+                            i.onload = () => resolve(i);
+                            i.src = dataUrl;
+                        } else {
+                            resolve(null);
+                        }
+                    }
+                }, 150);
             });
         }
 
