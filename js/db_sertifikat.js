@@ -197,6 +197,22 @@ const defaultData = [
                 }
             }
         ]
+    },
+    {
+        "id": "CERT-1769179774017",
+        "judul": "Peningkatan Kompetensi Guru Melalui Kegiatan Lomba Multimedia Pembelajaran Interaktif",
+        "deskripsi": "Dengan kegiatan ini diharapkan dapat meningkatkan pengetahuan dan keterampilan guru dalam merancang dan membuat MPI yang menyenangkan",
+        "narasumber": "Tim SLCC PGRI Kab. Situbondo",
+        "instansi_nara": "Sekbid Digitalisasi dan Keanggotaan",
+        "tgl_mulai": "2025-12-09",
+        "tgl_selesai": "2025-12-23",
+        "thumbnail": "thumbnail/Multimedia.png",
+        "link_download": "unduh.html",
+        "status": "Nonaktif",
+        "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
+        "template_img": "draf/default.pdf",
+        "google_sheet_url": "",
+        "layout": []
     }
 ];
 
