@@ -9,7 +9,7 @@ const defaultData = [
         "instansi_nara": "Wakil Ketua SLCC Pengurus Besar PGRI",
         "tgl_mulai": "2026-01-22",
         "tgl_selesai": "2026-01-24",
-        "status": "Aktif",
+        "status": "Nonaktif",
         "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
         "thumbnail": "thumbnail/Seminar.png",
         "link_download": "unduh.html",
