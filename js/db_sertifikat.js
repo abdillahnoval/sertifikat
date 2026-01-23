@@ -103,11 +103,81 @@ const defaultData = [
         "tgl_selesai": "2025-12-23",
         "thumbnail": "thumbnail/Multimedia.png",
         "link_download": "unduh.html",
-        "status": "Nonaktif",
+        "status": "Aktif",
         "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
-        "template_img": "draf/default.pdf",
-        "google_sheet_url": "",
-        "layout": []
+        "template_img": "draf/sertifikat2.pdf",
+        "google_sheet_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRTTQM2IZoVg2xvjdHbefT_FzFtVKfoHgNI_oDYw-_zLTmBPSbGZxpkPVn3YPhQB_U_R6MxFVzkpYB2/pub?gid=0&single=true&output=csv",
+        "layout": [
+            {
+                "id": 1769177614900,
+                "type": "text",
+                "x": 422,
+                "y": 231,
+                "size": 24,
+                "color": "#815a20",
+                "text": "<<Nama Peserta>>",
+                "font": "Poppins",
+                "align": "center",
+                "bold": true,
+                "_hitbox": {
+                    "x": 303.0960464477539,
+                    "y": 214,
+                    "w": 237.8079071044922,
+                    "h": 34
+                },
+                "_resizeBox": {
+                    "x": 540.9039535522461,
+                    "y": 248,
+                    "size": 10
+                }
+            },
+            {
+                "id": 1769177675107,
+                "type": "text",
+                "x": 420,
+                "y": 270,
+                "size": 16,
+                "color": "#000000",
+                "text": "<<Instansi>>",
+                "font": "Poppins",
+                "align": "center",
+                "bold": false,
+                "_hitbox": {
+                    "x": 366.64805603027344,
+                    "y": 257,
+                    "w": 106.70388793945312,
+                    "h": 26
+                },
+                "_resizeBox": {
+                    "x": 473.35194396972656,
+                    "y": 283,
+                    "size": 10
+                }
+            },
+            {
+                "id": 1769177728870,
+                "type": "text",
+                "x": 425,
+                "y": 293,
+                "size": 16,
+                "color": "#a27430",
+                "text": "Terbaik <<Ranking>> Guru Jenjang <<Jenjang>>",
+                "font": "Poppins",
+                "align": "center",
+                "bold": true,
+                "_hitbox": {
+                    "x": 225.44815063476562,
+                    "y": 280,
+                    "w": 399.10369873046875,
+                    "h": 26
+                },
+                "_resizeBox": {
+                    "x": 624.5518493652344,
+                    "y": 306,
+                    "size": 10
+                }
+            }
+        ]
     }
 ];
 
