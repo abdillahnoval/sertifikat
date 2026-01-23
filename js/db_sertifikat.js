@@ -10,7 +10,7 @@ const defaultData = [
         "tgl_mulai": "2026-01-22",
         "tgl_selesai": "2026-01-24",
         "status": "Aktif",
-        "base_url_validasi": "https://game.sdn2baderan.my.id/sertifikat/ceksertifikat.html?id=",
+        "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
         "thumbnail": "thumbnail/Seminar.png",
         "link_download": "unduh.html",
         "template_img": "draf/sertifikat1.pdf",
@@ -28,10 +28,10 @@ const defaultData = [
                 "align": "center",
                 "bold": true,
                 "_hitbox": {
-                    "x": 282.16004943847673,
-                    "y": 516.0000000000002,
-                    "w": 395.6799011230469,
-                    "h": 56.00000000000002
+                    "x": 176.35005950927734,
+                    "y": 322.5,
+                    "w": 247.2998809814453,
+                    "h": 35
                 },
                 "_resizeBox": {
                     "x": 423.64994049072266,
@@ -51,10 +51,10 @@ const defaultData = [
                 "align": "center",
                 "bold": false,
                 "_hitbox": {
-                    "x": 301.70410156250017,
-                    "y": 580.8000000000002,
-                    "w": 356.591796875,
-                    "h": 38.40000000000001
+                    "x": 188.56513214111328,
+                    "y": 363,
+                    "w": 222.86973571777344,
+                    "h": 24
                 }
             },
             {
@@ -64,10 +64,10 @@ const defaultData = [
                 "y": 723,
                 "size": 88,
                 "_hitbox": {
-                    "x": 46.40000000000002,
-                    "y": 1148.8000000000004,
-                    "w": 156.80000000000004,
-                    "h": 156.80000000000004
+                    "x": 29,
+                    "y": 718,
+                    "w": 98,
+                    "h": 98
                 },
                 "_resizeBox": {
                     "x": 203.20000000000005,
@@ -88,7 +88,7 @@ const defaultData = [
         "thumbnail": "thumbnail/Olahraga.png",
         "link_download": "unduh.html",
         "status": "Nonaktif",
-        "base_url_validasi": "https://game.sdn2baderan.my.id/sertifikat/ceksertifikat.html?id=",
+        "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
         "template_img": "draf/default.pdf",
         "google_sheet_url": "",
         "layout": []
@@ -104,7 +104,7 @@ const defaultData = [
         "thumbnail": "thumbnail/Multimedia.png",
         "link_download": "unduh.html",
         "status": "Nonaktif",
-        "base_url_validasi": "https://game.sdn2baderan.my.id/sertifikat/ceksertifikat.html?id=",
+        "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
         "template_img": "draf/default.pdf",
         "google_sheet_url": "",
         "layout": []
