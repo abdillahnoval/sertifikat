@@ -3,7 +3,7 @@
 const defaultData = [
     {
         "id": "CERT-001",
-        "judul": "Workshop Pemanfaatan Koding dan Artificial Intelligence (AI) dalam Pembelajaran Mendalam",
+        "judul": "Workshop Pemanfaatan Koding dan Artificial Intellegence (AI) dalam Pembelajaran Mendalam",
         "deskripsi": "Pelatihan intensif pemanfaatan teknologi Artificial Intelligence untuk menunjang efektivitas guru dalam mengajar di era digital.",
         "narasumber": "James F. Tomasouw, S.Kom., M.Kom.",
         "instansi_nara": "Wakil Ketua SLCC Pengurus Besar PGRI",
@@ -91,7 +91,77 @@ const defaultData = [
         "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
         "template_img": "draf/sertifikat3.pdf",
         "google_sheet_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTJsgr4CGiXY6joK_m3yZ6Y1zM7UELKNOIABO2Pi1U2wzeCHiFq42SBL2OLDrWNGv96jNCXP_DY6Oaz/pub?gid=0&single=true&output=csv",
-        "layout": []
+        "layout": [
+            {
+                "id": 1769271115971,
+                "type": "text",
+                "x": 417,
+                "y": 239,
+                "size": 24,
+                "color": "#a00505",
+                "text": "<<Nama Pemenang>>",
+                "font": "Poppins",
+                "align": "center",
+                "bold": true,
+                "_hitbox": {
+                    "x": 277.7680358886719,
+                    "y": 222,
+                    "w": 278.46392822265625,
+                    "h": 34
+                },
+                "_resizeBox": {
+                    "x": 556.2319641113281,
+                    "y": 256,
+                    "size": 10
+                }
+            },
+            {
+                "id": 1769271289247,
+                "type": "text",
+                "x": 423,
+                "y": 273,
+                "size": 12,
+                "color": "#000000",
+                "text": "Delegasi <<PGRI Cabang>>",
+                "font": "Poppins",
+                "align": "center",
+                "bold": false,
+                "_hitbox": {
+                    "x": 337.8280715942383,
+                    "y": 262,
+                    "w": 170.34385681152344,
+                    "h": 22
+                },
+                "_resizeBox": {
+                    "x": 508.1719284057617,
+                    "y": 284,
+                    "size": 10
+                }
+            },
+            {
+                "id": 1769271556424,
+                "type": "text",
+                "x": 421,
+                "y": 295,
+                "size": 15,
+                "color": "#000000",
+                "text": "<<Juara>> Lomba <<Cabang Olahraga>>",
+                "font": "Poppins",
+                "align": "center",
+                "bold": true,
+                "_hitbox": {
+                    "x": 261.3200988769531,
+                    "y": 282.5,
+                    "w": 319.35980224609375,
+                    "h": 25
+                },
+                "_resizeBox": {
+                    "x": 580.6799011230469,
+                    "y": 307.5,
+                    "size": 10
+                }
+            }
+        ]
     },
     {
         "id": "CERT-1769157369491",
