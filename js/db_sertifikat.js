@@ -3,7 +3,7 @@
 const defaultData = [
     {
         "id": "CERT-001",
-        "judul": "Workshop Pemanfaatan Koding dan Artificial Intellegence (AI) dalam Pembelajaran Mendalam",
+        "judul": "Workshop Pemanfaatan Koding dan Artificial Intelligence (AI) dalam Pembelajaran Mendalam",
         "deskripsi": "Pelatihan intensif pemanfaatan teknologi Artificial Intelligence untuk menunjang efektivitas guru dalam mengajar di era digital.",
         "narasumber": "James F. Tomasouw, S.Kom., M.Kom.",
         "instansi_nara": "Wakil Ketua SLCC Pengurus Besar PGRI",
@@ -83,14 +83,14 @@ const defaultData = [
         "deskripsi": "Kegiatan lomba lomba ini diprakarsai oleh Sekretaris Bidang Pemuda dan Olahraga PGRI Kabupaten Situbondo",
         "narasumber": "Panitia HUT Ke-80 PGRI Kab. Situbondo",
         "instansi_nara": "Bidang Pemuda dan Olahraga",
-        "tgl_mulai": "2025-11-05",
-        "tgl_selesai": "2025-11-05",
+        "tgl_mulai": "2025-11-06",
+        "tgl_selesai": "2025-11-06",
         "thumbnail": "thumbnail/Olahraga.png",
         "link_download": "unduh.html",
         "status": "Nonaktif",
         "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
-        "template_img": "draf/default.pdf",
-        "google_sheet_url": "",
+        "template_img": "draf/sertifikat3.pdf",
+        "google_sheet_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTJsgr4CGiXY6joK_m3yZ6Y1zM7UELKNOIABO2Pi1U2wzeCHiFq42SBL2OLDrWNGv96jNCXP_DY6Oaz/pub?gid=0&single=true&output=csv",
         "layout": []
     },
     {
