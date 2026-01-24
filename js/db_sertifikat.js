@@ -87,7 +87,7 @@ const defaultData = [
         "tgl_selesai": "2025-11-06",
         "thumbnail": "thumbnail/Olahraga.png",
         "link_download": "unduh.html",
-        "status": "Nonaktif",
+        "status": "Aktif",
         "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
         "template_img": "draf/sertifikat3.pdf",
         "google_sheet_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vTJsgr4CGiXY6joK_m3yZ6Y1zM7UELKNOIABO2Pi1U2wzeCHiFq42SBL2OLDrWNGv96jNCXP_DY6Oaz/pub?gid=0&single=true&output=csv",
