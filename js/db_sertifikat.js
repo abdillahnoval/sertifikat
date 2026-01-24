@@ -122,18 +122,18 @@ const defaultData = [
                 "y": 273,
                 "size": 12,
                 "color": "#000000",
-                "text": "Delegasi <<PGRI Cabang>>",
+                "text": "Delegasi <<Instansi>>",
                 "font": "Poppins",
                 "align": "center",
                 "bold": false,
                 "_hitbox": {
-                    "x": 337.8280715942383,
+                    "x": 354.2560729980469,
                     "y": 262,
-                    "w": 170.34385681152344,
+                    "w": 137.48785400390625,
                     "h": 22
                 },
                 "_resizeBox": {
-                    "x": 508.1719284057617,
+                    "x": 491.7439270019531,
                     "y": 284,
                     "size": 10
                 }
