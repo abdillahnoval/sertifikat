@@ -20,7 +20,7 @@ const defaultData = [
                 "id": 1,
                 "type": "text",
                 "text": "<<Nama Peserta>>",
-                "x": 300,
+                "x": 297.75,
                 "y": 340,
                 "size": 25,
                 "font": "Poppins",
@@ -28,13 +28,13 @@ const defaultData = [
                 "align": "center",
                 "bold": true,
                 "_hitbox": {
-                    "x": 176.35005950927734,
+                    "x": 174.10005950927734,
                     "y": 322.5,
                     "w": 247.2998809814453,
                     "h": 35
                 },
                 "_resizeBox": {
-                    "x": 423.64994049072266,
+                    "x": 421.39994049072266,
                     "y": 357.5,
                     "size": 10
                 }
@@ -43,7 +43,7 @@ const defaultData = [
                 "id": 2,
                 "type": "text",
                 "text": "<<Instansi>> - <<Kecamatan>>",
-                "x": 300,
+                "x": 297.75,
                 "y": 375,
                 "size": 14,
                 "font": "Poppins",
@@ -51,10 +51,15 @@ const defaultData = [
                 "align": "center",
                 "bold": false,
                 "_hitbox": {
-                    "x": 188.56513214111328,
+                    "x": 186.31513214111328,
                     "y": 363,
                     "w": 222.86973571777344,
                     "h": 24
+                },
+                "_resizeBox": {
+                    "x": 409.1848678588867,
+                    "y": 387,
+                    "size": 10
                 }
             },
             {
@@ -306,19 +311,13 @@ const defaultData = [
 ];
 
 // --- LOGIKA PEMILIHAN DATA OTOMATIS ---
-var dbSertifikat = defaultData; // Default: Pakai data server (Aman & Stabil)
+var dbSertifikat = defaultData; 
 
-// Pengecualian: Hanya halaman SETTING yang boleh baca LocalStorage (Jembatan Edit)
-// Ini mencegah Admin/Index menampilkan data cache yang usang.
 if (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {
     const local = localStorage.getItem('dbSertifikat');
-    if (local) {
-        console.log("Mode Setting: Memuat data editan sementara.");
-        dbSertifikat = JSON.parse(local);
-    }
+    if (local) dbSertifikat = JSON.parse(local);
 }
 
-// Fungsi Simpan (Hanya update memori browser untuk 'jembatan' ke setting.html)
 function simpanKeStorage() {
     localStorage.setItem('dbSertifikat', JSON.stringify(dbSertifikat));
 }
