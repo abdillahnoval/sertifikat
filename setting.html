@@ -59,11 +59,11 @@
 
         /* --- EDITOR PANEL --- */
         .main-content { flex: 1; padding: 20px; display: flex; gap: 20px; overflow: hidden; }
-        .editor-panel { width: 320px; background: var(--bg-card); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; border: 1px solid var(--border-color); box-shadow: var(--shadow-panel); overflow-y: scroll; flex-shrink: 0; scrollbar-width: none; -ms-overflow-style: none; }
+        .editor-panel { width: 330px; background: var(--bg-card); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; border: 1px solid var(--border-color); box-shadow: var(--shadow-panel); overflow-y: scroll; flex-shrink: 0; scrollbar-width: none; -ms-overflow-style: none; }
         .editor-panel::-webkit-scrollbar { width: 0px !important; height: 0px !important; background: transparent; display: none; }
 
         .panel-title { color: var(--primary-green); font-weight: 700; font-size: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .control-group { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+        .control-group { margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
         .label-text { font-weight: 600; font-size: 11px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; }
         
         .input-full, .font-select { width: 100%; padding: 8px 10px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px; color: var(--text-main); box-sizing: border-box; margin-bottom: 8px; }
@@ -161,14 +161,15 @@
                 </div>
 
                 <div id="propertyForm" class="properties-form">
+                    
                     <div class="control-group" id="groupText">
                         <label class="label-text">Isi Teks / Placeholder</label>
                         <input type="text" id="propText" class="input-full" oninput="updateActiveElement()">
                         <small style="font-size:10px; color:var(--text-muted);">Gunakan <code>&lt;&lt;...&gt;&gt;</code> untuk data dinamis.</small>
                     </div>
 
-                    <div class="control-group" id="groupStyle">
-                        <label class="label-text">Gaya Huruf</label>
+                    <div class="control-group" id="groupFont">
+                        <label class="label-text">Gaya & Format</label>
                         <select id="propFont" class="font-select" onchange="updateActiveElement()">
                             <option value="Poppins">Poppins</option>
                             <option value="Arial">Arial</option>
@@ -176,11 +177,9 @@
                             <option value="Courier New">Courier</option>
                         </select>
                         <div class="toolbar">
-                            <input type="number" id="propSize" class="input-full" style="width:60px; margin:0;" oninput="updateActiveElement()" title="Size px">
-                            
-                            <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold (Tebal)"><i class="ph ph-text-b"></i></button>
-                            <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic (Miring)"><i class="ph ph-text-italic"></i></button>
-                            <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')" title="Underline (Garis Bawah)"><i class="ph ph-text-underline"></i></button>
+                            <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
+                            <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
+                            <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
                             
                             <div style="display:flex; align-items:center; gap:5px; flex:1; margin-left:5px;">
                                 <div class="color-wrapper">
@@ -195,25 +194,34 @@
                             <button class="btn-tool" onclick="setAlign('center')" title="Rata Tengah"><i class="ph ph-text-align-center"></i></button>
                             <button class="btn-tool" onclick="setAlign('right')" title="Rata Kanan"><i class="ph ph-text-align-right"></i></button>
                         </div>
+                    </div>
 
-                        <label class="label-text" style="margin-top:10px;">Posisi Halaman</label>
+                    <div class="control-group" id="groupSize">
+                        <label class="label-text">Ukuran (Pixel)</label>
+                        <input type="number" id="propSize" class="input-full" oninput="updateActiveElement()">
+                    </div>
+
+                    <div class="control-group">
+                        <label class="label-text">Posisi Halaman</label>
                         <div class="toolbar" style="margin-bottom:5px;">
-                            <button class="btn-tool" onclick="alignToPage('left')" title="Kiri Halaman"><i class="ph ph-align-left"></i></button>
-                            <button class="btn-tool" onclick="alignToPage('center-x')" title="Tengah Horizontal"><i class="ph ph-align-center-horizontal"></i></button>
-                            <button class="btn-tool" onclick="alignToPage('right')" title="Kanan Halaman"><i class="ph ph-align-right"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('left')" title="Kiri"><i class="ph ph-align-left"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('center-x')" title="Tengah (Hor)"><i class="ph ph-align-center-horizontal"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('right')" title="Kanan"><i class="ph ph-align-right"></i></button>
                             
                             <div style="width:5px;"></div>
 
-                            <button class="btn-tool" onclick="alignToPage('top')" title="Atas Halaman"><i class="ph ph-align-top"></i></button>
-                            <button class="btn-tool" onclick="alignToPage('center-y')" title="Tengah Vertikal"><i class="ph ph-align-center-vertical"></i></button>
-                            <button class="btn-tool" onclick="alignToPage('bottom')" title="Bawah Halaman"><i class="ph ph-align-bottom"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('top')" title="Atas"><i class="ph ph-align-top"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('center-y')" title="Tengah (Ver)"><i class="ph ph-align-center-vertical"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('bottom')" title="Bawah"><i class="ph ph-align-bottom"></i></button>
                         </div>
+                    </div>
 
-                        <label class="label-text" style="margin-top:10px;">Aksi Elemen</label>
+                    <div class="control-group">
+                        <label class="label-text">Aksi Elemen</label>
                         <div class="toolbar">
-                            <button class="btn-tool" onclick="duplicateActiveElement()" title="Duplikat Elemen"><i class="ph ph-copy"></i></button>
-                            <button class="btn-tool" onclick="moveLayer('up')" title="Bawa ke Depan (Front)"><i class="ph ph-stack"></i><i class="ph ph-arrow-up" style="font-size:10px; margin-left:-2px;"></i></button>
-                            <button class="btn-tool" onclick="moveLayer('down')" title="Kirim ke Belakang (Back)"><i class="ph ph-stack"></i><i class="ph ph-arrow-down" style="font-size:10px; margin-left:-2px;"></i></button>
+                            <button class="btn-tool" onclick="duplicateActiveElement()" title="Duplikat"><i class="ph ph-copy"></i></button>
+                            <button class="btn-tool" onclick="moveLayer('up')" title="Ke Depan"><i class="ph ph-stack"></i><i class="ph ph-arrow-up" style="font-size:10px;"></i></button>
+                            <button class="btn-tool" onclick="moveLayer('down')" title="Ke Belakang"><i class="ph ph-stack"></i><i class="ph ph-arrow-down" style="font-size:10px;"></i></button>
                         </div>
                     </div>
 
@@ -284,7 +292,6 @@
         const canvas = document.getElementById('canvasPreview');
         const ctx = canvas.getContext('2d');
 
-        // State Vars
         let currentData = null; 
         let pdfDoc = null;
         let pageNum = 1;
@@ -294,40 +301,34 @@
         let isDragging = false, isResizing = false;
         let dragStart = {x:0, y:0};
         let initialProp = {x:0, y:0, size:0};
-        
         let pdfOriginalWidth = 0;
         let pdfOriginalHeight = 0;
 
-        // --- INIT ---
         const urlParams = new URLSearchParams(window.location.search);
         const idRef = urlParams.get('id');
 
         window.onload = function() {
             if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
-            
             setTimeout(() => {
                 if (typeof dbSertifikat === 'undefined') { alert("Database error!"); return; }
                 currentData = dbSertifikat.find(x => x.id === idRef);
-                
                 if (currentData) {
                     document.getElementById('inpPdf').value = currentData.template_img || '';
                     document.getElementById('inpCsv').value = currentData.google_sheet_url || '';
                     loadPDF(currentData.template_img);
                 } else {
-                    alert("Data tidak ditemukan! Kembali ke admin.");
-                    window.location.href = "admin.html";
+                    alert("Data tidak ditemukan!"); window.location.href = "admin.html";
                 }
             }, 300);
         };
 
-        // --- PDF LOGIC ---
         function loadPDF(url) {
             if(!url) return;
             pdfjsLib.getDocument(url).promise.then(pdf => {
                 pdfDoc = pdf;
                 document.getElementById('pageInfo').innerText = `Page ${pageNum}/${pdf.numPages}`;
                 renderPage(pageNum);
-            }).catch(err => console.error(err));
+            });
         }
 
         function renderPage(num) {
@@ -365,7 +366,6 @@
             }
         }
 
-        // --- CANVAS LOGIC ---
         function drawCanvas() {
             if (!bgImage.src) return;
             const scale = currentZoom;
@@ -386,14 +386,11 @@
                     let fontStyle = "";
                     if(el.bold) fontStyle += "bold ";
                     if(el.italic) fontStyle += "italic ";
-                    
                     ctx.font = `${fontStyle.trim()} ${size}px ${el.font}`;
                     ctx.fillStyle = el.color;
                     ctx.textAlign = el.align;
                     ctx.textBaseline = "middle";
-                    
                     ctx.fillText(el.text, x, y);
-                    
                     width = ctx.measureText(el.text).width; height = size;
                     
                     if (el.underline) {
@@ -401,14 +398,12 @@
                         let lineX = x;
                         if(el.align === 'center') lineX = x - (width/2);
                         else if(el.align === 'right') lineX = x - width;
-                        
                         ctx.moveTo(lineX, y + size/2);
                         ctx.lineTo(lineX + width, y + size/2);
                         ctx.strokeStyle = el.color;
                         ctx.lineWidth = Math.max(1, size * 0.05);
                         ctx.stroke();
                     }
-
                     if (el.align === 'center') drawX = x - (width/2);
                     else if (el.align === 'right') drawX = x - width;
 
@@ -425,7 +420,6 @@
                 if (el.id === activeElementId) {
                     ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 2; ctx.setLineDash([4, 2]);
                     ctx.strokeRect(el._hitbox.x, el._hitbox.y, el._hitbox.w, el._hitbox.h);
-                    
                     const hSize = 10 * scale;
                     el._resizeBox = { x: el._hitbox.x + el._hitbox.w, y: el._hitbox.y + el._hitbox.h, size: hSize };
                     ctx.setLineDash([]); ctx.fillStyle = "#f59e0b";
@@ -435,7 +429,6 @@
             });
         }
 
-        // --- INTERACTION & KEYBOARD SHORTCUTS ---
         function getMousePos(e) {
             const rect = canvas.getBoundingClientRect();
             return { x: e.clientX - rect.left, y: e.clientY - rect.top };
@@ -491,39 +484,30 @@
 
         window.addEventListener('mouseup', () => { isDragging = false; isResizing = false; });
 
-        // KEYBOARD EVENT LISTENER
         window.addEventListener('keydown', (e) => {
             if (!activeElementId) return;
             const el = currentData.layout.find(item => item.id === activeElementId);
             if (!el) return;
-
-            // Jika sedang mengetik di input, abaikan shortcut
             if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
 
-            const step = e.shiftKey ? 10 : 1; // Shift + Arrow = 10px
-
+            const step = e.shiftKey ? 10 : 1;
             switch (e.key) {
                 case 'ArrowUp': el.y -= step; break;
                 case 'ArrowDown': el.y += step; break;
                 case 'ArrowLeft': el.x -= step; break;
                 case 'ArrowRight': el.x += step; break;
-                case 'Delete': 
-                case 'Backspace': deleteActiveElement(); return; // Hapus
-                case 'd': if (e.ctrlKey || e.metaKey) { e.preventDefault(); duplicateActiveElement(); return; } break; // Ctrl+D Duplikat
+                case 'Delete': case 'Backspace': deleteActiveElement(); return;
+                case 'd': if (e.ctrlKey || e.metaKey) { e.preventDefault(); duplicateActiveElement(); return; } break;
                 default: return;
             }
-            
-            e.preventDefault(); // Cegah scroll browser
-            drawCanvas();
+            e.preventDefault(); drawCanvas();
         });
 
-        // --- CRUD & LOGIC ---
         function addNewElement(type) {
             const newEl = { id: Date.now(), type: type, x: 100, y: 100, size: type === 'text' ? 30 : 80, color: '#000000' };
             if(type === 'text') { newEl.text = "Teks Baru"; newEl.font = "Poppins"; newEl.align = "left"; newEl.bold = false; newEl.italic = false; newEl.underline = false; }
             currentData.layout.push(newEl);
-            setActive(newEl.id);
-            drawCanvas();
+            setActive(newEl.id); drawCanvas();
         }
 
         function deleteActiveElement() {
@@ -537,29 +521,19 @@
             if (!activeElementId) return;
             const original = currentData.layout.find(el => el.id === activeElementId);
             if (!original) return;
-
             const clone = JSON.parse(JSON.stringify(original));
-            clone.id = Date.now();
-            clone.x += 20; // Offset sedikit biar terlihat
-            clone.y += 20;
-            
+            clone.id = Date.now(); clone.x += 20; clone.y += 20;
             currentData.layout.push(clone);
-            setActive(clone.id);
-            drawCanvas();
+            setActive(clone.id); drawCanvas();
         }
 
-        // LAYERING
         function moveLayer(dir) {
             if (!activeElementId) return;
             const idx = currentData.layout.findIndex(el => el.id === activeElementId);
             if (idx === -1) return;
-
             const el = currentData.layout.splice(idx, 1)[0];
-            if (dir === 'up') {
-                currentData.layout.push(el); // Pindah ke paling akhir (depan)
-            } else {
-                currentData.layout.unshift(el); // Pindah ke paling awal (belakang)
-            }
+            if (dir === 'up') currentData.layout.push(el);
+            else currentData.layout.unshift(el);
             drawCanvas();
         }
 
@@ -572,21 +546,22 @@
 
         function syncForm(el) {
             const grText = document.getElementById('groupText');
-            const grStyle = document.getElementById('groupStyle');
+            const grFont = document.getElementById('groupFont');
+            
             if (el.type === 'qr') {
-                grText.style.display = 'none'; grStyle.style.display = 'none';
-                document.getElementById('propSize').value = el.size;
+                grText.style.display = 'none';
+                grFont.style.display = 'none'; // Sembunyikan Font Toolbar
             } else {
-                grText.style.display = 'block'; grStyle.style.display = 'block';
+                grText.style.display = 'block';
+                grFont.style.display = 'block'; // Tampilkan Font Toolbar
                 document.getElementById('propText').value = el.text;
                 document.getElementById('propFont').value = el.font;
-                document.getElementById('propSize').value = el.size;
                 syncColor(el.color);
-                
                 document.getElementById('btnBold').classList.toggle('active', !!el.bold);
                 document.getElementById('btnItalic').classList.toggle('active', !!el.italic);
                 document.getElementById('btnUnderline').classList.toggle('active', !!el.underline);
             }
+            document.getElementById('propSize').value = el.size; // Size selalu update
         }
 
         function updateActiveElement() {
@@ -595,9 +570,9 @@
             if (el.type === 'text') {
                 el.text = document.getElementById('propText').value;
                 el.font = document.getElementById('propFont').value;
-                el.size = parseInt(document.getElementById('propSize').value);
                 el.color = document.getElementById('propColorText').value;
             }
+            el.size = parseInt(document.getElementById('propSize').value);
             drawCanvas();
         }
 
@@ -617,53 +592,32 @@
             if(el) { el.align = align; drawCanvas(); }
         }
 
-        // --- ALIGN TO PAGE ---
         function alignToPage(mode) {
             const el = currentData.layout.find(e => e.id === activeElementId);
             if(!el || !pdfOriginalWidth) return;
+            const padding = 50;
 
-            const padding = 50; 
-
-            // HORIZONTAL
-            if (mode === 'left') {
-                if (el.type === 'text') { el.align = 'left'; el.x = padding; }
-                else { el.x = padding; }
-            }
+            if (mode === 'left') { if (el.type === 'text') { el.align = 'left'; el.x = padding; } else { el.x = padding; } }
             else if (mode === 'center-x') {
                 if (el.type === 'text') el.align = 'center';
                 el.x = pdfOriginalWidth / 2;
                 if (el.type === 'qr') el.x = (pdfOriginalWidth - el.size) / 2;
             }
-            else if (mode === 'right') {
-                if (el.type === 'text') { el.align = 'right'; el.x = pdfOriginalWidth - padding; }
-                else { el.x = pdfOriginalWidth - el.size - padding; }
-            }
-            
-            // VERTICAL
-            else if (mode === 'top') {
-                if (el.type === 'text') el.y = padding + (el.size/2); 
-                else el.y = padding;
-            }
+            else if (mode === 'right') { if (el.type === 'text') { el.align = 'right'; el.x = pdfOriginalWidth - padding; } else { el.x = pdfOriginalWidth - el.size - padding; } }
+            else if (mode === 'top') { if (el.type === 'text') el.y = padding + (el.size/2); else el.y = padding; }
             else if (mode === 'center-y') {
                 el.y = pdfOriginalHeight / 2;
                 if (el.type === 'qr') el.y = (pdfOriginalHeight - el.size) / 2;
             }
-            else if (mode === 'bottom') {
-                if (el.type === 'text') el.y = pdfOriginalHeight - padding - (el.size/2);
-                else el.y = pdfOriginalHeight - el.size - padding;
-            }
-            else if (mode === 'center-all') {
-                alignToPage('center-x');
-                alignToPage('center-y');
-            }
+            else if (mode === 'bottom') { if (el.type === 'text') el.y = pdfOriginalHeight - padding - (el.size/2); else el.y = pdfOriginalHeight - el.size - padding; }
+            
             drawCanvas();
         }
 
         function saveToDatabase() {
             currentData.template_img = document.getElementById('inpPdf').value;
             currentData.google_sheet_url = document.getElementById('inpCsv').value;
-            simpanKeStorage(); 
-            openExportModal();
+            simpanKeStorage(); openExportModal();
         }
 
         function openExportModal() {
