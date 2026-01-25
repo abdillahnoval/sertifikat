@@ -179,46 +179,40 @@
                         <div class="toolbar">
                             <input type="number" id="propSize" class="input-full" style="width:60px; margin:0;" oninput="updateActiveElement()" title="Size px">
                             
-                            <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')"><i class="ph ph-text-b"></i></button>
-                            <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')"><i class="ph ph-text-italic"></i></button>
-                            <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')"><i class="ph ph-text-underline"></i></button>
-                            
-                            <div style="display:flex; align-items:center; gap:5px; flex:1; margin-left:5px;">
-                                <div class="color-wrapper">
-                                    <input type="color" id="propColorPicker" oninput="syncColor(this.value)">
+                            <div id="styleButtonsContainer" style="display:flex; gap:5px;">
+                                <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold (Tebal)"><i class="ph ph-text-b"></i></button>
+                                <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic (Miring)"><i class="ph ph-text-italic"></i></button>
+                                <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')" title="Underline (Garis Bawah)"><i class="ph ph-text-underline"></i></button>
+                                
+                                <div class="color-wrapper" style="border:1px solid var(--border-color); border-radius:6px; padding:2px;">
+                                    <input type="color" id="propColor" oninput="updateActiveElement()">
                                 </div>
-                                <input type="text" id="propColorText" class="input-full" style="margin:0; font-family:monospace; padding:0 5px; height:32px;" onchange="syncColor(this.value)">
                             </div>
                         </div>
-                        <div class="toolbar" style="margin-top:5px;">
-                            <button class="btn-tool" onclick="setAlign('left')"><i class="ph ph-text-align-left"></i></button>
-                            <button class="btn-tool" onclick="setAlign('center')"><i class="ph ph-text-align-center"></i></button>
-                            <button class="btn-tool" onclick="setAlign('right')"><i class="ph ph-text-align-right"></i></button>
+                        
+                        <div id="alignButtonsContainer" class="toolbar" style="margin-top:5px;">
+                            <button class="btn-tool" onclick="setAlign('left')" title="Rata Kiri"><i class="ph ph-text-align-left"></i></button>
+                            <button class="btn-tool" onclick="setAlign('center')" title="Rata Tengah"><i class="ph ph-text-align-center"></i></button>
+                            <button class="btn-tool" onclick="setAlign('right')" title="Rata Kanan"><i class="ph ph-text-align-right"></i></button>
                         </div>
-                    </div>
-
-                    <div class="control-group" id="groupQRSize" style="display:none;">
-                        <label class="label-text">Ukuran QR Code (Pixel)</label>
-                        <input type="number" id="propSizeQR" class="input-full" oninput="updateActiveElement()">
                     </div>
 
                     <div class="control-group">
                         <label class="label-text">Posisi Halaman</label>
                         <div class="toolbar" style="margin-bottom:5px;">
-                            <button class="btn-tool" onclick="alignToPage('left')" title="Kiri"><i class="ph ph-align-left"></i></button>
-                            <button class="btn-tool" onclick="alignToPage('center-x')" title="Tengah (Hor)"><i class="ph ph-align-center-horizontal"></i></button>
-                            <button class="btn-tool" onclick="alignToPage('right')" title="Kanan"><i class="ph ph-align-right"></i></button>
-                            <div style="width:5px;"></div>
-                            <button class="btn-tool" onclick="alignToPage('top')" title="Atas"><i class="ph ph-align-top"></i></button>
-                            <button class="btn-tool" onclick="alignToPage('center-y')" title="Tengah (Ver)"><i class="ph ph-align-center-vertical"></i></button>
-                            <button class="btn-tool" onclick="alignToPage('bottom')" title="Bawah"><i class="ph ph-align-bottom"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('left')" title="Kiri Halaman"><i class="ph ph-align-left"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('center-x')" title="Tengah Horizontal"><i class="ph ph-align-center-horizontal"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('right')" title="Kanan Halaman"><i class="ph ph-align-right"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('top')" title="Atas Halaman"><i class="ph ph-align-top"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('center-y')" title="Tengah Vertikal"><i class="ph ph-align-center-vertical"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('bottom')" title="Bawah Halaman"><i class="ph ph-align-bottom"></i></button>
                         </div>
 
                         <label class="label-text" style="margin-top:10px;">Aksi Elemen</label>
                         <div class="toolbar">
-                            <button class="btn-tool" onclick="duplicateActiveElement()" title="Duplikat"><i class="ph ph-copy"></i></button>
-                            <button class="btn-tool" onclick="moveLayer('up')" title="Depan"><i class="ph ph-stack"></i><i class="ph ph-arrow-up" style="font-size:10px;"></i></button>
-                            <button class="btn-tool" onclick="moveLayer('down')" title="Belakang"><i class="ph ph-stack"></i><i class="ph ph-arrow-down" style="font-size:10px;"></i></button>
+                            <button class="btn-tool" onclick="duplicateActiveElement()" title="Duplikat Elemen"><i class="ph ph-copy"></i></button>
+                            <button class="btn-tool" onclick="moveLayer('up')" title="Bawa ke Depan"><i class="ph ph-stack"></i><i class="ph ph-arrow-up" style="font-size:10px; margin-left:-2px;"></i></button>
+                            <button class="btn-tool" onclick="moveLayer('down')" title="Kirim ke Belakang"><i class="ph ph-stack"></i><i class="ph ph-arrow-down" style="font-size:10px; margin-left:-2px;"></i></button>
                         </div>
                     </div>
 
@@ -289,6 +283,7 @@
         const canvas = document.getElementById('canvasPreview');
         const ctx = canvas.getContext('2d');
 
+        // State Vars
         let currentData = null; 
         let pdfDoc = null;
         let pageNum = 1;
@@ -298,28 +293,27 @@
         let isDragging = false, isResizing = false;
         let dragStart = {x:0, y:0};
         let initialProp = {x:0, y:0, size:0};
-        let pdfOriginalWidth = 0; let pdfOriginalHeight = 0;
+        
+        let pdfOriginalWidth = 0;
+        let pdfOriginalHeight = 0;
 
+        // --- INIT ---
         const urlParams = new URLSearchParams(window.location.search);
         const idRef = urlParams.get('id');
 
-        // --- LOAD DATA (Prioritas: Server DB > Local Draft) ---
         window.onload = function() {
             if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
             
             setTimeout(() => {
                 if (typeof dbSertifikat === 'undefined') { alert("Database error!"); return; }
                 
-                // 1. Ambil dari db_sertifikat.js (Server) dulu
-                let source = dbSertifikat;
-
-                // 2. Cek apakah ada draft di LocalStorage?
-                // Note: Sesuai request, saat LOAD PERTAMA KALI harus dari db_sertifikat.js
-                // Tapi untuk UX editor, biasanya kita cek localstorage jika user belum save.
-                // Sesuai instruksi spesifik: "Sistem akan selalu memprioritaskan data dari db_sertifikat.js (server) saat pertama kali memuat halaman."
-                // Jadi kita abaikan localstorage saat LOAD AWAL. Localstorage hanya untuk SAVE sementara.
+                // PRIORITAS 1: LOAD DARI SERVER (db_sertifikat.js)
+                // Kita akan timpa dengan draft lokal HANYA jika ada dan user sedang mengedit
+                // Tapi sesuai instruksi: "Selalu memprioritaskan db_sertifikat.js saat load"
+                currentData = dbSertifikat.find(x => x.id === idRef);
                 
-                currentData = source.find(x => x.id === idRef);
+                // Cek Draft Lokal (Opsional: Jika mau restore last session)
+                // Untuk sekarang kita patuh pada instruksi: Load dari Server.
                 
                 if (currentData) {
                     document.getElementById('inpPdf').value = currentData.template_img || '';
@@ -345,11 +339,15 @@
         function renderPage(num) {
             pdfDoc.getPage(num).then(page => {
                 const vpOriginal = page.getViewport({scale: 1.0});
-                pdfOriginalWidth = vpOriginal.width; pdfOriginalHeight = vpOriginal.height;
+                pdfOriginalWidth = vpOriginal.width;
+                pdfOriginalHeight = vpOriginal.height;
+
                 const viewport = page.getViewport({scale: 2.0});
                 const tempCanv = document.createElement('canvas');
                 const tempCtx = tempCanv.getContext('2d');
-                tempCanv.width = viewport.width; tempCanv.height = viewport.height;
+                tempCanv.width = viewport.width;
+                tempCanv.height = viewport.height;
+
                 page.render({canvasContext: tempCtx, viewport: viewport}).promise.then(() => {
                     bgImage.src = tempCanv.toDataURL();
                     bgImage.onload = () => drawCanvas();
@@ -357,17 +355,23 @@
             });
         }
 
-        function changeZoom(d) {
-            currentZoom = Math.max(0.2, Math.min(3.0, currentZoom + d));
-            document.getElementById('zoomDisplay').innerText = Math.round(currentZoom*100)+"%"; drawCanvas();
+        function changeZoom(delta) {
+            currentZoom = Math.max(0.2, Math.min(3.0, currentZoom + delta));
+            document.getElementById('zoomDisplay').innerText = Math.round(currentZoom * 100) + "%";
+            drawCanvas();
         }
-        function changePage(d) {
-            if(pdfDoc && pageNum+d > 0 && pageNum+d <= pdfDoc.numPages) {
-                pageNum += d; document.getElementById('pageInfo').innerText = `Page ${pageNum}/${pdfDoc.numPages}`; renderPage(pageNum);
+
+        function changePage(delta) {
+            if(!pdfDoc) return;
+            const next = pageNum + delta;
+            if(next >= 1 && next <= pdfDoc.numPages) {
+                pageNum = next;
+                document.getElementById('pageInfo').innerText = `Page ${pageNum}/${pdfDoc.numPages}`;
+                renderPage(pageNum);
             }
         }
 
-        // --- CANVAS DRAW ---
+        // --- CANVAS LOGIC ---
         function drawCanvas() {
             if (!bgImage.src) return;
             const scale = currentZoom;
@@ -376,38 +380,58 @@
             ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
 
             if (!currentData.layout) currentData.layout = [];
+            
             currentData.layout.forEach(el => {
                 ctx.save();
-                const x = el.x * scale; const y = el.y * scale; const size = el.size * scale;
+                const x = el.x * scale;
+                const y = el.y * scale;
+                const size = el.size * scale;
                 let width = 0, height = 0, drawX = x;
 
                 if (el.type === 'text') {
-                    let st = ""; if(el.bold) st += "bold "; if(el.italic) st += "italic ";
-                    ctx.font = `${st.trim()} ${size}px ${el.font}`;
-                    ctx.fillStyle = el.color; ctx.textAlign = el.align; ctx.textBaseline = "middle";
+                    let fontStyle = "";
+                    if(el.bold) fontStyle += "bold ";
+                    if(el.italic) fontStyle += "italic ";
+                    
+                    ctx.font = `${fontStyle.trim()} ${size}px ${el.font}`;
+                    ctx.fillStyle = el.color;
+                    ctx.textAlign = el.align;
+                    ctx.textBaseline = "middle";
+                    
                     ctx.fillText(el.text, x, y);
+                    
                     width = ctx.measureText(el.text).width; height = size;
                     
                     if (el.underline) {
                         ctx.beginPath();
-                        let lx = x; if(el.align==='center') lx=x-(width/2); else if(el.align==='right') lx=x-width;
-                        ctx.moveTo(lx, y+size/2); ctx.lineTo(lx+width, y+size/2);
-                        ctx.strokeStyle = el.color; ctx.lineWidth = Math.max(1, size*0.05); ctx.stroke();
+                        let lineX = x;
+                        if(el.align === 'center') lineX = x - (width/2);
+                        else if(el.align === 'right') lineX = x - width;
+                        
+                        ctx.moveTo(lineX, y + size/2);
+                        ctx.lineTo(lineX + width, y + size/2);
+                        ctx.strokeStyle = el.color;
+                        ctx.lineWidth = Math.max(1, size * 0.05);
+                        ctx.stroke();
                     }
-                    if(el.align==='center') drawX = x-(width/2); else if(el.align==='right') drawX = x-width;
-                } else {
+
+                    if (el.align === 'center') drawX = x - (width/2);
+                    else if (el.align === 'right') drawX = x - width;
+
+                } else if (el.type === 'qr') {
                     ctx.fillStyle = "white"; ctx.fillRect(x, y, size, size);
                     ctx.strokeStyle = "black"; ctx.strokeRect(x, y, size, size);
-                    ctx.fillStyle = "black"; ctx.fillRect(x+size*0.2, y+size*0.2, size*0.6, size*0.6);
+                    ctx.fillStyle = "black"; ctx.fillRect(x + size*0.2, y + size*0.2, size*0.6, size*0.6);
                     width = size; height = size;
                 }
 
-                const pad = 5*scale;
-                el._hitbox = { x: drawX-pad, y: (el.type==='text'?y-height/2:y)-pad, w: width+pad*2, h: height+pad*2 };
+                const pad = 5 * scale;
+                el._hitbox = { x: drawX - pad, y: (el.type === 'text' ? y - height/2 : y) - pad, w: width + pad*2, h: height + pad*2 };
 
                 if (el.id === activeElementId) {
                     ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 2; ctx.setLineDash([4, 2]);
                     ctx.strokeRect(el._hitbox.x, el._hitbox.y, el._hitbox.w, el._hitbox.h);
+                    
                     const hSize = 10 * scale;
                     el._resizeBox = { x: el._hitbox.x + el._hitbox.w, y: el._hitbox.y + el._hitbox.h, size: hSize };
                     ctx.setLineDash([]); ctx.fillStyle = "#f59e0b";
@@ -418,16 +442,24 @@
         }
 
         // --- INTERACTION ---
-        function getMousePos(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
-        function isHit(pos, r) { return pos.x >= r.x && pos.x <= r.x + r.w && pos.y >= r.y && pos.y <= r.y + r.h; }
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        }
+        function isHit(pos, rect) {
+            return pos.x >= rect.x && pos.x <= rect.x + rect.w && pos.y >= rect.y && pos.y <= rect.y + rect.h;
+        }
 
         canvas.addEventListener('mousedown', (e) => {
-            const pos = getMousePos(e); let clicked = false;
+            const pos = getMousePos(e);
+            let clicked = false;
             const activeEl = currentData.layout.find(el => el.id === activeElementId);
+            
             if (activeEl && activeEl._resizeBox) {
                 const rBox = { x: activeEl._resizeBox.x - 5, y: activeEl._resizeBox.y - 5, w: 10, h: 10 };
                 if (isHit(pos, rBox)) { isResizing = true; dragStart = pos; initialProp.size = activeEl.size; return; }
             }
+
             for (let i = currentData.layout.length - 1; i >= 0; i--) {
                 const el = currentData.layout[i];
                 if (el._hitbox && isHit(pos, el._hitbox)) {
@@ -436,12 +468,14 @@
                     clicked = true; break;
                 }
             }
-            if (!clicked) setActive(null); drawCanvas();
+            if (!clicked) setActive(null);
+            drawCanvas();
         });
 
         canvas.addEventListener('mousemove', (e) => {
             const pos = getMousePos(e);
             const activeEl = currentData.layout.find(el => el.id === activeElementId);
+
             if (isResizing && activeEl) {
                 const deltaY = (pos.y - dragStart.y) / currentZoom;
                 activeEl.size = Math.round(Math.max(5, initialProp.size + deltaY));
@@ -454,39 +488,86 @@
                 let cursor = 'default';
                 if (activeEl && activeEl._resizeBox) {
                     const rBox = { x: activeEl._resizeBox.x - 5, y: activeEl._resizeBox.y - 5, w: 10, h: 10 };
-                    if (isHit(pos, rBox)) cursor = 'nwse-resize'; else if (activeEl._hitbox && isHit(pos, activeEl._hitbox)) cursor = 'move';
+                    if (isHit(pos, rBox)) cursor = 'nwse-resize';
+                    else if (activeEl._hitbox && isHit(pos, activeEl._hitbox)) cursor = 'move';
                 } else if (currentData.layout.some(el => el._hitbox && isHit(pos, el._hitbox))) cursor = 'move';
                 canvas.style.cursor = cursor;
             }
         });
 
         window.addEventListener('mouseup', () => { isDragging = false; isResizing = false; });
+
+        // KEYBOARD EVENT LISTENER
         window.addEventListener('keydown', (e) => {
             if (!activeElementId) return;
-            const el = currentData.layout.find(i => i.id === activeElementId); if (!el) return;
-            if (document.activeElement.tagName === 'INPUT') return;
-            const s = e.shiftKey ? 10 : 1;
-            switch(e.key) {
-                case 'ArrowUp': el.y-=s; break; case 'ArrowDown': el.y+=s; break;
-                case 'ArrowLeft': el.x-=s; break; case 'ArrowRight': el.x+=s; break;
-                case 'Delete': case 'Backspace': deleteActiveElement(); return;
-                case 'd': if(e.ctrlKey) { e.preventDefault(); duplicateActiveElement(); return; } break;
+            const el = currentData.layout.find(item => item.id === activeElementId);
+            if (!el) return;
+
+            // Jika sedang mengetik di input, abaikan shortcut
+            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+
+            const step = e.shiftKey ? 10 : 1; // Shift + Arrow = 10px
+
+            switch (e.key) {
+                case 'ArrowUp': el.y -= step; break;
+                case 'ArrowDown': el.y += step; break;
+                case 'ArrowLeft': el.x -= step; break;
+                case 'ArrowRight': el.x += step; break;
+                case 'Delete': 
+                case 'Backspace': deleteActiveElement(); return; // Hapus
+                case 'd': if (e.ctrlKey || e.metaKey) { e.preventDefault(); duplicateActiveElement(); return; } break; // Ctrl+D Duplikat
                 default: return;
             }
-            e.preventDefault(); drawCanvas();
+            
+            e.preventDefault(); // Cegah scroll browser
+            drawCanvas();
         });
 
-        // --- CRUD ---
+        // --- CRUD & LOGIC ---
         function addNewElement(type) {
             const newEl = { id: Date.now(), type: type, x: 100, y: 100, size: type === 'text' ? 30 : 80, color: '#000000' };
-            if(type === 'text') { newEl.text = "Teks Baru"; newEl.font = "Poppins"; newEl.align = "left"; newEl.bold = false; }
-            currentData.layout.push(newEl); setActive(newEl.id); drawCanvas();
+            if(type === 'text') { newEl.text = "Teks Baru"; newEl.font = "Poppins"; newEl.align = "left"; newEl.bold = false; newEl.italic = false; newEl.underline = false; }
+            currentData.layout.push(newEl);
+            setActive(newEl.id);
+            drawCanvas();
         }
-        function deleteActiveElement() { if(confirm("Hapus?")) { currentData.layout = currentData.layout.filter(e => e.id !== activeElementId); setActive(null); drawCanvas(); } }
-        function duplicateActiveElement() { const s = currentData.layout.find(e => e.id === activeElementId); if(s) { const c = JSON.parse(JSON.stringify(s)); c.id = Date.now(); c.x+=20; c.y+=20; currentData.layout.push(c); setActive(c.id); drawCanvas(); } }
-        function moveLayer(d) { const idx = currentData.layout.findIndex(e => e.id === activeElementId); if(idx>-1) { const el = currentData.layout.splice(idx, 1)[0]; d==='up'?currentData.layout.push(el):currentData.layout.unshift(el); drawCanvas(); } }
 
-        // --- MENU LOGIC ---
+        function deleteActiveElement() {
+            if(activeElementId && confirm("Hapus elemen ini?")) {
+                currentData.layout = currentData.layout.filter(el => el.id !== activeElementId);
+                setActive(null); drawCanvas();
+            }
+        }
+
+        function duplicateActiveElement() {
+            if (!activeElementId) return;
+            const original = currentData.layout.find(el => el.id === activeElementId);
+            if (!original) return;
+
+            const clone = JSON.parse(JSON.stringify(original));
+            clone.id = Date.now();
+            clone.x += 20; // Offset sedikit biar terlihat
+            clone.y += 20;
+            
+            currentData.layout.push(clone);
+            setActive(clone.id);
+            drawCanvas();
+        }
+
+        function moveLayer(dir) {
+            if (!activeElementId) return;
+            const idx = currentData.layout.findIndex(el => el.id === activeElementId);
+            if (idx === -1) return;
+
+            const el = currentData.layout.splice(idx, 1)[0];
+            if (dir === 'up') {
+                currentData.layout.push(el); // Pindah ke paling akhir (depan)
+            } else {
+                currentData.layout.unshift(el); // Pindah ke paling awal (belakang)
+            }
+            drawCanvas();
+        }
+
         function setActive(id) {
             activeElementId = id;
             document.getElementById('propertyForm').classList.toggle('active', !!id);
@@ -496,66 +577,113 @@
 
         function syncForm(el) {
             const grText = document.getElementById('groupText');
-            const grStyle = document.getElementById('groupStyle');
-            const grQRSize = document.getElementById('groupQRSize');
-
+            // Element2 spesifik yang mau disembunyikan untuk QR
+            const fontSelect = document.getElementById('propFont');
+            const styleBtns = document.getElementById('styleButtonsContainer');
+            const alignBtns = document.getElementById('alignButtonsContainer');
+            
             if (el.type === 'qr') {
                 grText.style.display = 'none'; // Sembunyikan Input Teks
-                grStyle.style.display = 'none'; // Sembunyikan Style (Font/Warna/Size Text)
-                grQRSize.style.display = 'block'; // Tampilkan Input Size Khusus QR
-                document.getElementById('propSizeQR').value = el.size;
+                
+                // Sembunyikan Opsi Font & Style, tapi biarkan Ukuran (Pixel) muncul
+                fontSelect.style.display = 'none';
+                styleBtns.style.display = 'none';
+                alignBtns.style.display = 'none';
+                
             } else {
                 grText.style.display = 'block';
-                grStyle.style.display = 'block';
-                grQRSize.style.display = 'none';
+                
+                // Tampilkan Semua untuk Teks
+                fontSelect.style.display = 'block';
+                styleBtns.style.display = 'flex';
+                alignBtns.style.display = 'flex';
                 
                 document.getElementById('propText').value = el.text;
                 document.getElementById('propFont').value = el.font;
                 document.getElementById('propSize').value = el.size;
-                syncColor(el.color);
+                document.getElementById('propColor').value = el.color;
                 
                 document.getElementById('btnBold').classList.toggle('active', !!el.bold);
                 document.getElementById('btnItalic').classList.toggle('active', !!el.italic);
                 document.getElementById('btnUnderline').classList.toggle('active', !!el.underline);
             }
+            // Size selalu update
+            document.getElementById('propSize').value = el.size;
         }
 
         function updateActiveElement() {
-            const el = currentData.layout.find(e => e.id === activeElementId); if (!el) return;
+            const el = currentData.layout.find(e => e.id === activeElementId);
+            if (!el) return;
+            
+            // Size selalu diambil
+            el.size = parseInt(document.getElementById('propSize').value);
+            
             if (el.type === 'text') {
                 el.text = document.getElementById('propText').value;
                 el.font = document.getElementById('propFont').value;
-                el.size = parseInt(document.getElementById('propSize').value);
-                el.color = document.getElementById('propColorText').value;
-            } else {
-                el.size = parseInt(document.getElementById('propSizeQR').value);
+                el.color = document.getElementById('propColor').value;
             }
             drawCanvas();
         }
 
-        function syncColor(val) { document.getElementById('propColorPicker').value = val; document.getElementById('propColorText').value = val; updateActiveElement(); }
-        function toggleStyle(s) { const el = currentData.layout.find(e => e.id === activeElementId); if(el) { el[s] = !el[s]; syncForm(el); drawCanvas(); } }
-        function setAlign(a) { const el = currentData.layout.find(e => e.id === activeElementId); if(el) { el.align = a; drawCanvas(); } }
-        
+        function syncColor(val) {
+            document.getElementById('propColor').value = val;
+            updateActiveElement();
+        }
+
+        function toggleStyle(style) {
+            const el = currentData.layout.find(e => e.id === activeElementId);
+            if(el) { el[style] = !el[style]; syncForm(el); drawCanvas(); }
+        }
+
+        function setAlign(align) {
+            const el = currentData.layout.find(e => e.id === activeElementId);
+            if(el) { el.align = align; drawCanvas(); }
+        }
+
+        // --- ALIGN TO PAGE (LOGIC BARU) ---
         function alignToPage(mode) {
-            const el = currentData.layout.find(e => e.id === activeElementId); if(!el) return;
-            const pad = 50;
-            if (mode==='left') { if(el.type==='text') el.align='left'; el.x=pad; }
-            else if (mode==='center-x') { el.x=pdfOriginalWidth/2; if(el.type==='text') el.align='center'; if(el.type==='qr') el.x-=el.size/2; }
-            else if (mode==='right') { if(el.type==='text') el.align='right'; el.x=pdfOriginalWidth-pad; else el.x=pdfOriginalWidth-pad-el.size; }
-            else if (mode==='top') { el.y=pad + (el.type==='text'?el.size/2:0); }
-            else if (mode==='center-y') { el.y=pdfOriginalHeight/2; if(el.type==='qr') el.y-=el.size/2; }
-            else if (mode==='bottom') { el.y=pdfOriginalHeight-pad-(el.type==='text'?el.size/2:el.size); }
+            const el = currentData.layout.find(e => e.id === activeElementId);
+            if(!el || !pdfOriginalWidth) return;
+
+            const padding = 50;
+
+            // HORIZONTAL
+            if (mode === 'left') {
+                if (el.type === 'text') { el.align = 'left'; el.x = padding; }
+                else { el.x = padding; }
+            }
+            else if (mode === 'center-x') {
+                if (el.type === 'text') el.align = 'center';
+                el.x = pdfOriginalWidth / 2;
+                if (el.type === 'qr') el.x = (pdfOriginalWidth - el.size) / 2;
+            }
+            else if (mode === 'right') {
+                if (el.type === 'text') { el.align = 'right'; el.x = pdfOriginalWidth - padding; }
+                else { el.x = pdfOriginalWidth - el.size - padding; }
+            }
+            
+            // VERTICAL
+            else if (mode === 'top') {
+                if (el.type === 'text') el.y = padding + (el.size/2); 
+                else el.y = padding;
+            }
+            else if (mode === 'center-y') {
+                el.y = pdfOriginalHeight / 2;
+                if (el.type === 'qr') el.y = (pdfOriginalHeight - el.size) / 2;
+            }
+            else if (mode === 'bottom') {
+                if (el.type === 'text') el.y = pdfOriginalHeight - padding - (el.size/2);
+                else el.y = pdfOriginalHeight - el.size - padding;
+            }
             drawCanvas();
         }
 
-        // --- SAVE TO DB & EXPORT ---
         function saveToDatabase() {
             currentData.template_img = document.getElementById('inpPdf').value;
             currentData.google_sheet_url = document.getElementById('inpCsv').value;
             
-            // Simpan Draft ke LocalStorage (Agar tidak hilang saat refresh)
-            // Note: Ini hanya menyimpan array dbSertifikat yang sudah dimodifikasi di memori
+            // Simpan Draft ke LocalStorage (Priority 2)
             localStorage.setItem('dbSertifikat_draft', JSON.stringify(dbSertifikat));
             
             openExportModal();
@@ -565,18 +693,29 @@
             const modal = document.getElementById('exportModal');
             const txtArea = document.getElementById('codeArea');
             const jsonString = JSON.stringify(dbSertifikat, null, 4);
-            const jsContent = `// js/db_sertifikat.js (UPDATED)\n\n` +
-                              `var dbSertifikat = ${jsonString};`;
+            
+            // GENERATE CODE (Priority 3)
+            const jsContent = `// js/db_sertifikat.js (SMART LOGIC)\n\n` +
+                              `const defaultData = ${jsonString};\n\n` +
+                              `// --- LOGIKA PEMILIHAN DATA OTOMATIS ---\n` +
+                              `var dbSertifikat = defaultData; \n\n` +
+                              `// Pengecualian: Hanya halaman SETTING yang boleh baca LocalStorage (Jembatan Edit)\n` +
+                              `if (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {\n` +
+                              `    const local = localStorage.getItem('dbSertifikat_draft');\n` +
+                              `    if (local) dbSertifikat = JSON.parse(local);\n` +
+                              `}`;
             txtArea.value = jsContent;
             modal.style.display = "flex";
         }
 
-        function closeExportModal() { document.getElementById('exportModal').style.display = 'none'; }
-        function copyCode() { document.getElementById('codeArea').select(); document.execCommand('copy'); alert('Tersalin! Paste ke js/db_sertifikat.js'); }
+        function closeExportModal() { document.getElementById('exportModal').style.display = "none"; }
+        function copyCode() { const t = document.getElementById('codeArea'); t.select(); document.execCommand("copy"); alert("Kode disalin!"); }
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode')?'dark':'light'); }
-
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        }
     </script>
 </body>
 </html>
