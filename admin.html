@@ -7,8 +7,10 @@
     <link rel="icon" type="image/png" href="assets/Logo PGRI.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <style>
         /* GLOBAL RESET */
@@ -16,34 +18,20 @@
 
         :root {
             /* COLORS */
-            --primary-green: #10b981;
-            --primary-hover: #059669;
-            --bg-body: #f1f5f9;
-            --bg-card: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --input-bg: #f8fafc;
-            --input-border: #e2e8f0;
-            --border-color: #e2e8f0;
-            
-            /* DIMENSIONS */
-            --sidebar-width: 260px;
-            --navbar-height: 70px;
-            
-            /* SHADOWS */
+            --primary-green: #10b981; --primary-hover: #059669;
+            --bg-body: #f1f5f9; --bg-card: #ffffff;
+            --text-main: #1e293b; --text-muted: #64748b;
+            --input-bg: #f8fafc; --input-border: #e2e8f0; --border-color: #e2e8f0;
+            --sidebar-width: 260px; --navbar-height: 70px;
             --shadow-sidebar: 4px 0 24px 0 rgba(0,0,0,0.02);
             --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         /* DARK MODE */
         body.dark-mode {
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --input-bg: #334155;
-            --input-border: #475569;
-            --border-color: #334155;
+            --bg-body: #0f172a; --bg-card: #1e293b;
+            --text-main: #f1f5f9; --text-muted: #94a3b8;
+            --input-bg: #334155; --input-border: #475569; --border-color: #334155;
             --shadow-sidebar: 4px 0 24px 0 rgba(0,0,0,0.2);
         }
 
@@ -133,6 +121,7 @@
         .section-view { display: none; }
         .section-view.active { display: block; animation: fadeIn 0.3s ease; }
         
+        /* Toolbar Seimbang */
         .toolbar-peserta {
             display: flex; gap: 15px; margin-bottom: 20px;
             background: var(--bg-card); padding: 12px 15px; border-radius: 12px;
@@ -140,13 +129,13 @@
             align-items: center; justify-content: space-between;
         }
         .item-rows { width: 85px; flex-shrink: 0; }
-        .item-activity { flex: 1; min-width: 200px; } 
+        .item-activity { flex: 1; min-width: 250px; } 
         .item-search { width: 220px; flex-shrink: 0; position: relative; }
         .item-search input { padding-left: 32px; width: 100%; }
         .search-icon-inside { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
 
         /* Preview Modal Style */
-        .modal-card.preview-mode { max-width: 500px; } /* Ukuran mirip gambar */
+        .modal-card.preview-mode { max-width: 500px; } 
         .preview-container { 
             background: #f1f5f9; padding: 20px; border-radius: 8px; text-align: center;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -156,7 +145,7 @@
         #canvasContainer {
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             background: white;
-            line-height: 0; /* Remove gap */
+            line-height: 0; 
         }
         #previewCanvas {
             max-width: 100%; 
@@ -352,13 +341,11 @@
             </div>
             <div class="modal-body" style="display: block; text-align: center; padding: 25px;">
                 <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Pastikan data nama dan instansi sudah benar.</p>
-                
                 <div class="preview-container">
                     <div id="canvasContainer" style="display: inline-block; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
                         <canvas id="previewCanvas"></canvas>
                     </div>
                 </div>
-
                 <div style="margin-top: 20px;">
                     <button class="btn-submit" style="width: 100%; padding: 12px; font-size: 14px; background: #2563eb;" onclick="downloadPreview()">
                         <i class="ph ph-download-simple"></i> Download PDF (HD)
@@ -367,6 +354,8 @@
             </div>
         </div>
     </div>
+
+    <div id="qr-generator" style="display:none;"></div>
 
     <script>
         var versi = new Date().getTime();
@@ -557,8 +546,35 @@
         function nextPagePeserta() { if(pesertaPage < Math.ceil(filteredPeserta.length/pesertaLimit)) { pesertaPage++; renderPesertaTable(); } }
         function prevPagePeserta() { if(pesertaPage > 1) { pesertaPage--; renderPesertaTable(); } }
 
-        // --- 6. PREVIEW GENERATOR (CANVAS) ---
+        // --- 6. PREVIEW GENERATOR (QR FIXED) ---
         let currentPesertaData = null;
+
+        // HELPER QR (Persis unduh.html)
+        function createQR(text) {
+            return new Promise(resolve => {
+                const div = document.getElementById('qr-generator');
+                div.innerHTML = '';
+                new QRCode(div, { text: text, width: 500, height: 500 });
+                setTimeout(() => {
+                    const img = div.querySelector('img');
+                    if(img && img.src) {
+                        const loadedImg = new Image();
+                        loadedImg.onload = () => resolve(loadedImg);
+                        loadedImg.src = img.src;
+                    } else {
+                        // Fallback canvas
+                        const canvasQR = div.querySelector('canvas');
+                        if (canvasQR) {
+                            const dataUrl = canvasQR.toDataURL();
+                            const i = new Image();
+                            i.onload = () => resolve(i);
+                            i.src = dataUrl;
+                        } else resolve(null);
+                    }
+                }, 150);
+            });
+        }
+
         async function openPreviewModal(index) {
             const modal = document.getElementById('modalPreview');
             const canvas = document.getElementById('previewCanvas');
@@ -569,43 +585,58 @@
             if(!kegiatan || !currentPesertaData) return;
             modal.style.display = 'flex';
             
-            // Render PDF to Canvas
+            // Render PDF
             const loadingTask = pdfjsLib.getDocument(kegiatan.template_img);
             const pdf = await loadingTask.promise;
             const page = await pdf.getPage(1);
-            const viewport = page.getViewport({scale: 1.5}); // HD Quality
+            const viewport = page.getViewport({scale: 1.5});
             canvas.width = viewport.width; canvas.height = viewport.height;
             await page.render({canvasContext: ctx, viewport: viewport}).promise;
 
             // Overlay Data
             if(kegiatan.layout) {
-                kegiatan.layout.forEach(el => {
+                // Pre-calculate data replacements
+                const clean = (val) => val ? val.replace(/"/g, '').trim() : '';
+                const getData = (key) => {
+                     // Cari key di header
+                     const cleanKey = key.replace(/<<|>>/g, '').toLowerCase();
+                     let idx = pesertaHeaders.findIndex(h => h.toLowerCase() === cleanKey);
+                     // Fallback logic
+                     if(idx === -1) {
+                         if(cleanKey === 'nama') idx = 1;
+                         else if(cleanKey === 'instansi') idx = 2;
+                         else if(cleanKey === 'id') idx = 0;
+                     }
+                     return currentPesertaData[pesertaHeaders[idx]] || "";
+                };
+
+                for (let el of kegiatan.layout) {
                     const x = el.x * 1.5; const y = el.y * 1.5; const size = el.size * 1.5;
                     if(el.type === 'text') {
-                        let text = el.text.replace(/<<([^>>]+)>>/g, (m, key) => currentPesertaData[key] || m);
+                        let text = el.text.replace(/<<([^>>]+)>>/g, (m, k) => getData(k) || m);
                         ctx.font = `${el.bold?'bold ':''}${el.italic?'italic ':''}${size}px ${el.font}`;
                         ctx.fillStyle = el.color; ctx.textAlign = el.align; ctx.textBaseline = "middle";
                         ctx.fillText(text, x, y);
                     } else if(el.type === 'qr') {
-                        // QR Code using Qrious
-                        const qr = new QRious({
-                            value: (kegiatan.base_url_validasi || "") + (currentPesertaData[pesertaHeaders[0]] || ""),
-                            size: size,
-                            level: 'H'
-                        });
-                        ctx.drawImage(qr.image, x, y, size, size);
+                        // Generate Real QR
+                        const baseUrl = kegiatan.base_url_validasi || "https://pgri-situbondo.or.id/cek?id=";
+                        const idPeserta = getData('id') || getData('no') || "000";
+                        const qrImg = await createQR(baseUrl + idPeserta);
+                        if(qrImg) ctx.drawImage(qrImg, x, y, size, size);
                     }
-                });
+                }
             }
         }
+
         function closePreviewModal() { document.getElementById('modalPreview').style.display = 'none'; }
+        
         function downloadPreview() {
+            const { jsPDF } = window.jspdf;
             const link = document.createElement('a');
-            link.download = `Sertifikat-${currentPesertaData['Nama'] || 'Preview'}.png`;
+            link.download = `Sertifikat-${currentPesertaData[pesertaHeaders[1]] || 'Preview'}.png`;
             link.href = document.getElementById('previewCanvas').toDataURL();
             link.click();
         }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </body>
 </html>
