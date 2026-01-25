@@ -3,7 +3,7 @@
 const defaultData = [
     {
         "id": "CERT-001",
-        "judul": "Workshop Pemanfaatan Koding dan Artificial Intellegence (AI) dalam Pembelajaran Mendalam",
+        "judul": "Workshop Pemanfaatan Koding dan Artificial Intelligence (AI) dalam Pembelajaran Mendalam",
         "deskripsi": "Pelatihan intensif pemanfaatan teknologi Artificial Intelligence untuk menunjang efektivitas guru dalam mengajar di era digital.",
         "narasumber": "James F. Tomasouw, S.Kom., M.Kom.",
         "instansi_nara": "Wakil Ketua SLCC Pengurus Besar PGRI",
