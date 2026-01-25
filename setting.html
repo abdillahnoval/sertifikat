@@ -178,9 +178,9 @@
                         <div class="toolbar">
                             <input type="number" id="propSize" class="input-full" style="width:60px; margin:0;" oninput="updateActiveElement()" title="Size px">
                             
-                            <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
-                            <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
-                            <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
+                            <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold (Tebal)"><i class="ph ph-text-b"></i></button>
+                            <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic (Miring)"><i class="ph ph-text-italic"></i></button>
+                            <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')" title="Underline (Garis Bawah)"><i class="ph ph-text-underline"></i></button>
                             
                             <div style="display:flex; align-items:center; gap:5px; flex:1; margin-left:5px;">
                                 <div class="color-wrapper">
@@ -191,16 +191,21 @@
                         </div>
                         
                         <div class="toolbar" style="margin-top:5px;">
-                            <button class="btn-tool" onclick="setAlign('left')" title="Align Left"><i class="ph ph-text-align-left"></i></button>
-                            <button class="btn-tool" onclick="setAlign('center')" title="Align Center"><i class="ph ph-text-align-center"></i></button>
-                            <button class="btn-tool" onclick="setAlign('right')" title="Align Right"><i class="ph ph-text-align-right"></i></button>
+                            <button class="btn-tool" onclick="setAlign('left')" title="Rata Kiri"><i class="ph ph-text-align-left"></i></button>
+                            <button class="btn-tool" onclick="setAlign('center')" title="Rata Tengah"><i class="ph ph-text-align-center"></i></button>
+                            <button class="btn-tool" onclick="setAlign('right')" title="Rata Kanan"><i class="ph ph-text-align-right"></i></button>
                         </div>
 
-                        <label class="label-text" style="margin-top:10px;">Posisi Halaman (Align)</label>
-                        <div class="toolbar">
+                        <label class="label-text" style="margin-top:10px;">Posisi Halaman (Align to Page)</label>
+                        <div class="toolbar" style="margin-bottom:5px;">
+                            <button class="btn-tool" onclick="alignToPage('left')" title="Kiri Halaman"><i class="ph ph-align-left"></i></button>
                             <button class="btn-tool" onclick="alignToPage('center-x')" title="Tengah Horizontal"><i class="ph ph-align-center-horizontal"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('right')" title="Kanan Halaman"><i class="ph ph-align-right"></i></button>
+                        </div>
+                        <div class="toolbar">
+                            <button class="btn-tool" onclick="alignToPage('top')" title="Atas Halaman"><i class="ph ph-align-top"></i></button>
                             <button class="btn-tool" onclick="alignToPage('center-y')" title="Tengah Vertikal"><i class="ph ph-align-center-vertical"></i></button>
-                            <button class="btn-tool" onclick="alignToPage('center-all')" title="Tepat Ditengah"><i class="ph ph-crosshair"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('bottom')" title="Bawah Halaman"><i class="ph ph-align-bottom"></i></button>
                         </div>
                     </div>
 
@@ -282,7 +287,6 @@
         let dragStart = {x:0, y:0};
         let initialProp = {x:0, y:0, size:0};
         
-        // Simpan ukuran asli PDF (untuk Align Center)
         let pdfOriginalWidth = 0;
         let pdfOriginalHeight = 0;
 
@@ -320,7 +324,6 @@
 
         function renderPage(num) {
             pdfDoc.getPage(num).then(page => {
-                // Simpan Ukuran Asli (Scale 1.0)
                 const vpOriginal = page.getViewport({scale: 1.0});
                 pdfOriginalWidth = vpOriginal.width;
                 pdfOriginalHeight = vpOriginal.height;
@@ -372,7 +375,6 @@
                 let width = 0, height = 0, drawX = x;
 
                 if (el.type === 'text') {
-                    // Logic Font Style
                     let fontStyle = "";
                     if(el.bold) fontStyle += "bold ";
                     if(el.italic) fontStyle += "italic ";
@@ -384,7 +386,6 @@
                     
                     ctx.fillText(el.text, x, y);
                     
-                    // Logic Underline
                     width = ctx.measureText(el.text).width; height = size;
                     
                     if (el.underline) {
@@ -396,7 +397,7 @@
                         ctx.moveTo(lineX, y + size/2);
                         ctx.lineTo(lineX + width, y + size/2);
                         ctx.strokeStyle = el.color;
-                        ctx.lineWidth = size * 0.05; // Ketebalan garis proporsional
+                        ctx.lineWidth = Math.max(1, size * 0.05);
                         ctx.stroke();
                     }
 
@@ -482,7 +483,7 @@
 
         window.addEventListener('mouseup', () => { isDragging = false; isResizing = false; });
 
-        // --- ELEMENT CRUD ---
+        // --- CRUD & LOGIC ---
         function addNewElement(type) {
             const newEl = { id: Date.now(), type: type, x: 100, y: 100, size: type === 'text' ? 30 : 80, color: '#000000' };
             if(type === 'text') { newEl.text = "Teks Baru"; newEl.font = "Poppins"; newEl.align = "left"; newEl.bold = false; newEl.italic = false; newEl.underline = false; }
@@ -552,22 +553,48 @@
             if(el) { el.align = align; drawCanvas(); }
         }
 
+        // --- ALIGN TO PAGE (COMPLETE LOGIC) ---
         function alignToPage(mode) {
             const el = currentData.layout.find(e => e.id === activeElementId);
             if(!el || !pdfOriginalWidth) return;
 
-            if (mode === 'center-x') {
+            const padding = 50; // Jarak aman dari pinggir halaman
+
+            // HORIZONTAL
+            if (mode === 'left') {
+                if (el.type === 'text') { el.align = 'left'; el.x = padding; }
+                else { el.x = padding; }
+            }
+            else if (mode === 'center-x') {
+                if (el.type === 'text') el.align = 'center';
                 el.x = pdfOriginalWidth / 2;
-                if(el.type === 'text') el.align = 'center';
-            } 
+                if (el.type === 'qr') el.x = (pdfOriginalWidth - el.size) / 2;
+            }
+            else if (mode === 'right') {
+                if (el.type === 'text') { el.align = 'right'; el.x = pdfOriginalWidth - padding; }
+                else { el.x = pdfOriginalWidth - el.size - padding; }
+            }
+            
+            // VERTICAL
+            else if (mode === 'top') {
+                if (el.type === 'text') el.y = padding + (el.size/2); // Adjustment for baseline
+                else el.y = padding;
+            }
             else if (mode === 'center-y') {
                 el.y = pdfOriginalHeight / 2;
+                if (el.type === 'qr') el.y = (pdfOriginalHeight - el.size) / 2;
             }
+            else if (mode === 'bottom') {
+                if (el.type === 'text') el.y = pdfOriginalHeight - padding - (el.size/2);
+                else el.y = pdfOriginalHeight - el.size - padding;
+            }
+            
+            // SPECIAL (DEAD CENTER)
             else if (mode === 'center-all') {
-                el.x = pdfOriginalWidth / 2;
-                el.y = pdfOriginalHeight / 2;
-                if(el.type === 'text') el.align = 'center';
+                alignToPage('center-x');
+                alignToPage('center-y');
             }
+
             drawCanvas();
         }
 
@@ -586,12 +613,10 @@
                               `const defaultData = ${jsonString};\n\n` +
                               `// --- LOGIKA PEMILIHAN DATA OTOMATIS ---\n` +
                               `var dbSertifikat = defaultData; \n\n` +
-                              `// Pengecualian: Hanya halaman SETTING yang boleh baca LocalStorage (Jembatan Edit)\n` +
                               `if (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {\n` +
                               `    const local = localStorage.getItem('dbSertifikat');\n` +
                               `    if (local) dbSertifikat = JSON.parse(local);\n` +
                               `}\n\n` +
-                              `// Fungsi Simpan\n` +
                               `function simpanKeStorage() {\n` +
                               `    localStorage.setItem('dbSertifikat', JSON.stringify(dbSertifikat));\n` +
                               `}`;
