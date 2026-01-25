@@ -20,7 +20,7 @@ const defaultData = [
                 "id": 1,
                 "type": "text",
                 "text": "<<Nama Peserta>>",
-                "x": 327.75,
+                "x": 297.75,
                 "y": 340,
                 "size": 25,
                 "font": "Poppins",
@@ -28,13 +28,13 @@ const defaultData = [
                 "align": "center",
                 "bold": true,
                 "_hitbox": {
-                    "x": 204.10005950927734,
+                    "x": 174.10005950927734,
                     "y": 322.5,
                     "w": 247.2998809814453,
                     "h": 35
                 },
                 "_resizeBox": {
-                    "x": 451.39994049072266,
+                    "x": 421.39994049072266,
                     "y": 357.5,
                     "size": 10
                 }
