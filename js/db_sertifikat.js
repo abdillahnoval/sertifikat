@@ -43,7 +43,7 @@ const defaultData = [
                 "id": 2,
                 "type": "text",
                 "text": "<<Instansi>> - <<Kecamatan>>",
-                "x": 297.75,
+                "x": 337.75,
                 "y": 375,
                 "size": 14,
                 "font": "Poppins",
@@ -51,13 +51,13 @@ const defaultData = [
                 "align": "center",
                 "bold": false,
                 "_hitbox": {
-                    "x": 186.31513214111328,
+                    "x": 226.31513214111328,
                     "y": 363,
                     "w": 222.86973571777344,
                     "h": 24
                 },
                 "_resizeBox": {
-                    "x": 409.1848678588867,
+                    "x": 449.1848678588867,
                     "y": 387,
                     "size": 10
                 }
@@ -313,11 +313,8 @@ const defaultData = [
 // --- LOGIKA PEMILIHAN DATA OTOMATIS ---
 var dbSertifikat = defaultData; 
 
+// Pengecualian: Hanya halaman SETTING yang boleh baca LocalStorage (Jembatan Edit)
 if (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {
-    const local = localStorage.getItem('dbSertifikat');
+    const local = localStorage.getItem('dbSertifikat_draft');
     if (local) dbSertifikat = JSON.parse(local);
-}
-
-function simpanKeStorage() {
-    localStorage.setItem('dbSertifikat', JSON.stringify(dbSertifikat));
 }
