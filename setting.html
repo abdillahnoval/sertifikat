@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atur Layout - Sertifikat Builder</title>
-    <link rel="icon" type="image/png" href="assets/Logo PGRI.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
@@ -15,269 +14,95 @@
 
         :root {
             /* COLORS */
-            --primary-green: #10b981;
-            --primary-hover: #059669;
-            --bg-body: #f1f5f9;
-            --bg-card: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --input-bg: #f8fafc;
-            --border-color: #e2e8f0;
+            --primary-green: #10b981; --primary-hover: #059669;
+            --bg-body: #f8fafc; --bg-card: #ffffff;
+            --text-main: #1e293b; --text-muted: #64748b;
+            --input-bg: #f1f5f9; --border-color: #e2e8f0;
             --resize-handle: #f59e0b;
-            
-            /* DIMENSIONS */
-            --sidebar-width: 260px;
-            --navbar-height: 70px;
-            
-            /* SHADOWS */
-            --shadow-sidebar: 4px 0 24px 0 rgba(0,0,0,0.02);
+            --sidebar-width: 260px; --navbar-height: 70px;
             --shadow-panel: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        /* DARK MODE */
         body.dark-mode {
-            --bg-body: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --input-bg: #334155;
-            --border-color: #334155;
-            --shadow-sidebar: 4px 0 24px 0 rgba(0,0,0,0.2);
+            --bg-body: #0f172a; --bg-card: #1e293b;
+            --text-main: #f1f5f9; --text-muted: #94a3b8;
+            --input-bg: #334155; --border-color: #334155;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-            font-size: 13px;
-            transition: background 0.3s, color 0.3s;
+            font-family: 'Poppins', sans-serif; background-color: var(--bg-body);
+            color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden;
+            font-size: 13px; transition: 0.3s;
         }
 
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: var(--sidebar-width);
-            background: var(--bg-card);
-            box-shadow: var(--shadow-sidebar); 
-            display: flex; flex-direction: column;
-            padding: 20px;
-            flex-shrink: 0; z-index: 50; 
-            transition: transform 0.3s ease;
-        }
-        .logo-area { text-align: center; margin-bottom: 30px; }
-        .logo-area img { width: 60px; margin-bottom: 8px; }
-        .logo-area h2 { font-size: 14px; margin: 0; font-weight: 700; }
+        /* SIDEBAR & NAVBAR (SAMA) */
+        .sidebar { width: var(--sidebar-width); background: var(--bg-card); display: flex; flex-direction: column; padding: 20px; z-index: 50; box-shadow: 4px 0 24px rgba(0,0,0,0.02); }
+        .logo-area { text-align: center; margin-bottom: 30px; } .logo-area img { width: 60px; margin-bottom: 8px; } .logo-area h2 { font-size: 14px; margin: 0; font-weight: 700; }
         .role-badge { background: #d1fae5; color: #065f46; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; display: inline-block; margin-top: 4px; }
         .menu-label { color: var(--text-muted); font-size: 10px; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.8px; text-transform: uppercase; }
-        .nav-menu { list-style: none; padding: 0; margin: 0; }
-        .nav-menu li { margin-bottom: 5px; }
-        .nav-menu a {
-            display: flex; align-items: center; gap: 10px;
-            text-decoration: none; color: var(--text-muted);
-            padding: 10px 12px; border-radius: 8px;
-            font-size: 12.5px; transition: 0.2s; font-weight: 500;
-        }
+        .nav-menu { list-style: none; padding: 0; margin: 0; } .nav-menu li { margin-bottom: 5px; }
+        .nav-menu a { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-muted); padding: 10px 12px; border-radius: 8px; font-size: 12.5px; transition: 0.2s; font-weight: 500; }
         .nav-menu a.active { background: rgba(16, 185, 129, 0.08); color: var(--primary-green); font-weight: 600; }
-        .nav-menu a:hover:not(.active) { background: rgba(0,0,0,0.02); color: var(--text-main); }
-
-        /* --- SIDEBAR OVERLAY (MOBILE) --- */
-        .sidebar-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 45; display: none; backdrop-filter: blur(2px);
-        }
-
-        /* --- CONTENT WRAPPER --- */
+        
         .content-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-
-        /* --- NAVBAR --- */
-        .navbar {
-            height: var(--navbar-height);
-            background: var(--bg-card);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.02); 
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 25px; z-index: 40; border-bottom: 1px solid var(--border-color);
-        }
-        .nav-left { display: flex; align-items: center; gap: 15px; }
-        .brand-identity {
-            font-size: 16px; font-weight: 700; color: var(--text-main);
-            letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px;
-        }
-        .brand-identity i { color: var(--primary-green); font-size: 18px; }
+        .navbar { height: var(--navbar-height); background: var(--bg-card); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; border-bottom: 1px solid var(--border-color); z-index: 40; }
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 12px; } .brand-identity { font-size: 16px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
         .toggle-sidebar-btn { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; display: none; }
-        .nav-right { display: flex; align-items: center; gap: 12px; }
-        .theme-toggle {
-            background: var(--input-bg); border: none;
-            color: var(--text-main); width: 32px; height: 32px; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
-        }
-        .theme-toggle:hover { background: #e2e8f0; color: var(--primary-green); }
+        .theme-toggle { background: var(--input-bg); border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .profile-pic { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
 
-        /* --- SETTING LAYOUT AREA --- */
-        .main-content {
-            flex: 1; padding: 20px; 
-            display: flex; gap: 20px; 
-            overflow: hidden; 
-        }
-
-        /* PANEL EDITOR (KIRI) - FIX SCROLLBAR */
-        .editor-panel {
-            width: 320px;
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex; flex-direction: column;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-panel);
-            overflow-y: scroll; /* Wajib scroll */
-            flex-shrink: 0;
-            
-            /* Sembunyikan Scrollbar (Firefox) */
-            scrollbar-width: none; 
-            /* Sembunyikan Scrollbar (IE/Edge lama) */
-            -ms-overflow-style: none;
-        }
-
-        /* Sembunyikan Scrollbar (Chrome/Safari/Webkit) - AGRESIVE FIX */
-        .editor-panel::-webkit-scrollbar {
-            width: 0px !important;
-            height: 0px !important;
-            background: transparent; /* Optional */
-            display: none;
-        }
+        /* MAIN CONTENT & EDITOR */
+        .main-content { flex: 1; padding: 20px; display: flex; gap: 20px; overflow: hidden; }
+        
+        .editor-panel { width: 340px; background: var(--bg-card); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; border: 1px solid var(--border-color); box-shadow: var(--shadow-panel); overflow-y: scroll; flex-shrink: 0; scrollbar-width: none; -ms-overflow-style: none; }
+        .editor-panel::-webkit-scrollbar { display: none; }
 
         .panel-title { color: var(--primary-green); font-weight: 700; font-size: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .control-group { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+        .control-group { margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
         .label-text { font-weight: 600; font-size: 11px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; }
         
-        .input-full, .font-select { 
-            width: 100%; padding: 8px 10px; 
-            background: var(--input-bg); border: 1px solid var(--border-color); 
-            border-radius: 6px; font-size: 13px; color: var(--text-main);
-            box-sizing: border-box; margin-bottom: 8px;
-        }
+        .input-full, .font-select { width: 100%; padding: 8px 10px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px; color: var(--text-main); box-sizing: border-box; margin-bottom: 8px; }
         
-        .toolbar { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
-        .btn-tool {
-            width: 32px; height: 32px;
-            background: var(--input-bg); border: 1px solid var(--border-color);
-            border-radius: 6px; cursor: pointer; color: var(--text-muted);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .btn-tool:hover { background: var(--border-color); }
+        /* TOOLBAR BUTTONS */
+        .toolbar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+        .btn-tool { width: 32px; height: 32px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .btn-tool:hover { background: var(--border-color); color: var(--text-main); }
         .btn-tool.active { background: #d1fae5; color: var(--primary-green); border-color: var(--primary-green); }
-        .color-wrapper input { width: 32px; height: 32px; border: none; background: none; cursor: pointer; padding: 0; }
-
-        /* Action Buttons */
-        .btn-action {
-            width: 100%; padding: 10px; border: none; border-radius: 8px; 
-            font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-            font-size: 12px; transition: 0.2s; margin-top: 5px;
-        }
+        
+        /* COLOR INPUT WITH TEXT */
+        .color-group { display: flex; gap: 5px; align-items: center; width: 100%; }
+        .color-preview { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border-color); overflow: hidden; cursor: pointer; position: relative; }
+        .color-preview input { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; cursor: pointer; }
+        
+        .btn-action { width: 100%; padding: 10px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; margin-top: 5px; }
         .btn-add { background: #eff6ff; color: #2563eb; border: 1px dashed #bfdbfe; }
-        .btn-delete { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; margin-top: 15px;}
-        .btn-save { background: var(--primary-green); color: white; margin-top: auto; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
-        .btn-save:hover { background: var(--primary-hover); }
+        .btn-delete { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; margin-top: 15px; }
+        .btn-save { background: var(--primary-green); color: white; margin-top: auto; }
 
-        /* PREVIEW PANEL (KANAN) */
-        .preview-panel {
-            flex: 1;
-            background: var(--bg-card);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-panel);
-            display: flex; flex-direction: column;
-            overflow: hidden;
-        }
-
-        .preview-header {
-            padding: 10px 15px; border-bottom: 1px solid var(--border-color);
-            display: flex; justify-content: space-between; align-items: center;
-            background: var(--bg-card); /* White Header */
-        }
-        .control-bar { display: flex; gap: 8px; align-items: center; }
-        .zoom-label { font-size: 11px; font-weight: 600; width: 40px; text-align: center; }
-
-        .canvas-area {
-            flex: 1; overflow: auto; display: flex; justify-content: center; align-items: flex-start; padding: 30px; background: var(--bg-body);
-        }
+        /* PREVIEW PANEL */
+        .preview-panel { flex: 1; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; }
+        .preview-header { padding: 10px 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; background: var(--bg-card); }
+        .canvas-area { flex: 1; overflow: auto; display: flex; justify-content: center; align-items: flex-start; padding: 30px; background: var(--bg-body); }
         canvas { background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
 
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); border: 2px dashed var(--border-color); border-radius: 8px; font-size: 12px; }
-        .properties-form { display: none; }
-        .properties-form.active { display: block; animation: fadeIn 0.3s; }
+        .properties-form { display: none; } .properties-form.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- MODAL EXPORT CODE --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
-            z-index: 100; display: none; 
-            align-items: flex-start; justify-content: center;
-            overflow-y: auto; padding: 20px;
-        }
-
-        .modal-card {
-            background: var(--bg-card); width: 100%; max-width: 600px; 
-            border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            display: flex; flex-direction: column; 
-            position: relative; margin: auto; 
-            animation: modalFadeIn 0.3s ease;
-        }
-
-        .modal-header {
-            background: #10b981; padding: 15px 25px; 
-            display: flex; justify-content: space-between; align-items: center;
-            border-radius: 12px 12px 0 0; color: white;
-        }
-        .modal-header h3 { margin: 0; font-size: 16px; font-weight: 600; }
-        
+        /* MODAL EXPORT */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 100; display: none; align-items: flex-start; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
+        .modal-card { background: var(--bg-card); width: 100%; max-width: 600px; border-radius: 12px; display: flex; flex-direction: column; margin: auto; }
+        .modal-header { background: #10b981; padding: 15px 20px; display: flex; justify-content: space-between; color: white; border-radius: 12px 12px 0 0; }
         .modal-body { padding: 20px; }
-        
-        .code-area {
-            width: 100%; height: 300px;
-            background: #1e293b; color: #a5b4fc;
-            padding: 15px; border-radius: 8px;
-            font-family: 'Courier New', monospace; font-size: 12px;
-            border: 1px solid var(--border-color); resize: none;
-            white-space: pre; overflow-x: auto;
-        }
+        .code-area { width: 100%; height: 300px; background: #1e293b; color: #a5b4fc; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); resize: none; white-space: pre; font-family: monospace; font-size: 12px; }
+        .modal-footer { padding: 15px 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 10px; }
+        .close-modal { background: none; border: none; color: white; font-size: 18px; cursor: pointer; }
 
-        .modal-footer {
-            padding: 15px 25px; border-top: 1px solid var(--border-color);
-            display: flex; justify-content: flex-end; gap: 10px; background: var(--bg-card);
-            border-radius: 0 0 12px 12px;
-        }
-
-        .close-modal { 
-            background: rgba(255,255,255,0.2); border: none; font-size: 16px; color: white; 
-            cursor: pointer; width: 28px; height: 28px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; transition: 0.2s;
-        }
-        .close-modal:hover { background: rgba(255,255,255,0.4); }
-
-        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            body { height: auto; overflow: auto; flex-direction: column; }
-            .sidebar { position: fixed; height: 100%; left: -100%; top: 0; }
-            .sidebar.active { left: 0; }
-            .toggle-sidebar-btn { display: block; }
-            .navbar { padding: 0 15px; position: sticky; top: 0; }
-            .brand-identity span { display: block; font-size: 15px; }
-
-            .main-content {
-                flex-direction: column; overflow: visible; height: auto;
-                padding: 15px; gap: 15px;
-            }
-            .preview-panel { height: 50vh; order: 1; }
-            .canvas-area { padding: 15px; }
-            .editor-panel { width: 100%; height: auto; order: 2; max-height: none; overflow: visible; margin-bottom: 30px; }
+            .sidebar { position: fixed; height: 100%; left: -100%; top: 0; } .sidebar.active { left: 0; } .toggle-sidebar-btn { display: block; }
+            .main-content { flex-direction: column; overflow: visible; height: auto; }
+            .preview-panel { height: 50vh; order: 1; } .editor-panel { width: 100%; order: 2; height: auto; overflow: visible; }
         }
-
     </style>
 </head>
 <body>
@@ -286,11 +111,9 @@
 
     <div class="sidebar" id="sidebar">
         <div class="logo-area">
-            <img src="assets/Logo PGRI.png" alt="PGRI" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/87/Logo_PGRI.svg'">
-            <h2>PGRI Kab. Situbondo</h2>
-            <span class="role-badge">Administrator</span>
+            <img src="asset/Logo PGRI.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/87/Logo_PGRI.svg'" alt="PGRI">
+            <h2>PGRI Kab. Situbondo</h2> <span class="role-badge">Administrator</span>
         </div>
-        <div class="menu-label">Menu Utama</div>
         <ul class="nav-menu">
             <li><a href="admin.html"><i class="ph ph-list-dashes"></i> Daftar Sertifikat</a></li>
             <li><a href="#" class="active"><i class="ph ph-gear"></i> Atur Sertifikat</a></li>
@@ -300,20 +123,13 @@
     </div>
 
     <div class="content-wrapper">
-        
         <nav class="navbar">
             <div class="nav-left">
                 <button class="toggle-sidebar-btn" onclick="toggleSidebar()"><i class="ph ph-list"></i></button>
-                <div class="brand-identity">
-                    <i class="ph ph-certificate"></i>
-                    <span>Sertifikat Builder</span>
-                </div>
+                <div class="brand-identity"><i class="ph ph-certificate"></i> <span>Sertifikat Builder</span></div>
             </div>
             <div class="nav-right">
-                <button class="theme-toggle" onclick="toggleDarkMode()" title="Ganti Tema">
-                    <i class="ph ph-moon" id="themeIcon"></i>
-                </button>
-                <img src="assets/Logo PGRI.png" class="profile-pic" onerror="this.src='https://ui-avatars.com/api/?name=Admin&background=10b981&color=fff'">
+                <button class="theme-toggle" onclick="toggleDarkMode()"><i class="ph ph-moon" id="themeIcon"></i></button>
             </div>
         </nav>
 
@@ -336,31 +152,48 @@
                 </div>
 
                 <div id="propertyForm" class="properties-form">
+                    
                     <div class="control-group" id="groupText">
-                        <label class="label-text">Isi Teks / Placeholder</label>
+                        <label class="label-text">Isi Teks</label>
                         <input type="text" id="propText" class="input-full" oninput="updateActiveElement()">
-                        <small style="font-size:10px; color:var(--text-muted);">Gunakan <code>&lt;&lt;...&gt;&gt;</code> untuk data dinamis.</small>
                     </div>
 
                     <div class="control-group" id="groupStyle">
                         <label class="label-text">Gaya Huruf</label>
-                        <select id="propFont" class="font-select" onchange="updateActiveElement()">
-                            <option value="Poppins">Poppins</option>
-                            <option value="Arial">Arial</option>
-                            <option value="Times New Roman">Times New Roman</option>
-                            <option value="Courier New">Courier</option>
-                        </select>
+                        <div style="display:flex; gap:5px; margin-bottom:8px;">
+                            <select id="propFont" class="font-select" style="margin:0;" onchange="updateActiveElement()">
+                                <option value="Poppins">Poppins</option>
+                                <option value="Arial">Arial</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Courier New">Courier</option>
+                            </select>
+                            <input type="number" id="propSize" class="input-full" style="width:70px; margin:0;" oninput="updateActiveElement()" title="Size px">
+                        </div>
+
                         <div class="toolbar">
-                            <input type="number" id="propSize" class="input-full" style="width:60px; margin:0;" oninput="updateActiveElement()" title="Size px">
-                            <button id="btnBold" class="btn-tool" onclick="toggleBold()"><i class="ph ph-text-b"></i></button>
-                            <div class="color-wrapper" style="border:1px solid var(--border-color); border-radius:6px; padding:2px;">
-                                <input type="color" id="propColor" oninput="updateActiveElement()">
+                            <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
+                            <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
+                            <div class="color-group" style="flex:1; margin-left:5px;">
+                                <div class="color-preview">
+                                    <input type="color" id="propColorPicker" oninput="syncColorInput(this.value)">
+                                </div>
+                                <input type="text" id="propColorText" class="input-full" style="margin:0; font-family:monospace;" onchange="syncColorInput(this.value)">
                             </div>
                         </div>
-                        <div class="toolbar" style="margin-top:5px;">
+
+                        <div class="toolbar">
                             <button class="btn-tool" onclick="setAlign('left')"><i class="ph ph-text-align-left"></i></button>
                             <button class="btn-tool" onclick="setAlign('center')"><i class="ph ph-text-align-center"></i></button>
                             <button class="btn-tool" onclick="setAlign('right')"><i class="ph ph-text-align-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="label-text">Posisi Halaman (Align to Page)</label>
+                        <div class="toolbar">
+                            <button class="btn-tool" onclick="alignToPage('center-x')" title="Center Horizontal"><i class="ph ph-align-center-horizontal"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('center-y')" title="Center Vertical"><i class="ph ph-align-center-vertical"></i></button>
+                            <button class="btn-tool" onclick="alignToPage('center-all')" title="Dead Center"><i class="ph ph-crosshair"></i></button>
                         </div>
                     </div>
 
@@ -408,9 +241,6 @@
                 <button class="close-modal" onclick="closeExportModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
-                    Salin kode di bawah ini lalu tempel (overwrite) ke file <b>js/db_sertifikat.js</b> di hosting Anda agar perubahan tersimpan permanen.
-                </p>
                 <textarea id="codeArea" class="code-area" readonly></textarea>
             </div>
             <div class="modal-footer">
@@ -441,55 +271,49 @@
         let isDragging = false, isResizing = false;
         let dragStart = {x:0, y:0};
         let initialProp = {x:0, y:0, size:0};
-
-        // --- THEME & SIDEBAR ---
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const icon = document.getElementById('themeIcon');
-            const isDark = document.body.classList.contains('dark-mode');
-            icon.classList.replace(isDark ? 'ph-moon' : 'ph-sun', isDark ? 'ph-sun' : 'ph-moon');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        }
-        if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
-
-        function toggleSidebar() { 
-            const sb = document.getElementById('sidebar');
-            const ov = document.getElementById('sidebarOverlay');
-            sb.classList.toggle('active');
-            if(window.innerWidth <= 768) ov.style.display = sb.classList.contains('active') ? 'block' : 'none';
-        }
+        
+        // Canvas Dimensions (Real PDF Size)
+        let canvasRealWidth = 0;
+        let canvasRealHeight = 0;
 
         // --- INIT ---
         const urlParams = new URLSearchParams(window.location.search);
         const idRef = urlParams.get('id');
 
-        setTimeout(() => {
-            if (typeof dbSertifikat === 'undefined') { alert("Database error!"); return; }
-            currentData = dbSertifikat.find(x => x.id === idRef);
+        window.onload = function() {
+            if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
             
-            if (currentData) {
-                document.getElementById('inpPdf').value = currentData.template_img || '';
-                document.getElementById('inpCsv').value = currentData.google_sheet_url || '';
-                loadPDF(currentData.template_img);
-            } else {
-                alert("Data tidak ditemukan! Kembali ke admin.");
-                window.location.href = "admin.html";
-            }
-        }, 300);
+            setTimeout(() => {
+                if (typeof dbSertifikat === 'undefined') { alert("Database error!"); return; }
+                currentData = dbSertifikat.find(x => x.id === idRef);
+                
+                if (currentData) {
+                    document.getElementById('inpPdf').value = currentData.template_img || '';
+                    document.getElementById('inpCsv').value = currentData.google_sheet_url || '';
+                    loadPDF(currentData.template_img);
+                }
+            }, 300);
+        };
 
         // --- PDF LOGIC ---
         function loadPDF(url) {
             if(!url) return;
             pdfjsLib.getDocument(url).promise.then(pdf => {
                 pdfDoc = pdf;
-                document.getElementById('pageInfo').innerText = `Page ${pageNum}/${pdf.numPages}`;
                 renderPage(pageNum);
-            }).catch(err => console.error(err));
+            });
         }
 
         function renderPage(num) {
             pdfDoc.getPage(num).then(page => {
+                // Render High Res for Background
                 const viewport = page.getViewport({scale: 2.0});
+                
+                // Simpan Ukuran Asli PDF (Scale 1.0) untuk Align Logic
+                const rawViewport = page.getViewport({scale: 1.0});
+                canvasRealWidth = rawViewport.width;
+                canvasRealHeight = rawViewport.height;
+
                 const tempCanv = document.createElement('canvas');
                 const tempCtx = tempCanv.getContext('2d');
                 tempCanv.width = viewport.width;
@@ -502,23 +326,7 @@
             });
         }
 
-        function changeZoom(delta) {
-            currentZoom = Math.max(0.2, Math.min(3.0, currentZoom + delta));
-            document.getElementById('zoomDisplay').innerText = Math.round(currentZoom * 100) + "%";
-            drawCanvas();
-        }
-
-        function changePage(delta) {
-            if(!pdfDoc) return;
-            const next = pageNum + delta;
-            if(next >= 1 && next <= pdfDoc.numPages) {
-                pageNum = next;
-                document.getElementById('pageInfo').innerText = `Page ${pageNum}/${pdfDoc.numPages}`;
-                renderPage(pageNum);
-            }
-        }
-
-        // --- CANVAS LOGIC ---
+        // --- CANVAS DRAW ---
         function drawCanvas() {
             if (!bgImage.src) return;
             const scale = currentZoom;
@@ -536,14 +344,22 @@
                 let width = 0, height = 0, drawX = x;
 
                 if (el.type === 'text') {
-                    ctx.font = `${el.bold ? "bold" : "normal"} ${size}px ${el.font}`;
+                    // Font Style Construct
+                    let style = "";
+                    if (el.bold) style += "bold ";
+                    if (el.italic) style += "italic ";
+                    ctx.font = `${style.trim()} ${size}px ${el.font}`;
                     ctx.fillStyle = el.color;
                     ctx.textAlign = el.align;
                     ctx.textBaseline = "middle";
+                    
                     ctx.fillText(el.text, x, y);
+                    
+                    // Hitbox Calculation
                     width = ctx.measureText(el.text).width; height = size;
                     if (el.align === 'center') drawX = x - (width/2);
                     else if (el.align === 'right') drawX = x - width;
+
                 } else if (el.type === 'qr') {
                     ctx.fillStyle = "white"; ctx.fillRect(x, y, size, size);
                     ctx.strokeStyle = "black"; ctx.strokeRect(x, y, size, size);
@@ -551,9 +367,11 @@
                     width = size; height = size;
                 }
 
+                // Hitbox
                 const pad = 5 * scale;
                 el._hitbox = { x: drawX - pad, y: (el.type === 'text' ? y - height/2 : y) - pad, w: width + pad*2, h: height + pad*2 };
 
+                // Selection Box
                 if (el.id === activeElementId) {
                     ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 2; ctx.setLineDash([4, 2]);
                     ctx.strokeRect(el._hitbox.x, el._hitbox.y, el._hitbox.w, el._hitbox.h);
@@ -572,9 +390,7 @@
             const rect = canvas.getBoundingClientRect();
             return { x: e.clientX - rect.left, y: e.clientY - rect.top };
         }
-        function isHit(pos, rect) {
-            return pos.x >= rect.x && pos.x <= rect.x + rect.w && pos.y >= rect.y && pos.y <= rect.y + rect.h;
-        }
+        function isHit(pos, rect) { return pos.x >= rect.x && pos.x <= rect.x + rect.w && pos.y >= rect.y && pos.y <= rect.y + rect.h; }
 
         canvas.addEventListener('mousedown', (e) => {
             const pos = getMousePos(e);
@@ -611,32 +427,21 @@
                 activeEl.y = Math.round((pos.y / currentZoom) - dragStart.y);
                 drawCanvas();
             } else {
-                let cursor = 'default';
-                if (activeEl && activeEl._resizeBox) {
-                    const rBox = { x: activeEl._resizeBox.x - 5, y: activeEl._resizeBox.y - 5, w: 10, h: 10 };
-                    if (isHit(pos, rBox)) cursor = 'nwse-resize';
-                    else if (activeEl._hitbox && isHit(pos, activeEl._hitbox)) cursor = 'move';
-                } else if (currentData.layout.some(el => el._hitbox && isHit(pos, el._hitbox))) cursor = 'move';
-                canvas.style.cursor = cursor;
+                canvas.style.cursor = 'default'; // Cursor logic simplified
             }
         });
 
         window.addEventListener('mouseup', () => { isDragging = false; isResizing = false; });
 
-        // --- ELEMENT CRUD ---
+        // --- CRUD & LOGIC ---
         function addNewElement(type) {
             const newEl = { id: Date.now(), type: type, x: 100, y: 100, size: type === 'text' ? 30 : 80, color: '#000000' };
-            if(type === 'text') { newEl.text = "Teks Baru"; newEl.font = "Poppins"; newEl.align = "left"; newEl.bold = false; }
-            currentData.layout.push(newEl);
-            setActive(newEl.id);
-            drawCanvas();
-        }
-
-        function deleteActiveElement() {
-            if(activeElementId && confirm("Hapus elemen ini?")) {
-                currentData.layout = currentData.layout.filter(el => el.id !== activeElementId);
-                setActive(null); drawCanvas();
+            if(type === 'text') { 
+                newEl.text = "Teks Baru"; newEl.font = "Poppins"; newEl.align = "left"; 
+                newEl.bold = false; newEl.italic = false; 
             }
+            currentData.layout.push(newEl);
+            setActive(newEl.id); drawCanvas();
         }
 
         function setActive(id) {
@@ -649,17 +454,18 @@
         function syncForm(el) {
             const grText = document.getElementById('groupText');
             const grStyle = document.getElementById('groupStyle');
+            
             if (el.type === 'qr') {
                 grText.style.display = 'none'; grStyle.style.display = 'none';
-                document.getElementById('propSize').value = el.size;
             } else {
                 grText.style.display = 'block'; grStyle.style.display = 'block';
                 document.getElementById('propText').value = el.text;
                 document.getElementById('propFont').value = el.font;
                 document.getElementById('propSize').value = el.size;
-                document.getElementById('propColor').value = el.color;
-                const btnBold = document.getElementById('btnBold');
-                if(el.bold) btnBold.classList.add('active'); else btnBold.classList.remove('active');
+                syncColorInput(el.color);
+                
+                document.getElementById('btnBold').classList.toggle('active', !!el.bold);
+                document.getElementById('btnItalic').classList.toggle('active', !!el.italic);
             }
         }
 
@@ -670,14 +476,20 @@
                 el.text = document.getElementById('propText').value;
                 el.font = document.getElementById('propFont').value;
                 el.size = parseInt(document.getElementById('propSize').value);
-                el.color = document.getElementById('propColor').value;
+                el.color = document.getElementById('propColorText').value;
             }
             drawCanvas();
         }
 
-        function toggleBold() {
+        function syncColorInput(val) {
+            document.getElementById('propColorPicker').value = val;
+            document.getElementById('propColorText').value = val;
+            updateActiveElement();
+        }
+
+        function toggleStyle(style) {
             const el = currentData.layout.find(e => e.id === activeElementId);
-            if(el) { el.bold = !el.bold; syncForm(el); drawCanvas(); }
+            if(el) { el[style] = !el[style]; syncForm(el); drawCanvas(); }
         }
 
         function setAlign(align) {
@@ -685,54 +497,82 @@
             if(el) { el.align = align; drawCanvas(); }
         }
 
+        // --- ALIGN TO PAGE (NEW LOGIC) ---
+        function alignToPage(mode) {
+            const el = currentData.layout.find(e => e.id === activeElementId);
+            if(!el) return;
+
+            // Gunakan canvasRealWidth (Ukuran asli PDF) bukan ukuran canvas display
+            const pageW = canvasRealWidth;
+            const pageH = canvasRealHeight;
+
+            if (mode === 'center-x') {
+                el.x = pageW / 2;
+                if(el.type === 'text') el.align = 'center'; // Auto align center text
+            } 
+            else if (mode === 'center-y') {
+                el.y = pageH / 2;
+            }
+            else if (mode === 'center-all') {
+                el.x = pageW / 2;
+                el.y = pageH / 2;
+                if(el.type === 'text') el.align = 'center';
+            }
+            
+            drawCanvas();
+        }
+
+        function deleteActiveElement() {
+            if(activeElementId && confirm("Hapus elemen?")) {
+                currentData.layout = currentData.layout.filter(el => el.id !== activeElementId);
+                setActive(null); drawCanvas();
+            }
+        }
+
+        function changeZoom(delta) {
+            currentZoom = Math.max(0.2, Math.min(3.0, currentZoom + delta));
+            document.getElementById('zoomDisplay').innerText = Math.round(currentZoom * 100) + "%";
+            drawCanvas();
+        }
+
+        // --- SAVE & EXPORT ---
         function saveToDatabase() {
             currentData.template_img = document.getElementById('inpPdf').value;
             currentData.google_sheet_url = document.getElementById('inpCsv').value;
-            simpanKeStorage(); 
+            simpanKeStorage();
             openExportModal();
         }
 
         function openExportModal() {
             const modal = document.getElementById('exportModal');
             const txtArea = document.getElementById('codeArea');
-            
-            // Format JSON agar rapi
             const jsonString = JSON.stringify(dbSertifikat, null, 4);
             
-            // Template Kode JS yang SAMA PERSIS dengan struktur db_sertifikat.js
             const jsContent = `// js/db_sertifikat.js (SMART LOGIC)\n\n` +
                               `const defaultData = ${jsonString};\n\n` +
                               `// --- LOGIKA PEMILIHAN DATA OTOMATIS ---\n` +
-                              `var dbSertifikat = defaultData; // Default: Pakai data server (Aman & Stabil)\n\n` +
-                              `// Pengecualian: Hanya halaman SETTING yang boleh baca LocalStorage (Jembatan Edit)\n` +
-                              `// Ini mencegah Admin/Index menampilkan data cache yang usang.\n` +
+                              `var dbSertifikat = defaultData; \n\n` +
                               `if (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {\n` +
                               `    const local = localStorage.getItem('dbSertifikat');\n` +
-                              `    if (local) {\n` +
-                              `        console.log("Mode Setting: Memuat data editan sementara.");\n` +
-                              `        dbSertifikat = JSON.parse(local);\n` +
-                              `    }\n` +
+                              `    if (local) dbSertifikat = JSON.parse(local);\n` +
                               `}\n\n` +
-                              `// Fungsi Simpan (Hanya update memori browser untuk 'jembatan' ke setting.html)\n` +
                               `function simpanKeStorage() {\n` +
                               `    localStorage.setItem('dbSertifikat', JSON.stringify(dbSertifikat));\n` +
                               `}`;
-                              
             txtArea.value = jsContent;
             modal.style.display = "flex";
         }
 
-        function closeExportModal() {
-            document.getElementById('exportModal').style.display = "none";
+        function closeExportModal() { document.getElementById('exportModal').style.display = "none"; }
+        function copyCode() { 
+            document.getElementById('codeArea').select(); 
+            document.execCommand("copy"); 
+            alert("Kode disalin!"); 
         }
 
-        function copyCode() {
-            const txt = document.getElementById('codeArea');
-            txt.select();
-            document.execCommand("copy");
-            alert("Kode berhasil disalin! Silakan paste ke file js/db_sertifikat.js");
-        }
-
+        // Utils
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); }
     </script>
 </body>
 </html>
