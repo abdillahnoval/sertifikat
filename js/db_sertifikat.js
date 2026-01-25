@@ -43,7 +43,7 @@ const defaultData = [
                 "id": 2,
                 "type": "text",
                 "text": "<<Instansi>> - <<Kecamatan>>",
-                "x": 337.75,
+                "x": 297.75,
                 "y": 375,
                 "size": 14,
                 "font": "Poppins",
@@ -51,13 +51,13 @@ const defaultData = [
                 "align": "center",
                 "bold": false,
                 "_hitbox": {
-                    "x": 226.31513214111328,
+                    "x": 186.31513214111328,
                     "y": 363,
                     "w": 222.86973571777344,
                     "h": 24
                 },
                 "_resizeBox": {
-                    "x": 449.1848678588867,
+                    "x": 409.1848678588867,
                     "y": 387,
                     "size": 10
                 }
