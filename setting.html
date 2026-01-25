@@ -14,7 +14,6 @@
         * { box-sizing: border-box; }
 
         :root {
-            /* COLORS */
             --primary-green: #10b981; --primary-hover: #059669;
             --bg-body: #f1f5f9; --bg-card: #ffffff;
             --text-main: #1e293b; --text-muted: #64748b;
@@ -73,6 +72,7 @@
         .btn-tool:hover { background: var(--border-color); }
         .btn-tool.active { background: #d1fae5; color: var(--primary-green); border-color: var(--primary-green); }
         
+        /* COLOR PICKER (FIXED LAYOUT) */
         .color-wrapper { position: relative; border:1px solid var(--border-color); border-radius:6px; padding:2px; width: 32px; height: 32px; overflow: hidden; cursor: pointer;}
         .color-wrapper input { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; cursor: pointer; border: none; padding: 0; margin: 0; }
 
@@ -169,42 +169,59 @@
                     </div>
 
                     <div class="control-group" id="groupStyle">
-                        <label class="label-text">Gaya Huruf</label>
-                        <select id="propFont" class="font-select" onchange="updateActiveElement()">
-                            <option value="Poppins">Poppins</option>
-                            <option value="Arial">Arial</option>
-                            <option value="Times New Roman">Times New Roman</option>
-                            <option value="Courier New">Courier</option>
-                        </select>
-                        <div class="toolbar">
-                            <input type="number" id="propSize" class="input-full" style="width:60px; margin:0;" oninput="updateActiveElement()" title="Size px">
+                        <label class="label-text">Gaya & Format</label>
+                        
+                        <div id="rowFontSelect">
+                            <select id="propFont" class="font-select" onchange="updateActiveElement()">
+                                <option value="Poppins">Poppins</option>
+                                <option value="Arial">Arial</option>
+                                <option value="Times New Roman">Times New Roman</option>
+                                <option value="Courier New">Courier</option>
+                            </select>
+                        </div>
+
+                        <div class="toolbar" style="margin-bottom:8px;">
+                            <div id="rowStyleBtns" style="display:flex; gap:5px;">
+                                <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
+                                <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
+                                <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
+                            </div>
                             
-                            <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')"><i class="ph ph-text-b"></i></button>
-                            <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')"><i class="ph ph-text-italic"></i></button>
-                            <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')"><i class="ph ph-text-underline"></i></button>
-                            
-                            <div class="color-wrapper" style="border:1px solid var(--border-color); border-radius:6px; padding:2px;">
-                                <input type="color" id="propColor" oninput="updateActiveElement()">
+                            <div id="rowColorPicker" style="display:flex; align-items:center; gap:5px; flex:1; margin-left:5px;">
+                                <div class="color-wrapper">
+                                    <input type="color" id="propColorPicker" oninput="syncColor(this.value)">
+                                </div>
+                                <input type="text" id="propColorText" class="input-full" style="margin:0; font-family:monospace; padding:0 5px; height:32px; width:80px;" onchange="syncColor(this.value)" placeholder="#000000">
                             </div>
                         </div>
                         
-                        <div class="toolbar" style="margin-top:5px;">
-                            <button class="btn-tool" onclick="setAlign('left')"><i class="ph ph-text-align-left"></i></button>
-                            <button class="btn-tool" onclick="setAlign('center')"><i class="ph ph-text-align-center"></i></button>
-                            <button class="btn-tool" onclick="setAlign('right')"><i class="ph ph-text-align-right"></i></button>
+                        <div id="rowTextAlign" class="toolbar" style="margin-top:5px;">
+                            <button class="btn-tool" onclick="setAlign('left')" title="Rata Kiri"><i class="ph ph-text-align-left"></i></button>
+                            <button class="btn-tool" onclick="setAlign('center')" title="Rata Tengah"><i class="ph ph-text-align-center"></i></button>
+                            <button class="btn-tool" onclick="setAlign('right')" title="Rata Kanan"><i class="ph ph-text-align-right"></i></button>
+                        </div>
+
+                        <div style="margin-top:10px;">
+                            <label class="label-text">Ukuran (Pixel)</label>
+                            <input type="number" id="propSize" class="input-full" oninput="updateActiveElement()">
                         </div>
                     </div>
 
-                    <div class="control-group" id="groupPosAction">
-                        <label class="label-text">Posisi & Aksi</label>
+                    <div class="control-group">
+                        <label class="label-text">Posisi Halaman</label>
                         <div class="toolbar" style="margin-bottom:5px;">
                             <button class="btn-tool" onclick="alignToPage('left')" title="Kiri"><i class="ph ph-align-left"></i></button>
                             <button class="btn-tool" onclick="alignToPage('center-x')" title="Tengah (Hor)"><i class="ph ph-align-center-horizontal"></i></button>
                             <button class="btn-tool" onclick="alignToPage('right')" title="Kanan"><i class="ph ph-align-right"></i></button>
+                            
+                            <div style="width:10px;"></div>
+
                             <button class="btn-tool" onclick="alignToPage('top')" title="Atas"><i class="ph ph-align-top"></i></button>
                             <button class="btn-tool" onclick="alignToPage('center-y')" title="Tengah (Ver)"><i class="ph ph-align-center-vertical"></i></button>
                             <button class="btn-tool" onclick="alignToPage('bottom')" title="Bawah"><i class="ph ph-align-bottom"></i></button>
                         </div>
+
+                        <label class="label-text" style="margin-top:10px;">Aksi Elemen</label>
                         <div class="toolbar">
                             <button class="btn-tool" onclick="duplicateActiveElement()" title="Duplikat"><i class="ph ph-copy"></i></button>
                             <button class="btn-tool" onclick="moveLayer('up')" title="Depan"><i class="ph ph-stack"></i><i class="ph ph-arrow-up" style="font-size:10px;"></i></button>
@@ -279,7 +296,6 @@
         const canvas = document.getElementById('canvasPreview');
         const ctx = canvas.getContext('2d');
 
-        // State Vars
         let currentData = null; 
         let pdfDoc = null;
         let pageNum = 1;
@@ -294,22 +310,30 @@
         const urlParams = new URLSearchParams(window.location.search);
         const idRef = urlParams.get('id');
 
+        // --- 1. LOAD DATA LOGIC (Priority: LocalStorage > File) ---
         window.onload = function() {
             if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
+            
             setTimeout(() => {
                 if (typeof dbSertifikat === 'undefined') { alert("Database error!"); return; }
                 
-                // Cek LocalStorage untuk data sementara
-                const local = localStorage.getItem('dbSertifikat');
+                // Cek LocalStorage dulu (Logic 2: Simpanan Sementara)
+                const local = localStorage.getItem('dbSertifikat_draft');
+                let sourceData = dbSertifikat; // Default Logic 1: Dari file
+
                 if(local) {
-                    const parsed = JSON.parse(local);
-                    const found = parsed.find(x => x.id === idRef);
-                    if(found) { currentData = found; dbSertifikat = parsed; } 
-                    else { currentData = dbSertifikat.find(x => x.id === idRef); }
-                } else {
-                    currentData = dbSertifikat.find(x => x.id === idRef);
+                    try {
+                        const parsed = JSON.parse(local);
+                        // Validasi sederhana: Cek apakah ID yang dicari ada di local
+                        if(parsed.some(x => x.id === idRef)) {
+                            sourceData = parsed;
+                            console.log("Loaded from LocalStorage Draft");
+                        }
+                    } catch(e) { console.error("Local data invalid"); }
                 }
 
+                currentData = sourceData.find(x => x.id === idRef);
+                
                 if (currentData) {
                     document.getElementById('inpPdf').value = currentData.template_img || '';
                     document.getElementById('inpCsv').value = currentData.google_sheet_url || '';
@@ -321,7 +345,7 @@
             }, 300);
         };
 
-        // --- PDF LOGIC ---
+        // --- PDF RENDER ---
         function loadPDF(url) {
             if(!url) return;
             pdfjsLib.getDocument(url).promise.then(pdf => {
@@ -346,23 +370,7 @@
             });
         }
 
-        function changeZoom(delta) {
-            currentZoom = Math.max(0.2, Math.min(3.0, currentZoom + delta));
-            document.getElementById('zoomDisplay').innerText = Math.round(currentZoom * 100) + "%";
-            drawCanvas();
-        }
-
-        function changePage(delta) {
-            if(!pdfDoc) return;
-            const next = pageNum + delta;
-            if(next >= 1 && next <= pdfDoc.numPages) {
-                pageNum = next;
-                document.getElementById('pageInfo').innerText = `Page ${pageNum}/${pdfDoc.numPages}`;
-                renderPage(pageNum);
-            }
-        }
-
-        // --- CANVAS DRAW ---
+        // --- CANVAS ---
         function drawCanvas() {
             if (!bgImage.src) return;
             const scale = currentZoom;
@@ -371,37 +379,34 @@
             ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
 
             if (!currentData.layout) currentData.layout = [];
-            
             currentData.layout.forEach(el => {
                 ctx.save();
                 const x = el.x * scale; const y = el.y * scale; const size = el.size * scale;
                 let width = 0, height = 0, drawX = x;
 
                 if (el.type === 'text') {
-                    let style = "";
-                    if(el.bold) style += "bold "; if(el.italic) style += "italic ";
-                    ctx.font = `${style.trim()} ${size}px ${el.font}`;
+                    let st = ""; if(el.bold) st += "bold "; if(el.italic) st += "italic ";
+                    ctx.font = `${st.trim()} ${size}px ${el.font}`;
                     ctx.fillStyle = el.color; ctx.textAlign = el.align; ctx.textBaseline = "middle";
                     ctx.fillText(el.text, x, y);
                     width = ctx.measureText(el.text).width; height = size;
                     
                     if (el.underline) {
                         ctx.beginPath();
-                        let lineX = x;
-                        if(el.align === 'center') lineX = x - (width/2); else if(el.align === 'right') lineX = x - width;
-                        ctx.moveTo(lineX, y + size/2); ctx.lineTo(lineX + width, y + size/2);
-                        ctx.strokeStyle = el.color; ctx.lineWidth = Math.max(1, size * 0.05); ctx.stroke();
+                        let lx = x; if(el.align==='center') lx=x-(width/2); else if(el.align==='right') lx=x-width;
+                        ctx.moveTo(lx, y+size/2); ctx.lineTo(lx+width, y+size/2);
+                        ctx.strokeStyle = el.color; ctx.lineWidth = Math.max(1, size*0.05); ctx.stroke();
                     }
-                    if (el.align === 'center') drawX = x - (width/2); else if (el.align === 'right') drawX = x - width;
-                } else if (el.type === 'qr') {
+                    if(el.align==='center') drawX = x-(width/2); else if(el.align==='right') drawX = x-width;
+                } else {
                     ctx.fillStyle = "white"; ctx.fillRect(x, y, size, size);
                     ctx.strokeStyle = "black"; ctx.strokeRect(x, y, size, size);
-                    ctx.fillStyle = "black"; ctx.fillRect(x + size*0.2, y + size*0.2, size*0.6, size*0.6);
+                    ctx.fillStyle = "black"; ctx.fillRect(x+size*0.2, y+size*0.2, size*0.6, size*0.6);
                     width = size; height = size;
                 }
 
-                const pad = 5 * scale;
-                el._hitbox = { x: drawX - pad, y: (el.type === 'text' ? y - height/2 : y) - pad, w: width + pad*2, h: height + pad*2 };
+                const pad = 5*scale;
+                el._hitbox = { x: drawX-pad, y: (el.type==='text'?y-height/2:y)-pad, w: width+pad*2, h: height+pad*2 };
 
                 if (el.id === activeElementId) {
                     ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 2; ctx.setLineDash([4, 2]);
@@ -416,8 +421,8 @@
         }
 
         // --- INTERACTION ---
-        function getMousePos(e) { const rect = canvas.getBoundingClientRect(); return { x: e.clientX - rect.left, y: e.clientY - rect.top }; }
-        function isHit(pos, rect) { return pos.x >= rect.x && pos.x <= rect.x + rect.w && pos.y >= rect.y && pos.y <= rect.y + rect.h; }
+        function getMousePos(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+        function isHit(pos, r) { return pos.x >= r.x && pos.x <= r.x + r.w && pos.y >= r.y && pos.y <= r.y + r.h; }
 
         canvas.addEventListener('mousedown', (e) => {
             const pos = getMousePos(e); let clicked = false;
@@ -459,61 +464,31 @@
         });
 
         window.addEventListener('mouseup', () => { isDragging = false; isResizing = false; });
-
         window.addEventListener('keydown', (e) => {
             if (!activeElementId) return;
-            const el = currentData.layout.find(item => item.id === activeElementId);
-            if (!el) return;
-            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
-            const step = e.shiftKey ? 10 : 1;
-            switch (e.key) {
-                case 'ArrowUp': el.y -= step; break;
-                case 'ArrowDown': el.y += step; break;
-                case 'ArrowLeft': el.x -= step; break;
-                case 'ArrowRight': el.x += step; break;
+            const el = currentData.layout.find(i => i.id === activeElementId); if (!el) return;
+            if (document.activeElement.tagName === 'INPUT') return;
+            const s = e.shiftKey ? 10 : 1;
+            switch(e.key) {
+                case 'ArrowUp': el.y-=s; break; case 'ArrowDown': el.y+=s; break;
+                case 'ArrowLeft': el.x-=s; break; case 'ArrowRight': el.x+=s; break;
                 case 'Delete': case 'Backspace': deleteActiveElement(); return;
-                case 'd': if (e.ctrlKey || e.metaKey) { e.preventDefault(); duplicateActiveElement(); return; } break;
+                case 'd': if(e.ctrlKey) { e.preventDefault(); duplicateActiveElement(); return; } break;
                 default: return;
             }
             e.preventDefault(); drawCanvas();
         });
 
-        // --- CRUD LOGIC ---
+        // --- FUNCTIONS ---
         function addNewElement(type) {
             const newEl = { id: Date.now(), type: type, x: 100, y: 100, size: type === 'text' ? 30 : 80, color: '#000000' };
-            if(type === 'text') { newEl.text = "Teks Baru"; newEl.font = "Poppins"; newEl.align = "left"; newEl.bold = false; newEl.italic = false; newEl.underline = false; }
-            currentData.layout.push(newEl);
-            setActive(newEl.id); drawCanvas();
+            if(type === 'text') { newEl.text = "Teks Baru"; newEl.font = "Poppins"; newEl.align = "left"; newEl.bold = false; }
+            currentData.layout.push(newEl); setActive(newEl.id); drawCanvas();
         }
+        function deleteActiveElement() { if(confirm("Hapus?")) { currentData.layout = currentData.layout.filter(e => e.id !== activeElementId); setActive(null); drawCanvas(); } }
+        function duplicateActiveElement() { const s = currentData.layout.find(e => e.id === activeElementId); if(s) { const c = JSON.parse(JSON.stringify(s)); c.id = Date.now(); c.x+=20; c.y+=20; currentData.layout.push(c); setActive(c.id); drawCanvas(); } }
+        function moveLayer(d) { const idx = currentData.layout.findIndex(e => e.id === activeElementId); if(idx>-1) { const el = currentData.layout.splice(idx, 1)[0]; d==='up'?currentData.layout.push(el):currentData.layout.unshift(el); drawCanvas(); } }
 
-        function deleteActiveElement() {
-            if(activeElementId && confirm("Hapus elemen ini?")) {
-                currentData.layout = currentData.layout.filter(el => el.id !== activeElementId);
-                setActive(null); drawCanvas();
-            }
-        }
-
-        function duplicateActiveElement() {
-            if (!activeElementId) return;
-            const original = currentData.layout.find(el => el.id === activeElementId);
-            if (!original) return;
-            const clone = JSON.parse(JSON.stringify(original));
-            clone.id = Date.now(); clone.x += 20; clone.y += 20;
-            currentData.layout.push(clone);
-            setActive(clone.id); drawCanvas();
-        }
-
-        function moveLayer(dir) {
-            if (!activeElementId) return;
-            const idx = currentData.layout.findIndex(el => el.id === activeElementId);
-            if (idx === -1) return;
-            const el = currentData.layout.splice(idx, 1)[0];
-            if (dir === 'up') currentData.layout.push(el);
-            else currentData.layout.unshift(el);
-            drawCanvas();
-        }
-
-        // --- MANAJEMEN MENU TAMPILAN ---
         function setActive(id) {
             activeElementId = id;
             document.getElementById('propertyForm').classList.toggle('active', !!id);
@@ -522,23 +497,24 @@
         }
 
         function syncForm(el) {
-            const grText = document.getElementById('groupText');
-            const grStyle = document.getElementById('groupStyle');
+            const isText = el.type === 'text';
             
-            // LOGIKA TAMPILAN SESUAI PERMINTAAN
-            if (el.type === 'qr') {
-                grText.style.display = 'none'; // Sembunyikan Input Teks
-                grStyle.style.display = 'none'; // Sembunyikan Group Style (Font, Size, Color) -> Sesuai "kotak merah" tidak tampil
-                // Menu Posisi & Aksi TETAP MUNCUL (karena di control-group terpisah)
-            } else {
-                grText.style.display = 'block';
-                grStyle.style.display = 'block';
-                
+            // Show/Hide Groups Specific to Type
+            document.getElementById('groupText').style.display = isText ? 'block' : 'none';
+            
+            // Specific Show/Hide inside Style Group (Keep Size Always Visible)
+            document.getElementById('rowFontSelect').style.display = isText ? 'block' : 'none';
+            document.getElementById('rowStyleBtns').style.display = isText ? 'flex' : 'none';
+            document.getElementById('rowColorPicker').style.display = isText ? 'flex' : 'none';
+            document.getElementById('rowTextAlign').style.display = isText ? 'flex' : 'none';
+
+            // Populate Values
+            document.getElementById('propSize').value = el.size; // Pixel Size (Shared)
+            
+            if (isText) {
                 document.getElementById('propText').value = el.text;
                 document.getElementById('propFont').value = el.font;
-                document.getElementById('propSize').value = el.size;
-                document.getElementById('propColor').value = el.color;
-                
+                syncColor(el.color);
                 document.getElementById('btnBold').classList.toggle('active', !!el.bold);
                 document.getElementById('btnItalic').classList.toggle('active', !!el.italic);
                 document.getElementById('btnUnderline').classList.toggle('active', !!el.underline);
@@ -546,39 +522,46 @@
         }
 
         function updateActiveElement() {
-            const el = currentData.layout.find(e => e.id === activeElementId);
-            if (!el) return;
-            
+            const el = currentData.layout.find(e => e.id === activeElementId); if (!el) return;
+            el.size = parseInt(document.getElementById('propSize').value);
             if (el.type === 'text') {
                 el.text = document.getElementById('propText').value;
                 el.font = document.getElementById('propFont').value;
-                el.size = parseInt(document.getElementById('propSize').value);
-                el.color = document.getElementById('propColor').value;
+                el.color = document.getElementById('propColorText').value;
             }
             drawCanvas();
         }
 
+        function syncColor(val) { document.getElementById('propColorPicker').value = val; document.getElementById('propColorText').value = val; updateActiveElement(); }
         function toggleStyle(s) { const el = currentData.layout.find(e => e.id === activeElementId); if(el) { el[s] = !el[s]; syncForm(el); drawCanvas(); } }
         function setAlign(a) { const el = currentData.layout.find(e => e.id === activeElementId); if(el) { el.align = a; drawCanvas(); } }
-
+        
         function alignToPage(mode) {
             const el = currentData.layout.find(e => e.id === activeElementId); if(!el) return;
             const pad = 50;
-            if (mode==='left') { if(el.type==='text'){ el.align='left'; el.x=pad; } else el.x=pad; }
-            else if (mode==='center-x') { el.x = pdfOriginalWidth/2; if(el.type==='text') el.align='center'; if(el.type==='qr') el.x -= el.size/2; }
-            else if (mode==='right') { if(el.type==='text'){ el.align='right'; el.x=pdfOriginalWidth-pad; } else el.x=pdfOriginalWidth-pad-el.size; }
-            else if (mode==='top') { el.y = pad + (el.type==='text'? el.size/2 : 0); }
-            else if (mode==='center-y') { el.y = pdfOriginalHeight/2; if(el.type==='qr') el.y -= el.size/2; }
-            else if (mode==='bottom') { el.y = pdfOriginalHeight-pad - (el.type==='text'? el.size/2 : el.size); }
+            if (mode==='left') { if(el.type==='text') el.align='left'; el.x=pad; }
+            else if (mode==='center-x') { el.x=pdfOriginalWidth/2; if(el.type==='text') el.align='center'; if(el.type==='qr') el.x-=el.size/2; }
+            else if (mode==='right') { if(el.type==='text') el.align='right'; el.x=pdfOriginalWidth-pad; else el.x=pdfOriginalWidth-pad-el.size; }
+            else if (mode==='top') { el.y=pad + (el.type==='text'?el.size/2:0); }
+            else if (mode==='center-y') { el.y=pdfOriginalHeight/2; if(el.type==='qr') el.y-=el.size/2; }
+            else if (mode==='bottom') { el.y=pdfOriginalHeight-pad-(el.type==='text'?el.size/2:el.size); }
             drawCanvas();
         }
 
-        // --- SAVE TO STORAGE ---
+        // --- SAVE LOGIC (Logic 2 & 3) ---
         function saveToDatabase() {
             currentData.template_img = document.getElementById('inpPdf').value;
             currentData.google_sheet_url = document.getElementById('inpCsv').value;
-            // Simpan Layout ke Memori Browser
-            localStorage.setItem('dbSertifikat', JSON.stringify(dbSertifikat));
+            
+            // Logic 2: Simpan di LocalStorage (Draft Edit)
+            // Kita cari index data ini di array utama, lalu update
+            const globalIndex = dbSertifikat.findIndex(x => x.id === idRef);
+            if(globalIndex !== -1) {
+                dbSertifikat[globalIndex] = currentData;
+            }
+            localStorage.setItem('dbSertifikat_draft', JSON.stringify(dbSertifikat));
+
+            // Logic 3: Generate Code untuk Manual Save
             openExportModal();
         }
 
@@ -586,19 +569,30 @@
             const modal = document.getElementById('exportModal');
             const txtArea = document.getElementById('codeArea');
             const jsonString = JSON.stringify(dbSertifikat, null, 4);
-            const jsContent = `// js/db_sertifikat.js (SMART LOGIC)\n\nconst defaultData = ${jsonString};\n\nvar dbSertifikat = defaultData;\n\nif (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {\n    const local = localStorage.getItem('dbSertifikat');\n    if (local) dbSertifikat = JSON.parse(local);\n}\n\nfunction simpanKeStorage() {\n    localStorage.setItem('dbSertifikat', JSON.stringify(dbSertifikat));\n}`;
+            // Logic 4: Kode yang dihasilkan akan selalu mengecek LocalStorage juga saat di-load di device lain (jika localstorage dicopy/sync) 
+            // atau murni mengandalkan file JS ini sebagai sumber kebenaran.
+            const jsContent = `// js/db_sertifikat.js (Versi Auto-Generated)\n\n` +
+                              `const defaultData = ${jsonString};\n\n` +
+                              `// Init Data\n` +
+                              `var dbSertifikat = defaultData;\n\n` +
+                              `// Cek Draft Lokal (Khusus Editor)\n` +
+                              `if (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {\n` +
+                              `    const local = localStorage.getItem('dbSertifikat_draft');\n` +
+                              `    if (local) {\n` +
+                              `        try { dbSertifikat = JSON.parse(local); console.log('Draft Loaded'); } catch(e){}\n` +
+                              `    }\n` +
+                              `}`;
             txtArea.value = jsContent;
             modal.style.display = "flex";
         }
 
         function closeExportModal() { document.getElementById('exportModal').style.display = "none"; }
-        function copyCode() { document.getElementById('codeArea').select(); document.execCommand("copy"); alert("Kode disalin!"); }
+        function copyCode() { const t = document.getElementById('codeArea'); t.select(); document.execCommand("copy"); alert("Kode disalin!"); }
 
+        function changeZoom(d) { currentZoom = Math.max(0.2, Math.min(3.0, currentZoom + d)); document.getElementById('zoomDisplay').innerText = Math.round(currentZoom*100)+"%"; drawCanvas(); }
+        function changePage(d) { if(pdfDoc && pageNum+d>0 && pageNum+d<=pdfDoc.numPages) { pageNum+=d; document.getElementById('pageInfo').innerText = `Page ${pageNum}`; renderPage(pageNum); } }
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-        }
+        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode')?'dark':'light'); }
     </script>
 </body>
 </html>
