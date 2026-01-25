@@ -128,7 +128,7 @@
             align-items: center; justify-content: space-between;
         }
         .item-rows { width: 85px; flex-shrink: 0; }
-        .item-activity { flex: 1; min-width: 250px; } 
+        .item-activity { flex: 1; min-width: 200px; } 
         .item-search { width: 220px; flex-shrink: 0; position: relative; }
         .item-search input { padding-left: 32px; width: 100%; }
         .search-icon-inside { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
@@ -393,8 +393,14 @@
 
         window.onload = function() {
             setTimeout(() => {
-                if (typeof dbSertifikat === 'undefined') { return; }
-                localDB = dbSertifikat;
+                // 1. Cek Draft di LocalStorage (Prioritas agar editan tersimpan)
+                const draft = localStorage.getItem('dbSertifikat_draft');
+                if (draft) {
+                    try { localDB = JSON.parse(draft); } 
+                    catch(e) { if (typeof dbSertifikat !== 'undefined') localDB = dbSertifikat; }
+                } else {
+                    if (typeof dbSertifikat !== 'undefined') localDB = dbSertifikat;
+                }
                 filteredSertif = localDB;
                 renderTable();
             }, 300);
@@ -457,7 +463,7 @@
         function nextPage() { if(currentPage < Math.ceil(filteredSertif.length/itemsPerPage)) { currentPage++; renderTable(); } }
         function prevPage() { if(currentPage > 1) { currentPage--; renderTable(); } }
 
-        // --- 4. MODAL CRUD ---
+        // --- 4. MODAL CRUD & SIMPAN ---
         function openCreateModal() { document.getElementById('modalForm').style.display = 'flex'; }
         function closeModal() { document.getElementById('modalForm').style.display = 'none'; }
         function openEditModal(id) {
@@ -476,8 +482,44 @@
             document.getElementById('inThumb').value = item.thumbnail;
             document.getElementById('inLink').value = item.link_download;
         }
-        function simpanData() { alert("Simulasi Simpan."); closeModal(); }
-        function hapusData(id) { if(confirm("Hapus?")) { localDB = localDB.filter(x => x.id !== id); renderTable(); } }
+
+        function simpanData() {
+            const id = document.getElementById('inId').value;
+            const newData = {
+                id: id || "CERT-" + Date.now(),
+                judul: document.getElementById('inJudul').value,
+                deskripsi: document.getElementById('inDeskripsi').value,
+                narasumber: document.getElementById('inNaraNama').value,
+                instansi_nara: document.getElementById('inNaraInst').value,
+                tgl_mulai: document.getElementById('inTglMulai').value,
+                tgl_selesai: document.getElementById('inTglSelesai').value,
+                status: document.getElementById('inStatus').value,
+                base_url_validasi: document.getElementById('inBaseUrl').value,
+                thumbnail: document.getElementById('inThumb').value,
+                link_download: document.getElementById('inLink').value,
+                template_img: "draf/default.pdf", google_sheet_url: "", layout: []
+            };
+
+            if(!newData.judul) return alert("Judul wajib!");
+
+            if (id) {
+                const idx = localDB.findIndex(x => x.id === id);
+                if (idx !== -1) localDB[idx] = { ...localDB[idx], ...newData };
+            } else { localDB.push(newData); }
+            
+            // SIMPAN PERMANEN (Draft)
+            localStorage.setItem('dbSertifikat_draft', JSON.stringify(localDB));
+            
+            renderTable(); closeModal();
+        }
+
+        function hapusData(id) {
+            if(confirm("Hapus data?")) { 
+                localDB = localDB.filter(x => x.id !== id); 
+                localStorage.setItem('dbSertifikat_draft', JSON.stringify(localDB));
+                renderTable(); 
+            }
+        }
 
         // --- 5. DATA PESERTA ---
         let rawPesertaData = [], filteredPeserta = [], pesertaPage = 1, pesertaLimit = 25, pesertaHeaders = [], currentKegiatanId = null;
@@ -551,7 +593,7 @@
         function nextPagePeserta() { if(pesertaPage < Math.ceil(filteredPeserta.length/pesertaLimit)) { pesertaPage++; renderPesertaTable(); } }
         function prevPagePeserta() { if(pesertaPage > 1) { pesertaPage--; renderPesertaTable(); } }
 
-        // --- 6. PREVIEW GENERATOR (QR FIXED) ---
+        // --- 6. PREVIEW GENERATOR ---
         let currentPesertaData = null;
 
         function createQR(text) {
@@ -588,7 +630,6 @@
             if(!kegiatan || !currentPesertaData) return;
             modal.style.display = 'flex';
             
-            // Render PDF
             const loadingTask = pdfjsLib.getDocument(kegiatan.template_img);
             const pdf = await loadingTask.promise;
             const page = await pdf.getPage(1);
@@ -596,7 +637,6 @@
             canvas.width = viewport.width; canvas.height = viewport.height;
             await page.render({canvasContext: ctx, viewport: viewport}).promise;
 
-            // Overlay Data
             if(kegiatan.layout) {
                 const clean = (val) => val ? val.replace(/"/g, '').trim() : '';
                 const getData = (key) => {
@@ -633,7 +673,6 @@
             const { jsPDF } = window.jspdf;
             const kegiatan = localDB.find(x => x.id === currentKegiatanId);
             
-            // Re-render High Quality
             const loadingTask = pdfjsLib.getDocument(kegiatan.template_img);
             const pdf = await loadingTask.promise;
             const page = await pdf.getPage(1);
@@ -645,7 +684,6 @@
             await page.render({canvasContext: ctx, viewport: viewport}).promise;
 
             if(kegiatan.layout) {
-                const clean = (val) => val ? val.replace(/"/g, '').trim() : '';
                 const getData = (key) => {
                       const cleanKey = key.replace(/<<|>>/g, '').toLowerCase();
                       let idx = pesertaHeaders.findIndex(h => h.toLowerCase() === cleanKey);
@@ -656,7 +694,6 @@
                       }
                       return currentPesertaData[pesertaHeaders[idx]] || "";
                 };
-
                 for (let el of kegiatan.layout) {
                     const x = el.x * 3.0; const y = el.y * 3.0; const size = el.size * 3.0;
                     if(el.type === 'text') {
@@ -679,8 +716,8 @@
                 unit: 'px',
                 format: [viewport.width, viewport.height]
             });
-
             pdfDoc.addImage(imgData, 'JPEG', 0, 0, viewport.width, viewport.height);
+            
             let idxNama = pesertaHeaders.findIndex(h => h.toLowerCase().includes('nama'));
             if(idxNama === -1) idxNama = 1;
             const namaFile = currentPesertaData[pesertaHeaders[idxNama]] ? currentPesertaData[pesertaHeaders[idxNama]].replace(/[^a-zA-Z0-9]/g, '_') : 'Sertifikat';
