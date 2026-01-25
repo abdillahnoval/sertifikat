@@ -116,41 +116,25 @@
         .btn-cancel:hover { background: var(--bg-body); color: var(--text-main); }
         .btn-submit { background: var(--primary-green); color: white; border: none; padding: 8px 25px; border-radius: 6px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); transition: 0.2s; font-size: 12px;}
         .btn-submit:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        
+        .code-area { width: 100%; height: 300px; background: #1e293b; color: #a5b4fc; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 12px; border: 1px solid var(--border-color); resize: none; white-space: pre; overflow-x: auto; grid-column: span 2; }
 
-        /* --- STYLES KHUSUS VIEW PESERTA --- */
+        /* --- STYLES VIEW PESERTA --- */
         .section-view { display: none; }
         .section-view.active { display: block; animation: fadeIn 0.3s ease; }
         
-        .toolbar-peserta {
-            display: flex; gap: 15px; margin-bottom: 20px;
-            background: var(--bg-card); padding: 12px 15px; border-radius: 12px;
-            border: 1px solid var(--border-color); box-shadow: var(--shadow-card);
-            align-items: center; justify-content: space-between;
-        }
+        .toolbar-peserta { display: flex; gap: 15px; margin-bottom: 20px; background: var(--bg-card); padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-card); align-items: center; justify-content: space-between; }
         .item-rows { width: 85px; flex-shrink: 0; }
-        .item-activity { flex: 1; min-width: 200px; } 
+        .item-activity { flex: 1; min-width: 250px; } 
         .item-search { width: 220px; flex-shrink: 0; position: relative; }
         .item-search input { padding-left: 32px; width: 100%; }
         .search-icon-inside { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
 
         /* Preview Modal Style */
         .modal-card.preview-mode { max-width: 500px; } 
-        .preview-container { 
-            background: #f1f5f9; padding: 20px; border-radius: 8px; text-align: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 400px;
-        }
-        /* Canvas Container */
-        #canvasContainer {
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            background: white;
-            line-height: 0; 
-        }
-        #previewCanvas {
-            max-width: 100%; 
-            height: auto; 
-            display: block;
-        }
+        .preview-container { background: #f1f5f9; padding: 20px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; }
+        #canvasContainer { box-shadow: 0 10px 30px rgba(0,0,0,0.2); background: white; line-height: 0; }
+        #previewCanvas { max-width: 100%; height: auto; display: block; }
 
         @media (max-width: 768px) {
             body { height: auto; overflow: auto; flex-direction: column; } .sidebar { position: fixed; height: 100%; left: -100%; top: 0; } .sidebar.active { left: 0; } .toggle-sidebar-btn { display: block; }
@@ -158,7 +142,7 @@
             .main-content { overflow: visible; height: auto; padding: 15px; }
             .header-page { flex-direction: column; align-items: flex-start; gap: 15px; } 
             
-            /* FIX SEARCH WIDTH & BUTTON ADD */
+            /* UI SEARCH MOBILE FIX */
             .header-actions { width: 100%; flex-direction: column; align-items: stretch; }
             .search-box { width: 100%; }
             .search-box input { width: 100%; }
@@ -178,10 +162,8 @@
     <div class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="assets/Logo PGRI.png" alt="PGRI" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/87/Logo_PGRI.svg'">
-            <h2>PGRI Kab. Situbondo</h2>
-            <span class="role-badge">Administrator</span>
+            <h2>PGRI Kab. Situbondo</h2> <span class="role-badge">Administrator</span>
         </div>
-
         <div class="menu-label">Menu Utama</div>
         <ul class="nav-menu">
             <li><a href="#" onclick="switchView('sertifikat')" id="menuSertif" class="active"><i class="ph ph-list-dashes"></i> Daftar Sertifikat</a></li>
@@ -195,10 +177,7 @@
         <nav class="navbar">
             <div class="nav-left">
                 <button class="toggle-sidebar-btn" onclick="toggleSidebar()"><i class="ph ph-list"></i></button>
-                <div class="brand-identity">
-                    <i class="ph ph-certificate"></i>
-                    <span>Sertifikat Builder</span>
-                </div>
+                <div class="brand-identity"><i class="ph ph-certificate"></i> <span>Sertifikat Builder</span></div>
             </div>
             <div class="nav-right">
                 <button class="theme-toggle" onclick="toggleDarkMode()" title="Ganti Tema">
@@ -338,6 +317,27 @@
         </div>
     </div>
 
+    <div id="exportModal" class="modal-overlay" style="z-index: 210;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="ph ph-code"></i> Update Database</h3>
+                <button class="close-modal" onclick="closeExportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="full-width">
+                    <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
+                        Data berhasil disimpan di browser (Draft). Untuk permanen, salin kode ini ke file <b>js/db_sertifikat.js</b>.
+                    </p>
+                    <textarea id="codeArea" class="code-area" readonly></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeExportModal()">Tutup</button>
+                <button class="btn-submit" onclick="copyCode()">Copy Kode</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modalPreview" class="modal-overlay" style="z-index: 220;">
         <div class="modal-card preview-mode">
             <div class="modal-header">
@@ -385,7 +385,7 @@
             if(window.innerWidth <= 768) ov.style.display = sb.classList.contains('active') ? 'block' : 'none';
         }
 
-        // --- 2. LOGIC INIT ---
+        // --- 2. LOGIC INIT (SYNC DATA) ---
         let localDB = [];
         let currentPage = 1;
         const itemsPerPage = 5;
@@ -393,13 +393,15 @@
 
         window.onload = function() {
             setTimeout(() => {
-                // 1. Cek Draft di LocalStorage (Prioritas agar editan tersimpan)
-                const draft = localStorage.getItem('dbSertifikat_draft');
-                if (draft) {
-                    try { localDB = JSON.parse(draft); } 
-                    catch(e) { if (typeof dbSertifikat !== 'undefined') localDB = dbSertifikat; }
+                // 1. Ambil dari file server (Prioritas Utama sesuai request awal)
+                if (typeof dbSertifikat !== 'undefined') {
+                    // 2. Overwrite LocalStorage dengan data server agar sinkron
+                    localStorage.setItem('dbSertifikat_draft', JSON.stringify(dbSertifikat));
+                    localDB = dbSertifikat;
                 } else {
-                    if (typeof dbSertifikat !== 'undefined') localDB = dbSertifikat;
+                    // Fallback jika file gagal load
+                    const draft = localStorage.getItem('dbSertifikat_draft');
+                    localDB = draft ? JSON.parse(draft) : [];
                 }
                 filteredSertif = localDB;
                 renderTable();
@@ -510,6 +512,8 @@
             // SIMPAN PERMANEN (Draft)
             localStorage.setItem('dbSertifikat_draft', JSON.stringify(localDB));
             
+            // Show Export Modal for Manual Update
+            openExportModal();
             renderTable(); closeModal();
         }
 
@@ -517,11 +521,22 @@
             if(confirm("Hapus data?")) { 
                 localDB = localDB.filter(x => x.id !== id); 
                 localStorage.setItem('dbSertifikat_draft', JSON.stringify(localDB));
+                openExportModal(); // Prompt to update file
                 renderTable(); 
             }
         }
 
-        // --- 5. DATA PESERTA ---
+        // --- 5. EXPORT MODAL ---
+        function openExportModal() {
+            document.getElementById('exportModal').style.display = 'flex';
+            const jsonString = JSON.stringify(localDB, null, 4);
+            const jsContent = `// js/db_sertifikat.js\nconst defaultData = ${jsonString};\nvar dbSertifikat = defaultData;\nif (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {\n    const local = localStorage.getItem('dbSertifikat_draft');\n    if (local) { try { dbSertifikat = JSON.parse(local); } catch(e){} }\n}`;
+            document.getElementById('codeArea').value = jsContent;
+        }
+        function closeExportModal() { document.getElementById('exportModal').style.display = 'none'; }
+        function copyCode() { document.getElementById('codeArea').select(); document.execCommand('copy'); alert('Kode disalin!'); }
+
+        // --- 6. DATA PESERTA (DYNAMIC) ---
         let rawPesertaData = [], filteredPeserta = [], pesertaPage = 1, pesertaLimit = 25, pesertaHeaders = [], currentKegiatanId = null;
 
         function initPesertaView() {
@@ -593,7 +608,7 @@
         function nextPagePeserta() { if(pesertaPage < Math.ceil(filteredPeserta.length/pesertaLimit)) { pesertaPage++; renderPesertaTable(); } }
         function prevPagePeserta() { if(pesertaPage > 1) { pesertaPage--; renderPesertaTable(); } }
 
-        // --- 6. PREVIEW GENERATOR ---
+        // --- 7. PREVIEW GENERATOR (QR FIXED) ---
         let currentPesertaData = null;
 
         function createQR(text) {
@@ -630,6 +645,7 @@
             if(!kegiatan || !currentPesertaData) return;
             modal.style.display = 'flex';
             
+            // Render PDF
             const loadingTask = pdfjsLib.getDocument(kegiatan.template_img);
             const pdf = await loadingTask.promise;
             const page = await pdf.getPage(1);
@@ -637,6 +653,7 @@
             canvas.width = viewport.width; canvas.height = viewport.height;
             await page.render({canvasContext: ctx, viewport: viewport}).promise;
 
+            // Overlay Data
             if(kegiatan.layout) {
                 const clean = (val) => val ? val.replace(/"/g, '').trim() : '';
                 const getData = (key) => {
@@ -673,6 +690,7 @@
             const { jsPDF } = window.jspdf;
             const kegiatan = localDB.find(x => x.id === currentKegiatanId);
             
+            // Re-render High Quality
             const loadingTask = pdfjsLib.getDocument(kegiatan.template_img);
             const pdf = await loadingTask.promise;
             const page = await pdf.getPage(1);
