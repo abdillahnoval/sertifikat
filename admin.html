@@ -13,27 +13,27 @@
         * { box-sizing: border-box; }
 
         :root {
+            /* COLORS */
             --primary-green: #10b981; --primary-hover: #059669;
             --bg-body: #f1f5f9; --bg-card: #ffffff;
             --text-main: #1e293b; --text-muted: #64748b;
-            --input-bg: #f8fafc; --input-border: #e2e8f0; --border-color: #e2e8f0;
+            --input-bg: #f8fafc; --input-border: #e2e8f0;
+            --border-color: #e2e8f0;
             --sidebar-width: 260px; --navbar-height: 70px;
             --shadow-sidebar: 4px 0 24px 0 rgba(0,0,0,0.02);
             --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
+        /* DARK MODE */
         body.dark-mode {
             --bg-body: #0f172a; --bg-card: #1e293b;
             --text-main: #f1f5f9; --text-muted: #94a3b8;
-            --input-bg: #334155; --input-border: #475569; --border-color: #334155;
+            --input-bg: #334155; --input-border: #475569;
+            --border-color: #334155;
             --shadow-sidebar: 4px 0 24px 0 rgba(0,0,0,0.2);
         }
 
-        body {
-            font-family: 'Poppins', sans-serif; background-color: var(--bg-body);
-            color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden;
-            font-size: 13px; transition: background 0.3s, color 0.3s;
-        }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; font-size: 13px; transition: background 0.3s, color 0.3s; }
 
         /* --- SIDEBAR --- */
         .sidebar { width: var(--sidebar-width); background: var(--bg-card); box-shadow: var(--shadow-sidebar); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; z-index: 50; transition: transform 0.3s ease; }
@@ -59,24 +59,17 @@
         .header-page { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
         .page-title h1 { font-size: 20px; margin: 0; font-weight: 700; color: var(--text-main); }
         .page-title p { color: var(--text-muted); font-size: 13px; margin: 4px 0 0; }
-        .header-actions { display: flex; gap: 10px; }
-        .search-box { position: relative; }
-        .search-box input { padding: 10px 15px 10px 35px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font-family: inherit; font-size: 13px; width: 250px; transition: 0.2s; }
-        .search-box input:focus { border-color: var(--primary-green); outline: none; }
-        .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
         .btn-add { background: var(--primary-green); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; transition: 0.2s; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25); }
         .btn-add:hover { background: var(--primary-hover); transform: translateY(-2px); }
-        .btn-export { background: #3b82f6; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; transition: 0.2s; }
-        .btn-export:hover { background: #2563eb; }
 
         /* --- TABLE --- */
         .card-table { background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-card); border: 1px solid var(--border-color); overflow: hidden; }
         .table-responsive { width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         thead { background: var(--bg-body); }
-        th { text-align: left; padding: 12px 15px; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        th { text-align: left; padding: 12px 15px; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
         
-        /* Compact Table Padding */
+        /* Compact Table Style */
         td { padding: 10px 15px; border-bottom: 1px solid var(--border-color); vertical-align: middle; font-size: 13px; }
         tr:last-child td { border-bottom: none; }
         
@@ -118,28 +111,30 @@
         
         .code-area { width: 100%; height: 300px; background: #1e293b; color: #a5b4fc; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 12px; border: 1px solid var(--border-color); resize: none; white-space: pre; overflow-x: auto; grid-column: span 2; }
 
-        /* STYLE BARU: View Switching & Toolbar Peserta Layout */
+        /* --- STYLE BARU: View Switching & Toolbar Peserta Layout --- */
         .section-view { display: none; }
         .section-view.active { display: block; animation: fadeIn 0.3s ease; }
         
+        /* Flexbox Seimbang */
         .toolbar-peserta {
             display: flex; gap: 15px; margin-bottom: 20px;
             background: var(--bg-card); padding: 12px 15px; border-radius: 12px;
             border: 1px solid var(--border-color); box-shadow: var(--shadow-card);
-            align-items: center;
+            align-items: center; justify-content: space-between;
         }
 
-        /* Layout Kiri (Baris), Tengah (Kegiatan), Kanan (Search) */
-        .item-rows { width: 90px; flex-shrink: 0; }
-        .item-activity { flex: 1; min-width: 250px; }
-        .item-search { width: 220px; flex-shrink: 0; }
+        .item-rows { width: 80px; flex-shrink: 0; }
+        .item-activity { flex: 1; min-width: 250px; } /* Flexible Width */
+        .item-search { width: 220px; flex-shrink: 0; position: relative; }
+        .item-search input { padding-left: 32px; width: 100%; }
+        .search-icon-inside { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
 
         @media (max-width: 768px) {
             body { height: auto; overflow: auto; flex-direction: column; } .sidebar { position: fixed; height: 100%; left: -100%; top: 0; } .sidebar.active { left: 0; } .toggle-sidebar-btn { display: block; }
             .navbar { padding: 0 15px; position: sticky; top: 0; } .brand-identity span { display: block; font-size: 15px; }
             .main-content { overflow: visible; height: auto; padding: 15px; }
             .header-page { flex-direction: column; align-items: flex-start; gap: 15px; } 
-            .header-actions { width: 100%; flex-direction: column; } .search-box input { width: 100%; } .btn-add { width: 100%; justify-content: center; }
+            .btn-add { width: 100%; justify-content: center; }
             .modal-card { width: 100%; margin: 10px 0; } .modal-body { grid-template-columns: 1fr; gap: 15px; padding: 15px; } .full-width { grid-column: span 1; }
             
             .toolbar-peserta { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -154,8 +149,7 @@
     <div class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="assets/Logo PGRI.png" alt="PGRI" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/87/Logo_PGRI.svg'">
-            <h2>PGRI Kab. Situbondo</h2>
-            <span class="role-badge">Administrator</span>
+            <h2>PGRI Kab. Situbondo</h2> <span class="role-badge">Administrator</span>
         </div>
 
         <div class="menu-label">Menu Utama</div>
@@ -171,10 +165,7 @@
         <nav class="navbar">
             <div class="nav-left">
                 <button class="toggle-sidebar-btn" onclick="toggleSidebar()"><i class="ph ph-list"></i></button>
-                <div class="brand-identity">
-                    <i class="ph ph-certificate"></i>
-                    <span>Sertifikat Builder</span>
-                </div>
+                <div class="brand-identity"><i class="ph ph-certificate"></i> <span>Sertifikat Builder</span></div>
             </div>
             <div class="nav-right">
                 <button class="theme-toggle" onclick="toggleDarkMode()" title="Ganti Tema">
@@ -192,18 +183,9 @@
                         <h1>Daftar Sertifikat</h1>
                         <p>Kelola semua kegiatan seminar dan workshop PGRI.</p>
                     </div>
-                    <div class="header-actions">
-                        <div class="search-box">
-                            <i class="ph ph-magnifying-glass"></i>
-                            <input type="text" id="searchInput" placeholder="Cari kegiatan..." onkeyup="filterTable()">
-                        </div>
-                        <button class="btn-export" onclick="openExportModal()" title="Export Database">
-                            <i class="ph ph-code"></i> Simpan Permanen
-                        </button>
-                        <button class="btn-add" onclick="openCreateModal()">
-                            <i class="ph ph-plus-circle" style="font-size: 18px;"></i> Tambah Kegiatan
-                        </button>
-                    </div>
+                    <button class="btn-add" onclick="openCreateModal()">
+                        <i class="ph ph-plus-circle" style="font-size: 18px;"></i> Tambah Kegiatan
+                    </button>
                 </div>
 
                 <div class="card-table">
@@ -220,7 +202,6 @@
                             <tbody id="tableBody"></tbody>
                         </table>
                     </div>
-
                     <div class="pagination">
                         <span id="pageInfo">Menampilkan...</span>
                         <div class="page-controls">
@@ -255,7 +236,8 @@
                     </div>
 
                     <div class="item-search">
-                        <input type="text" id="cariPeserta" class="input-modern" placeholder="Cari data peserta..." onkeyup="filterPesertaLocal()">
+                        <i class="ph ph-magnifying-glass search-icon-inside"></i>
+                        <input type="text" id="cariPeserta" class="input-modern" placeholder="Cari peserta..." onkeyup="filterPesertaLocal()">
                     </div>
                 </div>
 
@@ -319,27 +301,6 @@
         </div>
     </div>
 
-    <div id="exportModal" class="modal-overlay" style="z-index: 210;">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3><i class="ph ph-code"></i> Update Database</h3>
-                <button class="close-modal" onclick="closeExportModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="full-width">
-                    <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
-                        Salin kode di bawah ini lalu tempel (overwrite) ke file <b>js/db_sertifikat.js</b> di hosting Anda agar perubahan tersimpan permanen.
-                    </p>
-                    <textarea id="codeArea" class="code-area" readonly></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeExportModal()">Tutup</button>
-                <button class="btn-submit" onclick="copyCode()">Copy Kode</button>
-            </div>
-        </div>
-    </div>
-
     <div id="modalPreview" class="modal-overlay" style="z-index: 220;">
         <div class="modal-card" style="max-width: 900px; height: 90vh;">
             <div class="modal-header">
@@ -368,8 +329,10 @@
         }
         if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
         function toggleSidebar() { 
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('sidebarOverlay').style.display = document.getElementById('sidebar').classList.contains('active') ? 'block' : 'none';
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('sidebarOverlay');
+            sb.classList.toggle('active');
+            if(window.innerWidth <= 768) ov.style.display = sb.classList.contains('active') ? 'block' : 'none';
         }
 
         // 2. DATA HANDLING (LOAD PRIORITY)
@@ -391,42 +354,30 @@
         // 3. PAGINATION & RENDER (KEGIATAN)
         let currentPage = 1;
         const itemsPerPage = 5;
-        let filteredData = [];
 
         function renderTable() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase();
-            filteredData = localDB.filter(item => item.judul.toLowerCase().includes(keyword));
-
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
-
-            const totalItems = filteredData.length;
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+            if (typeof dbSertifikat === 'undefined') { console.error("DB Error"); return; }
+            const total = dbSertifikat.length;
+            const pages = Math.ceil(total / itemsPerPage);
+            if (currentPage > pages && pages > 0) currentPage = pages;
             if (currentPage < 1) currentPage = 1;
-
             const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const dataToShow = filteredData.slice(start, end);
-
-            document.getElementById('pageInfo').innerText = `Halaman ${currentPage} dari ${totalPages || 1}`;
+            const dataToShow = dbSertifikat.slice(start, start + itemsPerPage);
+            document.getElementById('pageInfo').innerText = `Halaman ${currentPage} dari ${pages || 1}`;
             
             const btns = document.querySelectorAll('.page-btn');
             btns[0].classList.toggle('disabled', currentPage === 1);
-            btns[1].classList.toggle('disabled', currentPage >= totalPages);
+            btns[1].classList.toggle('disabled', currentPage >= pages);
 
-            if(dataToShow.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" align="center" style="padding:40px; color:var(--text-muted);">Belum ada data.</td></tr>';
-                return;
-            }
+            if(dataToShow.length === 0) { tbody.innerHTML = '<tr><td colspan="4" align="center" style="padding:40px;">Belum ada data.</td></tr>'; return; }
 
             dataToShow.forEach((item, index) => {
                 const tr = document.createElement('tr');
-                const globalIndex = start + index + 1;
                 const statusClass = item.status === "Aktif" ? "status-aktif" : "status-nonaktif";
-                
                 tr.innerHTML = `
-                    <td style="color:var(--text-muted); font-weight:600;">${globalIndex}</td>
+                    <td style="color:var(--text-muted); font-weight:600;">${start + index + 1}</td>
                     <td class="col-judul">
                         <h4>${item.judul}</h4>
                         <p>${item.deskripsi ? item.deskripsi.substring(0, 70) + '...' : '-'}</p>
@@ -439,18 +390,13 @@
                             <button class="icon-btn" title="Edit Metadata" onclick="openEditModal('${item.id}')"><i class="ph ph-pencil-simple"></i></button>
                             <button class="icon-btn btn-delete" title="Hapus" onclick="hapusData('${item.id}')"><i class="ph ph-trash"></i></button>
                         </div>
-                    </td>
-                `;
+                    </td>`;
                 tbody.appendChild(tr);
             });
         }
-
-        function filterTable() { currentPage = 1; renderTable(); }
-        function nextPage() { const totalPages = Math.ceil(filteredData.length / itemsPerPage); if(currentPage < totalPages) { currentPage++; renderTable(); } }
+        function nextPage() { if(currentPage < Math.ceil(dbSertifikat.length/itemsPerPage)) { currentPage++; renderTable(); } }
         function prevPage() { if(currentPage > 1) { currentPage--; renderTable(); } }
 
-        // 4. MODAL LOGIC
-        function closeModal() { document.getElementById('modalForm').style.display = 'none'; }
         function openCreateModal() {
             document.getElementById('modalForm').style.display = 'flex';
             document.getElementById('modalTitle').innerHTML = '<i class="ph ph-plus-circle"></i> Tambah Kegiatan';
@@ -476,8 +422,8 @@
             document.getElementById('inStatus').value = item.status || 'Aktif';
             document.getElementById('inBaseUrl').value = item.base_url_validasi || '';
         }
-
-        // 5. CRUD & SAVE
+        function closeModal() { document.getElementById('modalForm').style.display = 'none'; }
+        
         function simpanData() {
             const id = document.getElementById('inId').value;
             const newData = {
@@ -509,13 +455,6 @@
             }
         }
         function saveToDraft() { localStorage.setItem('dbSertifikat_draft', JSON.stringify(localDB)); }
-        function openExportModal() {
-            document.getElementById('exportModal').style.display = "flex";
-            const jsContent = `// js/db_sertifikat.js (UPDATED)\nconst defaultData = ${JSON.stringify(localDB, null, 4)};\nvar dbSertifikat = defaultData;\nif (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {\n    const local = localStorage.getItem('dbSertifikat_draft');\n    if (local) { try { dbSertifikat = JSON.parse(local); } catch(e){} }\n}`;
-            document.getElementById('codeArea').value = jsContent;
-        }
-        function closeExportModal() { document.getElementById('exportModal').style.display = "none"; }
-        function copyCode() { document.getElementById('codeArea').select(); document.execCommand("copy"); alert("Kode disalin!"); }
         
         // 6. VIEW SWITCHING
         function switchView(view) {
@@ -612,8 +551,8 @@
                     let rowHTML = `<td style="color:var(--text-muted); font-weight:600;">${start + i + 1}</td>`;
                     pesertaHeaders.forEach(key => rowHTML += `<td>${row[key] || '-'}</td>`);
                     
-                    // Tombol Preview
-                    const searchKey = row[pesertaHeaders[0]]; // Asumsi kolom pertama ID/Nama
+                    // Tombol Preview (Open Modal)
+                    const searchKey = row[pesertaHeaders[0]]; 
                     rowHTML += `
                         <td style="text-align:right;">
                             <button class="icon-btn" onclick="openPreviewModal('${currentKegiatanId}', '${encodeURIComponent(searchKey)}')" style="color:var(--primary-green); border-color:var(--primary-green); margin-left:auto;" title="Preview Sertifikat">
@@ -635,17 +574,17 @@
         function nextPagePeserta() { if(pesertaPage < Math.ceil(filteredPeserta.length / pesertaLimit)) { pesertaPage++; renderPesertaTable(); } }
         function prevPagePeserta() { if(pesertaPage > 1) { pesertaPage--; renderPesertaTable(); } }
 
-        // 8. PREVIEW MODAL LOGIC
+        // 8. PREVIEW MODAL LOGIC (IFRAME TO INDEX.HTML)
         function openPreviewModal(kegiatanId, searchKey) {
             const modal = document.getElementById('modalPreview');
             const iframe = document.getElementById('previewFrame');
-            // Load index.html di dalam iframe dengan parameter search
+            // Pastikan index.html mendukung parameter 'preview=true' untuk tampilan yang bersih jika perlu
             iframe.src = `index.html?id=${kegiatanId}&search=${searchKey}&preview=true`;
             modal.style.display = 'flex';
         }
         function closePreviewModal() {
             document.getElementById('modalPreview').style.display = 'none';
-            document.getElementById('previewFrame').src = ''; // Clear source
+            document.getElementById('previewFrame').src = ''; // Clear source to stop media/memory
         }
 
     </script>
