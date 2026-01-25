@@ -48,41 +48,63 @@
         .nav-menu a.active { background: rgba(16, 185, 129, 0.08); color: var(--primary-green); font-weight: 600; }
         .nav-menu a:hover:not(.active) { background: rgba(0,0,0,0.02); color: var(--text-main); }
 
+        /* --- SIDEBAR OVERLAY (MOBILE) --- */
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 45; display: none; backdrop-filter: blur(2px); }
+
+        /* --- CONTENT WRAPPER --- */
         .content-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 
+        /* --- NAVBAR --- */
         .navbar { height: var(--navbar-height); background: var(--bg-card); box-shadow: 0 2px 15px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; z-index: 40; border-bottom: 1px solid var(--border-color); }
-        .nav-left { display: flex; align-items: center; gap: 15px; } .brand-identity { font-size: 16px; font-weight: 700; color: var(--text-main); letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
-        .brand-identity i { color: var(--primary-green); font-size: 18px; } .toggle-sidebar-btn { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; display: none; }
-        .nav-right { display: flex; align-items: center; gap: 12px; } .theme-toggle { background: var(--input-bg); border: none; color: var(--text-main); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .theme-toggle:hover { background: #e2e8f0; color: var(--primary-green); } .profile-pic { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+        .nav-left { display: flex; align-items: center; gap: 15px; } 
+        .brand-identity { font-size: 16px; font-weight: 700; color: var(--text-main); letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
+        .brand-identity i { color: var(--primary-green); font-size: 18px; } 
+        .toggle-sidebar-btn { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; display: none; }
+        .nav-right { display: flex; align-items: center; gap: 12px; } 
+        .theme-toggle { background: var(--input-bg); border: none; color: var(--text-main); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .theme-toggle:hover { background: #e2e8f0; color: var(--primary-green); } 
+        .profile-pic { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
 
-        /* --- EDITOR PANEL --- */
+        /* --- SETTING LAYOUT AREA --- */
         .main-content { flex: 1; padding: 20px; display: flex; gap: 20px; overflow: hidden; }
-        .editor-panel { width: 320px; background: var(--bg-card); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; border: 1px solid var(--border-color); box-shadow: var(--shadow-panel); overflow-y: scroll; flex-shrink: 0; scrollbar-width: none; -ms-overflow-style: none; }
+
+        /* PANEL EDITOR (KIRI) */
+        .editor-panel {
+            width: 320px; background: var(--bg-card); border-radius: 12px; padding: 20px;
+            display: flex; flex-direction: column; border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-panel); overflow-y: scroll; flex-shrink: 0;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
         .editor-panel::-webkit-scrollbar { width: 0px !important; height: 0px !important; background: transparent; display: none; }
 
         .panel-title { color: var(--primary-green); font-weight: 700; font-size: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
         .control-group { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
         .label-text { font-weight: 600; font-size: 11px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; }
         
-        .input-full, .font-select { width: 100%; padding: 8px 10px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px; color: var(--text-main); box-sizing: border-box; margin-bottom: 8px; }
+        .input-full, .font-select { 
+            width: 100%; padding: 8px 10px; background: var(--input-bg); border: 1px solid var(--border-color); 
+            border-radius: 6px; font-size: 13px; color: var(--text-main); box-sizing: border-box; margin-bottom: 8px; 
+        }
         
         .toolbar { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
-        .btn-tool { width: 32px; height: 32px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; }
+        .btn-tool { 
+            width: 32px; height: 32px; background: var(--input-bg); border: 1px solid var(--border-color); 
+            border-radius: 6px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; 
+        }
         .btn-tool:hover { background: var(--border-color); }
         .btn-tool.active { background: #d1fae5; color: var(--primary-green); border-color: var(--primary-green); }
         
         .color-wrapper { position: relative; border:1px solid var(--border-color); border-radius:6px; padding:2px; width: 32px; height: 32px; overflow: hidden; cursor: pointer;}
         .color-wrapper input { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; cursor: pointer; border: none; padding: 0; margin: 0; }
 
+        /* Action Buttons */
         .btn-action { width: 100%; padding: 10px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; transition: 0.2s; margin-top: 5px; }
         .btn-add { background: #eff6ff; color: #2563eb; border: 1px dashed #bfdbfe; }
         .btn-delete { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; margin-top: 10px;}
         .btn-save { background: var(--primary-green); color: white; margin-top: auto; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
         .btn-save:hover { background: var(--primary-hover); }
 
-        /* PREVIEW PANEL */
+        /* PREVIEW PANEL (KANAN) */
         .preview-panel { flex: 1; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-panel); display: flex; flex-direction: column; overflow: hidden; }
         .preview-header { padding: 10px 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); }
         .control-bar { display: flex; gap: 8px; align-items: center; } .zoom-label { font-size: 11px; font-weight: 600; width: 40px; text-align: center; }
@@ -93,7 +115,7 @@
         .properties-form { display: none; } .properties-form.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* MODAL */
+        /* --- MODAL EXPORT CODE --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 100; display: none; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 20px; }
         .modal-card { background: var(--bg-card); width: 100%; max-width: 600px; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); display: flex; flex-direction: column; position: relative; margin: auto; animation: modalFadeIn 0.3s ease; }
         .modal-header { background: #10b981; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-radius: 12px 12px 0 0; color: white; }
@@ -104,10 +126,12 @@
         .close-modal { background: rgba(255,255,255,0.2); border: none; font-size: 16px; color: white; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .close-modal:hover { background: rgba(255,255,255,0.4); }
 
+        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             body { height: auto; overflow: auto; flex-direction: column; } .sidebar { position: fixed; height: 100%; left: -100%; top: 0; } .sidebar.active { left: 0; } .toggle-sidebar-btn { display: block; } .navbar { padding: 0 15px; position: sticky; top: 0; } .brand-identity span { display: block; font-size: 15px; }
             .main-content { flex-direction: column; overflow: visible; height: auto; padding: 15px; gap: 15px; } .preview-panel { height: 50vh; order: 1; } .canvas-area { padding: 15px; } .editor-panel { width: 100%; height: auto; order: 2; max-height: none; overflow: visible; margin-bottom: 30px; }
         }
+
     </style>
 </head>
 <body>
@@ -117,7 +141,8 @@
     <div class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="assets/Logo PGRI.png" alt="PGRI" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/87/Logo_PGRI.svg'">
-            <h2>PGRI Kab. Situbondo</h2> <span class="role-badge">Administrator</span>
+            <h2>PGRI Kab. Situbondo</h2>
+            <span class="role-badge">Administrator</span>
         </div>
         <div class="menu-label">Menu Utama</div>
         <ul class="nav-menu">
@@ -180,7 +205,7 @@
                         <div class="toolbar">
                             <input type="number" id="propSize" class="input-full" style="width:60px; margin:0;" oninput="updateActiveElement()" title="Size px">
                             
-                            <div id="styleButtonsWrapper" style="display:flex; gap:5px;">
+                            <div id="styleBtnWrapper" style="display:flex; gap:5px;">
                                 <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold (Tebal)"><i class="ph ph-text-b"></i></button>
                                 <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic (Miring)"><i class="ph ph-text-italic"></i></button>
                                 <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')" title="Underline (Garis Bawah)"><i class="ph ph-text-underline"></i></button>
@@ -312,7 +337,7 @@
             setTimeout(() => {
                 if (typeof dbSertifikat === 'undefined') { alert("Database error!"); return; }
                 
-                // PRIORITY A: Load ALWAYS from Server (dbSertifikat)
+                // PRIORITY A: SELALU LOAD DARI DB_SERTIFIKAT (SERVER)
                 currentData = dbSertifikat.find(x => x.id === idRef);
                 
                 if (currentData) {
@@ -586,7 +611,7 @@
             if (el.type === 'qr') {
                 grText.style.display = 'none'; // Sembunyikan Input Teks
                 
-                // Hide Font, Style, Color, Align
+                // Sembunyikan Font, Style, Warna, Align
                 if(fontSelectWrapper) fontSelectWrapper.style.display = 'none';
                 if(styleBtnWrapper) styleBtnWrapper.style.display = 'none';
                 if(colorWrapper) colorWrapper.style.display = 'none';
@@ -691,26 +716,29 @@
             currentData.template_img = document.getElementById('inpPdf').value;
             currentData.google_sheet_url = document.getElementById('inpCsv').value;
             
-            // PRIORITY B: Simpan Draft ke LocalStorage
+            // PRIORITY B: SIMPAN KE LOCALSTORAGE (Draft Sementara)
             localStorage.setItem('dbSertifikat_draft', JSON.stringify(dbSertifikat));
             
-            // PRIORITY C: Generate Code (Clean Data)
             openExportModal();
         }
 
         function openExportModal() {
             const modal = document.getElementById('exportModal');
             const txtArea = document.getElementById('codeArea');
+            
             const jsonString = JSON.stringify(dbSertifikat, null, 4);
+            
+            // PRIORITY C: GENERATE KODE JS UNTUK UPDATE MANUAL
             const jsContent = `// js/db_sertifikat.js (SMART LOGIC)\n\n` +
                               `const defaultData = ${jsonString};\n\n` +
                               `// --- LOGIKA PEMILIHAN DATA OTOMATIS ---\n` +
                               `var dbSertifikat = defaultData; \n\n` +
                               `if (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {\n` +
                               `    const local = localStorage.getItem('dbSertifikat_draft');\n` +
-                              `    if (local) {\n` +
-                              `        try { dbSertifikat = JSON.parse(local); console.log('Draft Loaded'); } catch(e){}\n` +
-                              `    }\n` +
+                              `    if (local) dbSertifikat = JSON.parse(local);\n` +
+                              `}\n\n` +
+                              `function simpanKeStorage() {\n` +
+                              `    localStorage.setItem('dbSertifikat_draft', JSON.stringify(dbSertifikat));\n` +
                               `}`;
             txtArea.value = jsContent;
             modal.style.display = "flex";
