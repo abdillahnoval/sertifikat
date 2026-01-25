@@ -168,8 +168,8 @@
                     </div>
 
                     <div class="control-group" id="groupStyle">
-                        <label class="label-text">Gaya & Format</label>
-                        <div id="fontControls">
+                        <label class="label-text">Gaya Huruf</label>
+                        <div id="fontSelectWrapper">
                             <select id="propFont" class="font-select" onchange="updateActiveElement()">
                                 <option value="Poppins">Poppins</option>
                                 <option value="Arial">Arial</option>
@@ -177,25 +177,24 @@
                                 <option value="Courier New">Courier</option>
                             </select>
                         </div>
-                        
                         <div class="toolbar">
                             <input type="number" id="propSize" class="input-full" style="width:60px; margin:0;" oninput="updateActiveElement()" title="Size px">
                             
-                            <div id="styleButtons" style="display:flex; gap:5px;">
+                            <div id="styleButtonsWrapper" style="display:flex; gap:5px;">
                                 <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold (Tebal)"><i class="ph ph-text-b"></i></button>
                                 <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic (Miring)"><i class="ph ph-text-italic"></i></button>
                                 <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')" title="Underline (Garis Bawah)"><i class="ph ph-text-underline"></i></button>
                             </div>
                             
-                            <div id="colorControls" style="display:flex; align-items:center; gap:5px; flex:1; margin-left:5px;">
+                            <div id="colorWrapper" style="display:flex; align-items:center; gap:5px; flex:1; margin-left:5px;">
                                 <div class="color-wrapper">
                                     <input type="color" id="propColorPicker" oninput="syncColor(this.value)">
                                 </div>
-                                <input type="text" id="propColorText" class="input-full" style="margin:0; font-family:monospace; padding:0 5px; height:32px;" onchange="syncColor(this.value)">
+                                <input type="text" id="propColorText" class="input-full" style="margin:0; font-family:monospace; padding:0 5px; height:32px;" onchange="syncColor(this.value)" placeholder="#000000">
                             </div>
                         </div>
                         
-                        <div id="alignControls" class="toolbar" style="margin-top:5px;">
+                        <div id="alignWrapper" class="toolbar" style="margin-top:5px;">
                             <button class="btn-tool" onclick="setAlign('left')" title="Rata Kiri"><i class="ph ph-text-align-left"></i></button>
                             <button class="btn-tool" onclick="setAlign('center')" title="Rata Tengah"><i class="ph ph-text-align-center"></i></button>
                             <button class="btn-tool" onclick="setAlign('right')" title="Rata Kanan"><i class="ph ph-text-align-right"></i></button>
@@ -299,7 +298,6 @@
         let isDragging = false, isResizing = false;
         let dragStart = {x:0, y:0};
         let initialProp = {x:0, y:0, size:0};
-        
         let pdfOriginalWidth = 0;
         let pdfOriginalHeight = 0;
 
@@ -307,12 +305,14 @@
         const urlParams = new URLSearchParams(window.location.search);
         const idRef = urlParams.get('id');
 
+        // LOGIC Priority A: Always load from db_sertifikat.js
         window.onload = function() {
             if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
             
             setTimeout(() => {
-                // LOGIKA PRIORITY: Selalu load dari db_sertifikat.js (Server) saat reload
                 if (typeof dbSertifikat === 'undefined') { alert("Database error!"); return; }
+                
+                // MURNI DARI DB (SERVER), Abaikan LocalStorage saat Load
                 currentData = dbSertifikat.find(x => x.id === idRef);
                 
                 if (currentData) {
@@ -497,25 +497,30 @@
 
         window.addEventListener('mouseup', () => { isDragging = false; isResizing = false; });
 
+        // KEYBOARD EVENT LISTENER
         window.addEventListener('keydown', (e) => {
             if (!activeElementId) return;
             const el = currentData.layout.find(item => item.id === activeElementId);
             if (!el) return;
 
+            // Jika sedang mengetik di input, abaikan shortcut
             if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
 
-            const step = e.shiftKey ? 10 : 1;
+            const step = e.shiftKey ? 10 : 1; // Shift + Arrow = 10px
 
             switch (e.key) {
                 case 'ArrowUp': el.y -= step; break;
                 case 'ArrowDown': el.y += step; break;
                 case 'ArrowLeft': el.x -= step; break;
                 case 'ArrowRight': el.x += step; break;
-                case 'Delete': case 'Backspace': deleteActiveElement(); return;
-                case 'd': if (e.ctrlKey || e.metaKey) { e.preventDefault(); duplicateActiveElement(); return; } break;
+                case 'Delete': 
+                case 'Backspace': deleteActiveElement(); return; // Hapus
+                case 'd': if (e.ctrlKey || e.metaKey) { e.preventDefault(); duplicateActiveElement(); return; } break; // Ctrl+D Duplikat
                 default: return;
             }
-            e.preventDefault(); drawCanvas();
+            
+            e.preventDefault(); // Cegah scroll browser
+            drawCanvas();
         });
 
         // --- CRUD & LOGIC ---
@@ -541,21 +546,26 @@
 
             const clone = JSON.parse(JSON.stringify(original));
             clone.id = Date.now();
-            clone.x += 20; clone.y += 20;
+            clone.x += 20; // Offset sedikit biar terlihat
+            clone.y += 20;
             
             currentData.layout.push(clone);
             setActive(clone.id);
             drawCanvas();
         }
 
+        // LAYERING
         function moveLayer(dir) {
             if (!activeElementId) return;
             const idx = currentData.layout.findIndex(el => el.id === activeElementId);
             if (idx === -1) return;
 
             const el = currentData.layout.splice(idx, 1)[0];
-            if (dir === 'up') currentData.layout.push(el);
-            else currentData.layout.unshift(el);
+            if (dir === 'up') {
+                currentData.layout.push(el); // Pindah ke paling akhir (depan)
+            } else {
+                currentData.layout.unshift(el); // Pindah ke paling awal (belakang)
+            }
             drawCanvas();
         }
 
@@ -568,46 +578,45 @@
 
         function syncForm(el) {
             const grText = document.getElementById('groupText');
-            // Element spesifik yang akan disembunyikan jika QR
-            const fontControls = document.getElementById('fontControls');
-            const styleButtons = document.getElementById('styleButtons');
-            const colorControls = document.getElementById('colorControls');
-            const alignControls = document.getElementById('alignControls');
+            // Element2 spesifik yang mau disembunyikan untuk QR
+            const fontSelectWrapper = document.getElementById('fontSelectWrapper');
+            const styleButtonsWrapper = document.getElementById('styleButtonsWrapper');
+            const colorWrapper = document.getElementById('colorWrapper');
+            const alignWrapper = document.getElementById('alignWrapper');
             const labelGaya = document.querySelector('#groupStyle .label-text');
 
             if (el.type === 'qr') {
-                grText.style.display = 'none'; // Sembunyikan Isi Teks
+                grText.style.display = 'none'; // Sembunyikan Input Teks
                 
-                // Sembunyikan elemen Gaya Huruf (kecuali size)
-                fontControls.style.display = 'none';
-                styleButtons.style.display = 'none';
-                colorControls.style.display = 'none';
-                alignControls.style.display = 'none';
+                // Logic Menu QR Code: Sembunyikan font/style/warna, sisakan size
+                if(fontSelectWrapper) fontSelectWrapper.style.display = 'none';
+                if(styleButtonsWrapper) styleButtonsWrapper.style.display = 'none';
+                if(colorWrapper) colorWrapper.style.display = 'none';
+                if(alignWrapper) alignWrapper.style.display = 'none';
                 
-                // Ubah label agar sesuai konteks
-                labelGaya.textContent = "Ukuran QR Code";
+                if(labelGaya) labelGaya.innerText = "Ukuran QR Code";
+
+                document.getElementById('propSize').value = el.size;
             } else {
                 grText.style.display = 'block';
                 
-                // Tampilkan semua elemen Gaya Huruf
-                fontControls.style.display = 'block';
-                styleButtons.style.display = 'flex';
-                colorControls.style.display = 'flex';
-                alignControls.style.display = 'flex';
-                
-                labelGaya.textContent = "Gaya & Format";
+                // Logic Menu Text: Tampilkan Semua
+                if(fontSelectWrapper) fontSelectWrapper.style.display = 'block';
+                if(styleButtonsWrapper) styleButtonsWrapper.style.display = 'flex';
+                if(colorWrapper) colorWrapper.style.display = 'flex';
+                if(alignWrapper) alignWrapper.style.display = 'flex';
+
+                if(labelGaya) labelGaya.innerText = "Gaya Huruf";
 
                 document.getElementById('propText').value = el.text;
                 document.getElementById('propFont').value = el.font;
-                
+                document.getElementById('propSize').value = el.size;
                 syncColor(el.color);
                 
                 document.getElementById('btnBold').classList.toggle('active', !!el.bold);
                 document.getElementById('btnItalic').classList.toggle('active', !!el.italic);
                 document.getElementById('btnUnderline').classList.toggle('active', !!el.underline);
             }
-            // Size selalu update (input size ada di luar div yang disembunyikan)
-            document.getElementById('propSize').value = el.size;
         }
 
         function updateActiveElement() {
@@ -615,7 +624,7 @@
             if (!el) return;
             
             el.size = parseInt(document.getElementById('propSize').value);
-            
+
             if (el.type === 'text') {
                 el.text = document.getElementById('propText').value;
                 el.font = document.getElementById('propFont').value;
@@ -640,34 +649,58 @@
             if(el) { el.align = align; drawCanvas(); }
         }
 
+        // --- ALIGN TO PAGE ---
         function alignToPage(mode) {
             const el = currentData.layout.find(e => e.id === activeElementId);
             if(!el || !pdfOriginalWidth) return;
 
             const padding = 50; 
 
-            if (mode === 'left') { if (el.type === 'text') { el.align = 'left'; el.x = padding; } else { el.x = padding; } }
+            // HORIZONTAL
+            if (mode === 'left') {
+                if (el.type === 'text') { el.align = 'left'; el.x = padding; }
+                else { el.x = padding; }
+            }
             else if (mode === 'center-x') {
                 if (el.type === 'text') el.align = 'center';
                 el.x = pdfOriginalWidth / 2;
                 if (el.type === 'qr') el.x = (pdfOriginalWidth - el.size) / 2;
             }
-            else if (mode === 'right') { if (el.type === 'text') { el.align = 'right'; el.x = pdfOriginalWidth - padding; } else { el.x = pdfOriginalWidth - el.size - padding; } }
-            else if (mode === 'top') { if (el.type === 'text') el.y = padding + (el.size/2); else el.y = padding; }
+            else if (mode === 'right') {
+                if (el.type === 'text') { el.align = 'right'; el.x = pdfOriginalWidth - padding; }
+                else { el.x = pdfOriginalWidth - el.size - padding; }
+            }
+            
+            // VERTICAL
+            else if (mode === 'top') {
+                if (el.type === 'text') el.y = padding + (el.size/2); 
+                else el.y = padding;
+            }
             else if (mode === 'center-y') {
                 el.y = pdfOriginalHeight / 2;
                 if (el.type === 'qr') el.y = (pdfOriginalHeight - el.size) / 2;
             }
-            else if (mode === 'bottom') { if (el.type === 'text') el.y = pdfOriginalHeight - padding - (el.size/2); else el.y = pdfOriginalHeight - el.size - padding; }
-            else if (mode === 'center-all') { alignToPage('center-x'); alignToPage('center-y'); }
+            else if (mode === 'bottom') {
+                if (el.type === 'text') el.y = pdfOriginalHeight - padding - (el.size/2);
+                else el.y = pdfOriginalHeight - el.size - padding;
+            }
+            else if (mode === 'center-all') {
+                alignToPage('center-x');
+                alignToPage('center-y');
+            }
             drawCanvas();
         }
 
+        // Priority B: Save to LocalStorage & C: Generate Code
         function saveToDatabase() {
             currentData.template_img = document.getElementById('inpPdf').value;
             currentData.google_sheet_url = document.getElementById('inpCsv').value;
             
-            // SIMPAN KE LOCALSTORAGE (Draft)
+            // Update Global Array variable (in memory)
+            const idx = dbSertifikat.findIndex(x => x.id === idRef);
+            if(idx !== -1) dbSertifikat[idx] = currentData;
+            
+            // Simpan Draft ke LocalStorage
             localStorage.setItem('dbSertifikat_draft', JSON.stringify(dbSertifikat));
             
             openExportModal();
@@ -683,9 +716,10 @@
                               `var dbSertifikat = defaultData; \n\n` +
                               `if (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {\n` +
                               `    const local = localStorage.getItem('dbSertifikat_draft');\n` +
-                              `    if (local) {\n` +
-                              `        try { dbSertifikat = JSON.parse(local); console.log('Draft Loaded'); } catch(e){}\n` +
-                              `    }\n` +
+                              `    if (local) dbSertifikat = JSON.parse(local);\n` +
+                              `}\n\n` +
+                              `function simpanKeStorage() {\n` +
+                              `    localStorage.setItem('dbSertifikat_draft', JSON.stringify(dbSertifikat));\n` +
                               `}`;
             txtArea.value = jsContent;
             modal.style.display = "flex";
