@@ -78,7 +78,7 @@
 
         .btn-action { width: 100%; padding: 10px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; transition: 0.2s; margin-top: 5px; }
         .btn-add { background: #eff6ff; color: #2563eb; border: 1px dashed #bfdbfe; }
-        .btn-delete { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; margin-top: 15px;}
+        .btn-delete { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; margin-top: 10px;}
         .btn-save { background: var(--primary-green); color: white; margin-top: auto; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
         .btn-save:hover { background: var(--primary-hover); }
 
@@ -196,7 +196,7 @@
                             <button class="btn-tool" onclick="setAlign('right')" title="Rata Kanan"><i class="ph ph-text-align-right"></i></button>
                         </div>
 
-                        <label class="label-text" style="margin-top:10px;">Posisi Halaman (Align to Page)</label>
+                        <label class="label-text" style="margin-top:10px;">Posisi Halaman</label>
                         <div class="toolbar" style="margin-bottom:5px;">
                             <button class="btn-tool" onclick="alignToPage('left')" title="Kiri Halaman"><i class="ph ph-align-left"></i></button>
                             <button class="btn-tool" onclick="alignToPage('center-x')" title="Tengah Horizontal"><i class="ph ph-align-center-horizontal"></i></button>
@@ -207,6 +207,13 @@
                             <button class="btn-tool" onclick="alignToPage('top')" title="Atas Halaman"><i class="ph ph-align-top"></i></button>
                             <button class="btn-tool" onclick="alignToPage('center-y')" title="Tengah Vertikal"><i class="ph ph-align-center-vertical"></i></button>
                             <button class="btn-tool" onclick="alignToPage('bottom')" title="Bawah Halaman"><i class="ph ph-align-bottom"></i></button>
+                        </div>
+
+                        <label class="label-text" style="margin-top:10px;">Aksi Elemen</label>
+                        <div class="toolbar">
+                            <button class="btn-tool" onclick="duplicateActiveElement()" title="Duplikat Elemen"><i class="ph ph-copy"></i></button>
+                            <button class="btn-tool" onclick="moveLayer('up')" title="Bawa ke Depan (Front)"><i class="ph ph-stack"></i><i class="ph ph-arrow-up" style="font-size:10px; margin-left:-2px;"></i></button>
+                            <button class="btn-tool" onclick="moveLayer('down')" title="Kirim ke Belakang (Back)"><i class="ph ph-stack"></i><i class="ph ph-arrow-down" style="font-size:10px; margin-left:-2px;"></i></button>
                         </div>
                     </div>
 
@@ -428,7 +435,7 @@
             });
         }
 
-        // --- INTERACTION ---
+        // --- INTERACTION & KEYBOARD SHORTCUTS ---
         function getMousePos(e) {
             const rect = canvas.getBoundingClientRect();
             return { x: e.clientX - rect.left, y: e.clientY - rect.top };
@@ -484,7 +491,33 @@
 
         window.addEventListener('mouseup', () => { isDragging = false; isResizing = false; });
 
-        // --- ELEMENT CRUD ---
+        // KEYBOARD EVENT LISTENER
+        window.addEventListener('keydown', (e) => {
+            if (!activeElementId) return;
+            const el = currentData.layout.find(item => item.id === activeElementId);
+            if (!el) return;
+
+            // Jika sedang mengetik di input, abaikan shortcut
+            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+
+            const step = e.shiftKey ? 10 : 1; // Shift + Arrow = 10px
+
+            switch (e.key) {
+                case 'ArrowUp': el.y -= step; break;
+                case 'ArrowDown': el.y += step; break;
+                case 'ArrowLeft': el.x -= step; break;
+                case 'ArrowRight': el.x += step; break;
+                case 'Delete': 
+                case 'Backspace': deleteActiveElement(); return; // Hapus
+                case 'd': if (e.ctrlKey || e.metaKey) { e.preventDefault(); duplicateActiveElement(); return; } break; // Ctrl+D Duplikat
+                default: return;
+            }
+            
+            e.preventDefault(); // Cegah scroll browser
+            drawCanvas();
+        });
+
+        // --- CRUD & LOGIC ---
         function addNewElement(type) {
             const newEl = { id: Date.now(), type: type, x: 100, y: 100, size: type === 'text' ? 30 : 80, color: '#000000' };
             if(type === 'text') { newEl.text = "Teks Baru"; newEl.font = "Poppins"; newEl.align = "left"; newEl.bold = false; newEl.italic = false; newEl.underline = false; }
@@ -498,6 +531,36 @@
                 currentData.layout = currentData.layout.filter(el => el.id !== activeElementId);
                 setActive(null); drawCanvas();
             }
+        }
+
+        function duplicateActiveElement() {
+            if (!activeElementId) return;
+            const original = currentData.layout.find(el => el.id === activeElementId);
+            if (!original) return;
+
+            const clone = JSON.parse(JSON.stringify(original));
+            clone.id = Date.now();
+            clone.x += 20; // Offset sedikit biar terlihat
+            clone.y += 20;
+            
+            currentData.layout.push(clone);
+            setActive(clone.id);
+            drawCanvas();
+        }
+
+        // LAYERING
+        function moveLayer(dir) {
+            if (!activeElementId) return;
+            const idx = currentData.layout.findIndex(el => el.id === activeElementId);
+            if (idx === -1) return;
+
+            const el = currentData.layout.splice(idx, 1)[0];
+            if (dir === 'up') {
+                currentData.layout.push(el); // Pindah ke paling akhir (depan)
+            } else {
+                currentData.layout.unshift(el); // Pindah ke paling awal (belakang)
+            }
+            drawCanvas();
         }
 
         function setActive(id) {
@@ -554,6 +617,7 @@
             if(el) { el.align = align; drawCanvas(); }
         }
 
+        // --- ALIGN TO PAGE ---
         function alignToPage(mode) {
             const el = currentData.layout.find(e => e.id === activeElementId);
             if(!el || !pdfOriginalWidth) return;
