@@ -78,8 +78,6 @@
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         thead { background: var(--bg-body); }
         th { text-align: left; padding: 12px 15px; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
-        
-        /* COMPACT TABLE */
         td { padding: 10px 15px; border-bottom: 1px solid var(--border-color); vertical-align: middle; font-size: 13px; }
         tr:last-child td { border-bottom: none; }
         
@@ -175,7 +173,8 @@
     <div class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="assets/Logo PGRI.png" alt="PGRI" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/87/Logo_PGRI.svg'">
-            <h2>PGRI Kab. Situbondo</h2> <span class="role-badge">Administrator</span>
+            <h2>PGRI Kab. Situbondo</h2>
+            <span class="role-badge">Administrator</span>
         </div>
 
         <div class="menu-label">Menu Utama</div>
@@ -550,6 +549,7 @@
         // --- 6. PREVIEW GENERATOR (QR FIXED) ---
         let currentPesertaData = null;
 
+        // HELPER QR (Persis unduh.html)
         function createQR(text) {
             return new Promise(resolve => {
                 const div = document.getElementById('qr-generator');
@@ -595,16 +595,19 @@
 
             // Overlay Data
             if(kegiatan.layout) {
+                // Pre-calculate data replacements
                 const clean = (val) => val ? val.replace(/"/g, '').trim() : '';
                 const getData = (key) => {
-                      const cleanKey = key.replace(/<<|>>/g, '').toLowerCase();
-                      let idx = pesertaHeaders.findIndex(h => h.toLowerCase() === cleanKey);
-                      if(idx === -1) {
-                          if(cleanKey === 'nama') idx = 1;
-                          else if(cleanKey === 'instansi') idx = 2;
-                          else if(cleanKey === 'id') idx = 0;
-                      }
-                      return currentPesertaData[pesertaHeaders[idx]] || "";
+                     // Cari key di header
+                     const cleanKey = key.replace(/<<|>>/g, '').toLowerCase();
+                     let idx = pesertaHeaders.findIndex(h => h.toLowerCase() === cleanKey);
+                     // Fallback logic
+                     if(idx === -1) {
+                         if(cleanKey === 'nama') idx = 1;
+                         else if(cleanKey === 'instansi') idx = 2;
+                         else if(cleanKey === 'id') idx = 0;
+                     }
+                     return currentPesertaData[pesertaHeaders[idx]] || "";
                 };
 
                 for (let el of kegiatan.layout) {
@@ -615,6 +618,7 @@
                         ctx.fillStyle = el.color; ctx.textAlign = el.align; ctx.textBaseline = "middle";
                         ctx.fillText(text, x, y);
                     } else if(el.type === 'qr') {
+                        // Generate Real QR
                         const baseUrl = kegiatan.base_url_validasi || "https://pgri-situbondo.or.id/cek?id=";
                         const idPeserta = getData('id') || getData('no') || "000";
                         const qrImg = await createQR(baseUrl + idPeserta);
