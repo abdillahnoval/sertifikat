@@ -14,6 +14,7 @@
         * { box-sizing: border-box; }
 
         :root {
+            /* COLORS */
             --primary-green: #10b981; --primary-hover: #059669;
             --bg-body: #f1f5f9; --bg-card: #ffffff;
             --text-main: #1e293b; --text-muted: #64748b;
@@ -72,7 +73,6 @@
         .btn-tool:hover { background: var(--border-color); }
         .btn-tool.active { background: #d1fae5; color: var(--primary-green); border-color: var(--primary-green); }
         
-        /* COLOR PICKER (FIXED LAYOUT) */
         .color-wrapper { position: relative; border:1px solid var(--border-color); border-radius:6px; padding:2px; width: 32px; height: 32px; overflow: hidden; cursor: pointer;}
         .color-wrapper input { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; cursor: pointer; border: none; padding: 0; margin: 0; }
 
@@ -170,32 +170,26 @@
 
                     <div class="control-group" id="groupStyle">
                         <label class="label-text">Gaya & Format</label>
-                        
-                        <div id="rowFontSelect">
-                            <select id="propFont" class="font-select" onchange="updateActiveElement()">
-                                <option value="Poppins">Poppins</option>
-                                <option value="Arial">Arial</option>
-                                <option value="Times New Roman">Times New Roman</option>
-                                <option value="Courier New">Courier</option>
-                            </select>
-                        </div>
-
-                        <div class="toolbar" style="margin-bottom:8px;">
-                            <div id="rowStyleBtns" style="display:flex; gap:5px;">
-                                <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
-                                <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
-                                <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
-                            </div>
+                        <select id="propFont" class="font-select" onchange="updateActiveElement()">
+                            <option value="Poppins">Poppins</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Courier New">Courier</option>
+                        </select>
+                        <div class="toolbar">
+                            <button id="btnBold" class="btn-tool" onclick="toggleStyle('bold')" title="Bold"><i class="ph ph-text-b"></i></button>
+                            <button id="btnItalic" class="btn-tool" onclick="toggleStyle('italic')" title="Italic"><i class="ph ph-text-italic"></i></button>
+                            <button id="btnUnderline" class="btn-tool" onclick="toggleStyle('underline')" title="Underline"><i class="ph ph-text-underline"></i></button>
                             
-                            <div id="rowColorPicker" style="display:flex; align-items:center; gap:5px; flex:1; margin-left:5px;">
+                            <div style="display:flex; align-items:center; gap:5px; flex:1; margin-left:5px;">
                                 <div class="color-wrapper">
                                     <input type="color" id="propColorPicker" oninput="syncColor(this.value)">
                                 </div>
-                                <input type="text" id="propColorText" class="input-full" style="margin:0; font-family:monospace; padding:0 5px; height:32px; width:80px;" onchange="syncColor(this.value)" placeholder="#000000">
+                                <input type="text" id="propColorText" class="input-full" style="margin:0; font-family:monospace; padding:0 5px; height:32px;" onchange="syncColor(this.value)" placeholder="#000000">
                             </div>
                         </div>
                         
-                        <div id="rowTextAlign" class="toolbar" style="margin-top:5px;">
+                        <div class="toolbar" style="margin-top:5px;">
                             <button class="btn-tool" onclick="setAlign('left')" title="Rata Kiri"><i class="ph ph-text-align-left"></i></button>
                             <button class="btn-tool" onclick="setAlign('center')" title="Rata Tengah"><i class="ph ph-text-align-center"></i></button>
                             <button class="btn-tool" onclick="setAlign('right')" title="Rata Kanan"><i class="ph ph-text-align-right"></i></button>
@@ -214,7 +208,7 @@
                             <button class="btn-tool" onclick="alignToPage('center-x')" title="Tengah (Hor)"><i class="ph ph-align-center-horizontal"></i></button>
                             <button class="btn-tool" onclick="alignToPage('right')" title="Kanan"><i class="ph ph-align-right"></i></button>
                             
-                            <div style="width:10px;"></div>
+                            <div style="width:5px;"></div>
 
                             <button class="btn-tool" onclick="alignToPage('top')" title="Atas"><i class="ph ph-align-top"></i></button>
                             <button class="btn-tool" onclick="alignToPage('center-y')" title="Tengah (Ver)"><i class="ph ph-align-center-vertical"></i></button>
@@ -296,6 +290,7 @@
         const canvas = document.getElementById('canvasPreview');
         const ctx = canvas.getContext('2d');
 
+        // State Vars
         let currentData = null; 
         let pdfDoc = null;
         let pageNum = 1;
@@ -310,29 +305,18 @@
         const urlParams = new URLSearchParams(window.location.search);
         const idRef = urlParams.get('id');
 
-        // --- 1. LOAD DATA LOGIC (Priority: LocalStorage > File) ---
         window.onload = function() {
             if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
             
             setTimeout(() => {
                 if (typeof dbSertifikat === 'undefined') { alert("Database error!"); return; }
                 
-                // Cek LocalStorage dulu (Logic 2: Simpanan Sementara)
-                const local = localStorage.getItem('dbSertifikat_draft');
-                let sourceData = dbSertifikat; // Default Logic 1: Dari file
-
-                if(local) {
-                    try {
-                        const parsed = JSON.parse(local);
-                        // Validasi sederhana: Cek apakah ID yang dicari ada di local
-                        if(parsed.some(x => x.id === idRef)) {
-                            sourceData = parsed;
-                            console.log("Loaded from LocalStorage Draft");
-                        }
-                    } catch(e) { console.error("Local data invalid"); }
-                }
-
-                currentData = sourceData.find(x => x.id === idRef);
+                // Prioritas 1: Ambil data asli dari server (db_sertifikat.js)
+                // Kita akan timpa dengan data lokal HANYA JIKA user sedang dalam mode edit aktif dan belum save
+                // Tapi sesuai request: "selalu menomor satukan db_sertifikat.js" saat load awal.
+                // Jadi kita load dbSertifikat saja.
+                
+                currentData = dbSertifikat.find(x => x.id === idRef);
                 
                 if (currentData) {
                     document.getElementById('inpPdf').value = currentData.template_img || '';
@@ -345,7 +329,7 @@
             }, 300);
         };
 
-        // --- PDF RENDER ---
+        // --- PDF LOGIC ---
         function loadPDF(url) {
             if(!url) return;
             pdfjsLib.getDocument(url).promise.then(pdf => {
@@ -370,7 +354,23 @@
             });
         }
 
-        // --- CANVAS ---
+        function changeZoom(delta) {
+            currentZoom = Math.max(0.2, Math.min(3.0, currentZoom + delta));
+            document.getElementById('zoomDisplay').innerText = Math.round(currentZoom * 100) + "%";
+            drawCanvas();
+        }
+
+        function changePage(delta) {
+            if(!pdfDoc) return;
+            const next = pageNum + delta;
+            if(next >= 1 && next <= pdfDoc.numPages) {
+                pageNum = next;
+                document.getElementById('pageInfo').innerText = `Page ${pageNum}/${pdfDoc.numPages}`;
+                renderPage(pageNum);
+            }
+        }
+
+        // --- CANVAS LOGIC ---
         function drawCanvas() {
             if (!bgImage.src) return;
             const scale = currentZoom;
@@ -496,22 +496,33 @@
             if (id) syncForm(currentData.layout.find(e => e.id === id));
         }
 
+        // --- SYNC FORM (Logic Selectif) ---
         function syncForm(el) {
-            const isText = el.type === 'text';
+            const grText = document.getElementById('groupText');
+            const grStyle = document.getElementById('groupStyle'); // Gaya & Format (Font, Align, Size Text)
+            // Note: Input Ukuran ada di dalam groupStyle untuk Text, dan kita akan gunakan input yang sama.
             
-            // Show/Hide Groups Specific to Type
-            document.getElementById('groupText').style.display = isText ? 'block' : 'none';
-            
-            // Specific Show/Hide inside Style Group (Keep Size Always Visible)
-            document.getElementById('rowFontSelect').style.display = isText ? 'block' : 'none';
-            document.getElementById('rowStyleBtns').style.display = isText ? 'flex' : 'none';
-            document.getElementById('rowColorPicker').style.display = isText ? 'flex' : 'none';
-            document.getElementById('rowTextAlign').style.display = isText ? 'flex' : 'none';
+            if (el.type === 'qr') {
+                grText.style.display = 'none'; // Sembunyikan Input Teks
+                
+                // Sembunyikan elemen-elemen font tapi TAMPILKAN ukuran
+                // Cara paling aman tanpa merusak layout adalah menyembunyikan child element
+                document.getElementById('propFont').style.display = 'none';
+                document.querySelector('#groupStyle .toolbar').style.display = 'none'; // Bold/Italic/Color Toolbar
+                document.querySelectorAll('#groupStyle .toolbar')[1].style.display = 'none'; // Align Toolbar
+                
+                // Label "Gaya & Format" ubah jadi "Pengaturan QR" agar relevan (opsional)
+                document.querySelector('#groupStyle .label-text').innerText = "Ukuran QR Code";
+                
+            } else {
+                grText.style.display = 'block';
+                
+                // Tampilkan semua untuk Teks
+                document.getElementById('propFont').style.display = 'block';
+                document.querySelector('#groupStyle .toolbar').style.display = 'flex';
+                document.querySelectorAll('#groupStyle .toolbar')[1].style.display = 'flex';
+                document.querySelector('#groupStyle .label-text').innerText = "Gaya & Format";
 
-            // Populate Values
-            document.getElementById('propSize').value = el.size; // Pixel Size (Shared)
-            
-            if (isText) {
                 document.getElementById('propText').value = el.text;
                 document.getElementById('propFont').value = el.font;
                 syncColor(el.color);
@@ -519,6 +530,8 @@
                 document.getElementById('btnItalic').classList.toggle('active', !!el.italic);
                 document.getElementById('btnUnderline').classList.toggle('active', !!el.underline);
             }
+            // Ukuran selalu tampil dan diupdate
+            document.getElementById('propSize').value = el.size; 
         }
 
         function updateActiveElement() {
@@ -548,51 +561,38 @@
             drawCanvas();
         }
 
-        // --- SAVE LOGIC (Logic 2 & 3) ---
+        // --- SAVE LOGIC ---
         function saveToDatabase() {
             currentData.template_img = document.getElementById('inpPdf').value;
             currentData.google_sheet_url = document.getElementById('inpCsv').value;
             
-            // Logic 2: Simpan di LocalStorage (Draft Edit)
-            // Kita cari index data ini di array utama, lalu update
-            const globalIndex = dbSertifikat.findIndex(x => x.id === idRef);
-            if(globalIndex !== -1) {
-                dbSertifikat[globalIndex] = currentData;
-            }
-            localStorage.setItem('dbSertifikat_draft', JSON.stringify(dbSertifikat));
-
-            // Logic 3: Generate Code untuk Manual Save
+            // Simpan ke LocalStorage sebagai cadangan jika user lupa copy code
+            localStorage.setItem('dbSertifikat_backup', JSON.stringify(dbSertifikat));
+            
+            // Buka Modal untuk Update Manual
             openExportModal();
         }
-
+        
         function openExportModal() {
             const modal = document.getElementById('exportModal');
             const txtArea = document.getElementById('codeArea');
             const jsonString = JSON.stringify(dbSertifikat, null, 4);
-            // Logic 4: Kode yang dihasilkan akan selalu mengecek LocalStorage juga saat di-load di device lain (jika localstorage dicopy/sync) 
-            // atau murni mengandalkan file JS ini sebagai sumber kebenaran.
-            const jsContent = `// js/db_sertifikat.js (Versi Auto-Generated)\n\n` +
-                              `const defaultData = ${jsonString};\n\n` +
-                              `// Init Data\n` +
-                              `var dbSertifikat = defaultData;\n\n` +
-                              `// Cek Draft Lokal (Khusus Editor)\n` +
-                              `if (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {\n` +
-                              `    const local = localStorage.getItem('dbSertifikat_draft');\n` +
-                              `    if (local) {\n` +
-                              `        try { dbSertifikat = JSON.parse(local); console.log('Draft Loaded'); } catch(e){}\n` +
-                              `    }\n` +
-                              `}`;
+            // KEMBALIKAN KE FORMAT ASLI TANPA LOGIKA HYBRID YANG MEMBINGUNGKAN
+            const jsContent = `// js/db_sertifikat.js\n\n` +
+                              `var dbSertifikat = ${jsonString};`;
             txtArea.value = jsContent;
             modal.style.display = "flex";
         }
 
-        function closeExportModal() { document.getElementById('exportModal').style.display = "none"; }
-        function copyCode() { const t = document.getElementById('codeArea'); t.select(); document.execCommand("copy"); alert("Kode disalin!"); }
-
+        function closeExportModal() { document.getElementById('exportModal').style.display = 'none'; }
+        function copyCode() { document.getElementById('codeArea').select(); document.execCommand('copy'); alert('Tersalin!'); }
+        
+        // Utils
         function changeZoom(d) { currentZoom = Math.max(0.2, Math.min(3.0, currentZoom + d)); document.getElementById('zoomDisplay').innerText = Math.round(currentZoom*100)+"%"; drawCanvas(); }
-        function changePage(d) { if(pdfDoc && pageNum+d>0 && pageNum+d<=pdfDoc.numPages) { pageNum+=d; document.getElementById('pageInfo').innerText = `Page ${pageNum}`; renderPage(pageNum); } }
+        function changePage(d) { if(pdfDoc && pageNum+d > 0 && pageNum+d <= pdfDoc.numPages) { pageNum+=d; document.getElementById('pageInfo').innerText = `Page ${pageNum}`; renderPage(pageNum); } }
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
         function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode')?'dark':'light'); }
+
     </script>
 </body>
 </html>
