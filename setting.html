@@ -59,11 +59,11 @@
 
         /* --- EDITOR PANEL --- */
         .main-content { flex: 1; padding: 20px; display: flex; gap: 20px; overflow: hidden; }
-        .editor-panel { width: 330px; background: var(--bg-card); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; border: 1px solid var(--border-color); box-shadow: var(--shadow-panel); overflow-y: scroll; flex-shrink: 0; scrollbar-width: none; -ms-overflow-style: none; }
+        .editor-panel { width: 320px; background: var(--bg-card); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; border: 1px solid var(--border-color); box-shadow: var(--shadow-panel); overflow-y: scroll; flex-shrink: 0; scrollbar-width: none; -ms-overflow-style: none; }
         .editor-panel::-webkit-scrollbar { width: 0px !important; height: 0px !important; background: transparent; display: none; }
 
         .panel-title { color: var(--primary-green); font-weight: 700; font-size: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .control-group { margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+        .control-group { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
         .label-text { font-weight: 600; font-size: 11px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px; }
         
         .input-full, .font-select { width: 100%; padding: 8px 10px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; font-size: 13px; color: var(--text-main); box-sizing: border-box; margin-bottom: 8px; }
@@ -78,7 +78,7 @@
 
         .btn-action { width: 100%; padding: 10px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; transition: 0.2s; margin-top: 5px; }
         .btn-add { background: #eff6ff; color: #2563eb; border: 1px dashed #bfdbfe; }
-        .btn-delete { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; margin-top: 10px;}
+        .btn-delete { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; margin-top: 15px;}
         .btn-save { background: var(--primary-green); color: white; margin-top: auto; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
         .btn-save:hover { background: var(--primary-hover); }
 
@@ -292,6 +292,7 @@
         const canvas = document.getElementById('canvasPreview');
         const ctx = canvas.getContext('2d');
 
+        // State Vars
         let currentData = null; 
         let pdfDoc = null;
         let pageNum = 1;
@@ -301,34 +302,40 @@
         let isDragging = false, isResizing = false;
         let dragStart = {x:0, y:0};
         let initialProp = {x:0, y:0, size:0};
+        
         let pdfOriginalWidth = 0;
         let pdfOriginalHeight = 0;
 
+        // --- INIT ---
         const urlParams = new URLSearchParams(window.location.search);
         const idRef = urlParams.get('id');
 
         window.onload = function() {
             if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
+            
             setTimeout(() => {
                 if (typeof dbSertifikat === 'undefined') { alert("Database error!"); return; }
                 currentData = dbSertifikat.find(x => x.id === idRef);
+                
                 if (currentData) {
                     document.getElementById('inpPdf').value = currentData.template_img || '';
                     document.getElementById('inpCsv').value = currentData.google_sheet_url || '';
                     loadPDF(currentData.template_img);
                 } else {
-                    alert("Data tidak ditemukan!"); window.location.href = "admin.html";
+                    alert("Data tidak ditemukan! Kembali ke admin.");
+                    window.location.href = "admin.html";
                 }
             }, 300);
         };
 
+        // --- PDF LOGIC ---
         function loadPDF(url) {
             if(!url) return;
             pdfjsLib.getDocument(url).promise.then(pdf => {
                 pdfDoc = pdf;
                 document.getElementById('pageInfo').innerText = `Page ${pageNum}/${pdf.numPages}`;
                 renderPage(pageNum);
-            });
+            }).catch(err => console.error(err));
         }
 
         function renderPage(num) {
@@ -366,6 +373,7 @@
             }
         }
 
+        // --- CANVAS LOGIC ---
         function drawCanvas() {
             if (!bgImage.src) return;
             const scale = currentZoom;
@@ -429,6 +437,7 @@
             });
         }
 
+        // --- INTERACTION ---
         function getMousePos(e) {
             const rect = canvas.getBoundingClientRect();
             return { x: e.clientX - rect.left, y: e.clientY - rect.top };
@@ -484,6 +493,7 @@
 
         window.addEventListener('mouseup', () => { isDragging = false; isResizing = false; });
 
+        // KEYBOARD EVENT LISTENER
         window.addEventListener('keydown', (e) => {
             if (!activeElementId) return;
             const el = currentData.layout.find(item => item.id === activeElementId);
@@ -544,16 +554,19 @@
             if (id) syncForm(currentData.layout.find(e => e.id === id));
         }
 
+        // --- UPDATED SYNCFORM LOGIC ---
         function syncForm(el) {
             const grText = document.getElementById('groupText');
             const grFont = document.getElementById('groupFont');
             
+            // Perbaikan Logika Tampilan Menu
             if (el.type === 'qr') {
-                grText.style.display = 'none';
+                grText.style.display = 'none'; // Sembunyikan Input Teks
                 grFont.style.display = 'none'; // Sembunyikan Font Toolbar
+                // Menu Posisi & Aksi TETAP MUNCUL karena berada di luar div groupFont
             } else {
                 grText.style.display = 'block';
-                grFont.style.display = 'block'; // Tampilkan Font Toolbar
+                grFont.style.display = 'block';
                 document.getElementById('propText').value = el.text;
                 document.getElementById('propFont').value = el.font;
                 syncColor(el.color);
@@ -561,7 +574,7 @@
                 document.getElementById('btnItalic').classList.toggle('active', !!el.italic);
                 document.getElementById('btnUnderline').classList.toggle('active', !!el.underline);
             }
-            document.getElementById('propSize').value = el.size; // Size selalu update
+            document.getElementById('propSize').value = el.size; // Size selalu update untuk keduanya
         }
 
         function updateActiveElement() {
