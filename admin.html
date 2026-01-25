@@ -14,108 +14,262 @@
 
         :root {
             /* COLORS */
-            --primary-green: #10b981; --primary-hover: #059669;
-            --bg-body: #f1f5f9; --bg-card: #ffffff;
-            --text-main: #1e293b; --text-muted: #64748b;
-            --input-bg: #f8fafc; --input-border: #e2e8f0;
+            --primary-green: #10b981;
+            --primary-hover: #059669;
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --input-bg: #f8fafc;
+            --input-border: #e2e8f0;
             --border-color: #e2e8f0;
-            --sidebar-width: 260px; --navbar-height: 70px;
+            
+            /* DIMENSIONS */
+            --sidebar-width: 260px;
+            --navbar-height: 70px;
+            
+            /* SHADOWS */
             --shadow-sidebar: 4px 0 24px 0 rgba(0,0,0,0.02);
             --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         /* DARK MODE */
         body.dark-mode {
-            --bg-body: #0f172a; --bg-card: #1e293b;
-            --text-main: #f1f5f9; --text-muted: #94a3b8;
-            --input-bg: #334155; --input-border: #475569;
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --input-bg: #334155;
+            --input-border: #475569;
             --border-color: #334155;
             --shadow-sidebar: 4px 0 24px 0 rgba(0,0,0,0.2);
         }
 
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-body); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; font-size: 13px; transition: background 0.3s, color 0.3s; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 13px;
+            transition: background 0.3s, color 0.3s;
+        }
 
         /* --- SIDEBAR --- */
-        .sidebar { width: var(--sidebar-width); background: var(--bg-card); box-shadow: var(--shadow-sidebar); display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; z-index: 50; transition: transform 0.3s ease; }
-        .logo-area { text-align: center; margin-bottom: 30px; } .logo-area img { width: 60px; margin-bottom: 8px; } .logo-area h2 { font-size: 14px; margin: 0; font-weight: 700; }
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-card);
+            box-shadow: var(--shadow-sidebar); 
+            display: flex; flex-direction: column;
+            padding: 20px;
+            flex-shrink: 0; z-index: 50; 
+            transition: transform 0.3s ease;
+        }
+
+        .logo-area { text-align: center; margin-bottom: 30px; }
+        .logo-area img { width: 60px; margin-bottom: 8px; }
+        .logo-area h2 { font-size: 14px; margin: 0; font-weight: 700; }
         .role-badge { background: #d1fae5; color: #065f46; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; display: inline-block; margin-top: 4px; }
+
         .menu-label { color: var(--text-muted); font-size: 10px; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.8px; text-transform: uppercase; }
-        .nav-menu { list-style: none; padding: 0; margin: 0; } .nav-menu li { margin-bottom: 5px; }
-        .nav-menu a { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-muted); padding: 10px 12px; border-radius: 8px; font-size: 12.5px; transition: 0.2s; font-weight: 500; }
+        
+        .nav-menu { list-style: none; padding: 0; margin: 0; }
+        .nav-menu li { margin-bottom: 5px; }
+        .nav-menu a {
+            display: flex; align-items: center; gap: 10px;
+            text-decoration: none; color: var(--text-muted);
+            padding: 10px 12px; border-radius: 8px;
+            font-size: 12.5px; transition: 0.2s; font-weight: 500;
+        }
         .nav-menu a.active { background: rgba(16, 185, 129, 0.08); color: var(--primary-green); font-weight: 600; }
         .nav-menu a:hover:not(.active) { background: rgba(0,0,0,0.02); color: var(--text-main); }
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 45; display: none; backdrop-filter: blur(2px); }
+
+        /* --- SIDEBAR OVERLAY --- */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 45; 
+            display: none; backdrop-filter: blur(2px);
+        }
 
         /* --- CONTENT WRAPPER --- */
         .content-wrapper { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-        .navbar { height: var(--navbar-height); background: var(--bg-card); box-shadow: 0 2px 15px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; z-index: 40; border-bottom: 1px solid var(--border-color); }
-        .nav-left { display: flex; align-items: center; gap: 15px; } .brand-identity { font-size: 16px; font-weight: 700; color: var(--text-main); letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
-        .brand-identity i { color: var(--primary-green); font-size: 18px; } .toggle-sidebar-btn { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; display: none; }
-        .nav-right { display: flex; align-items: center; gap: 12px; } .theme-toggle { background: var(--input-bg); border: none; color: var(--text-main); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .theme-toggle:hover { background: #e2e8f0; color: var(--primary-green); } .profile-pic { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            height: var(--navbar-height);
+            background: var(--bg-card);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.02); 
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 25px; z-index: 40; border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 15px; }
+        .brand-identity {
+            font-size: 16px; font-weight: 700; color: var(--text-main);
+            letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px;
+        }
+        .brand-identity i { color: var(--primary-green); font-size: 18px; }
+        .toggle-sidebar-btn { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; display: none; }
+
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        .theme-toggle {
+            background: var(--input-bg); border: none;
+            color: var(--text-main); width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
+        }
+        .theme-toggle:hover { background: #e2e8f0; color: var(--primary-green); }
+        .profile-pic { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
 
         /* --- MAIN CONTENT --- */
-        .main-content { flex: 1; padding: 25px; overflow-y: auto; }
-        .header-page { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+        .main-content { 
+            flex: 1; padding: 25px; 
+            overflow-y: auto; /* Scrollable Content */
+        }
+
+        .header-page { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .page-title h1 { font-size: 20px; margin: 0; font-weight: 700; color: var(--text-main); }
         .page-title p { color: var(--text-muted); font-size: 13px; margin: 4px 0 0; }
-        .btn-add { background: var(--primary-green); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; transition: 0.2s; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25); }
+
+        .btn-add {
+            background: var(--primary-green); color: white;
+            border: none; padding: 10px 20px; border-radius: 8px;
+            font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            font-size: 13px; transition: 0.2s; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25);
+        }
         .btn-add:hover { background: var(--primary-hover); transform: translateY(-2px); }
 
         /* --- TABLE --- */
-        .card-table { background: var(--bg-card); border-radius: 12px; box-shadow: var(--shadow-card); border: 1px solid var(--border-color); overflow: hidden; }
+        .card-table {
+            background: var(--bg-card); border-radius: 12px;
+            box-shadow: var(--shadow-card); border: 1px solid var(--border-color); overflow: hidden;
+        }
         .table-responsive { width: 100%; overflow-x: auto; }
+        
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         thead { background: var(--bg-body); }
-        th { text-align: left; padding: 12px 15px; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+        th { text-align: left; padding: 15px 20px; font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        /* Compact Table Style */
-        td { padding: 10px 15px; border-bottom: 1px solid var(--border-color); vertical-align: middle; font-size: 13px; }
+        /* VERTICAL ALIGN MIDDLE & COMPACT PADDING */
+        td { 
+            padding: 10px 20px; /* Reduced Padding */
+            border-bottom: 1px solid var(--border-color); 
+            vertical-align: middle; 
+            font-size: 13px; 
+        }
         tr:last-child td { border-bottom: none; }
         
         .col-judul h4 { margin: 0 0 4px 0; font-size: 14px; font-weight: 600; color: var(--text-main); }
         .col-judul p { margin: 0 0 4px 0; font-size: 12px; color: var(--text-muted); line-height: 1.4; }
         .col-judul strong { font-size: 11px; color: var(--primary-green); font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        
         .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
         .status-aktif { background: #d1fae5; color: #047857; }
         .status-nonaktif { background: #f3f4f6; color: #4b5563; }
+
         .action-btn-group { display: flex; justify-content: flex-end; gap: 6px; }
-        .icon-btn { width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--border-color); background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: 0.2s; }
+        .icon-btn {
+            width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--border-color);
+            background: transparent; color: var(--text-muted); cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 14px; transition: 0.2s;
+        }
         .icon-btn:hover { background: var(--bg-body); color: var(--text-main); border-color: #cbd5e1; }
         .btn-delete:hover { border-color: #fca5a5; color: #ef4444; background: #fef2f2; }
-        .pagination { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-top: 1px solid var(--border-color); font-size: 12px; color: var(--text-muted); background: var(--bg-card); }
+
+        /* Pagination */
+        .pagination {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 20px; border-top: 1px solid var(--border-color);
+            font-size: 12px; color: var(--text-muted); background: var(--bg-card);
+        }
         .page-controls { display: flex; gap: 5px; }
-        .page-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        .page-btn {
+            background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main);
+            width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+            border-radius: 6px; cursor: pointer; transition: 0.2s;
+        }
         .page-btn:hover { border-color: var(--primary-green); color: var(--primary-green); }
         .page-btn.disabled { opacity: 0.5; cursor: default; }
 
-        /* --- MODAL --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 100; display: none; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 20px; }
-        .modal-card { background: var(--bg-card); width: 100%; max-width: 650px; border-radius: 12px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; position: relative; margin: auto; animation: modalFadeIn 0.3s ease; overflow: hidden; }
+        /* --- MODAL SCROLLING & STYLE --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
+            z-index: 100; display: none; 
+            align-items: flex-start; justify-content: center;
+            overflow-y: auto; padding: 20px;
+        }
+
+        .modal-card {
+            background: var(--bg-card); 
+            width: 100%; max-width: 650px; 
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            display: flex; flex-direction: column; 
+            position: relative; margin: auto; 
+            animation: modalFadeIn 0.3s ease;
+            overflow: hidden;
+        }
+
         @keyframes modalFadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        .modal-header { background: #10b981; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; color: white; }
+
+        .modal-header {
+            background: #10b981; 
+            padding: 15px 25px; 
+            display: flex; justify-content: space-between; align-items: center;
+            color: white;
+        }
         .modal-header h3 { margin: 0; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-        .close-modal { background: rgba(255,255,255,0.2); border: none; font-size: 16px; color: white; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .close-modal { 
+            background: rgba(255,255,255,0.2); border: none; font-size: 16px; color: white; 
+            cursor: pointer; width: 28px; height: 28px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; transition: 0.2s;
+        }
         .close-modal:hover { background: rgba(255,255,255,0.4); }
-        .modal-body { padding: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .modal-body { 
+            padding: 25px; 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+        }
+
         .full-width { grid-column: span 2; }
-        .form-label { display: block; margin-bottom: 6px; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .input-modern { width: 100%; padding: 10px 12px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; font-family: inherit; font-size: 13px; color: var(--text-main); box-sizing: border-box; transition: 0.2s; }
+
+        .form-label { 
+            display: block; margin-bottom: 6px; 
+            font-size: 11px; font-weight: 700; color: var(--text-muted); 
+            text-transform: uppercase; letter-spacing: 0.5px; 
+        }
+        
+        .input-modern {
+            width: 100%; padding: 10px 12px;
+            background: var(--input-bg); 
+            border: 1px solid var(--border-color);
+            border-radius: 6px; 
+            font-family: inherit; font-size: 13px; color: var(--text-main);
+            box-sizing: border-box; transition: 0.2s;
+        }
         .input-modern:focus { border-color: var(--primary-green); outline: none; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
-        textarea.input-modern { resize: none; } select.input-modern { cursor: pointer; }
-        .modal-footer { padding: 15px 25px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg-card); }
+        textarea.input-modern { resize: none; }
+        select.input-modern { cursor: pointer; }
+
+        .modal-footer {
+            padding: 15px 25px; border-top: 1px solid var(--border-color);
+            display: flex; justify-content: flex-end; gap: 10px; background: var(--bg-card);
+        }
+        
         .btn-cancel { background: transparent; color: var(--text-muted); border: 1px solid #cbd5e1; padding: 8px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 12px;}
         .btn-cancel:hover { background: var(--bg-body); color: var(--text-main); }
+        
         .btn-submit { background: var(--primary-green); color: white; border: none; padding: 8px 25px; border-radius: 6px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); transition: 0.2s; font-size: 12px;}
         .btn-submit:hover { background: var(--primary-hover); transform: translateY(-1px); }
-        
-        .code-area { width: 100%; height: 300px; background: #1e293b; color: #a5b4fc; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 12px; border: 1px solid var(--border-color); resize: none; white-space: pre; overflow-x: auto; grid-column: span 2; }
 
-        /* --- STYLE BARU: View Switching & Toolbar Peserta Layout --- */
+        /* --- STYLES FOR PESERTA VIEW (NEW) --- */
         .section-view { display: none; }
         .section-view.active { display: block; animation: fadeIn 0.3s ease; }
         
-        /* Flexbox Seimbang */
         .toolbar-peserta {
             display: flex; gap: 15px; margin-bottom: 20px;
             background: var(--bg-card); padding: 12px 15px; border-radius: 12px;
@@ -123,20 +277,47 @@
             align-items: center; justify-content: space-between;
         }
 
-        .item-rows { width: 80px; flex-shrink: 0; }
-        .item-activity { flex: 1; min-width: 250px; } /* Flexible Width */
+        .item-rows { width: 85px; flex-shrink: 0; }
+        .item-activity { flex: 1; min-width: 200px; } 
         .item-search { width: 220px; flex-shrink: 0; position: relative; }
         .item-search input { padding-left: 32px; width: 100%; }
-        .search-icon-inside { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+        .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
 
+        /* PREVIEW MODAL STYLE */
+        .modal-card.preview-mode { max-width: 900px; height: 90vh; }
+        .iframe-container { width: 100%; height: 100%; background: #333; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* RESPONSIVE MOBILE */
         @media (max-width: 768px) {
-            body { height: auto; overflow: auto; flex-direction: column; } .sidebar { position: fixed; height: 100%; left: -100%; top: 0; } .sidebar.active { left: 0; } .toggle-sidebar-btn { display: block; }
-            .navbar { padding: 0 15px; position: sticky; top: 0; } .brand-identity span { display: block; font-size: 15px; }
-            .main-content { overflow: visible; height: auto; padding: 15px; }
-            .header-page { flex-direction: column; align-items: flex-start; gap: 15px; } 
-            .btn-add { width: 100%; justify-content: center; }
-            .modal-card { width: 100%; margin: 10px 0; } .modal-body { grid-template-columns: 1fr; gap: 15px; padding: 15px; } .full-width { grid-column: span 1; }
+            /* Scroll Fix */
+            body { 
+                height: auto; 
+                overflow: auto; /* Izinkan scroll di body utama */
+                flex-direction: column;
+            }
+
+            .sidebar { position: fixed; height: 100%; left: -100%; top: 0; }
+            .sidebar.active { left: 0; }
+            .toggle-sidebar-btn { display: block; }
             
+            .navbar { padding: 0 15px; position: sticky; top: 0; }
+            .brand-identity span { display: block; font-size: 15px; }
+            
+            /* Konten Scrollable */
+            .main-content { 
+                overflow: visible; 
+                height: auto; 
+                padding: 15px;
+            }
+
+            .header-page { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .btn-add { width: 100%; justify-content: center; }
+
+            .modal-card { width: 100%; margin: 10px 0; }
+            .modal-body { grid-template-columns: 1fr; gap: 15px; padding: 15px; }
+            .full-width { grid-column: span 1; }
+
             .toolbar-peserta { flex-direction: column; align-items: stretch; gap: 10px; }
             .item-rows, .item-activity, .item-search { width: 100%; }
         }
@@ -149,7 +330,8 @@
     <div class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="assets/Logo PGRI.png" alt="PGRI" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/87/Logo_PGRI.svg'">
-            <h2>PGRI Kab. Situbondo</h2> <span class="role-badge">Administrator</span>
+            <h2>PGRI Kab. Situbondo</h2>
+            <span class="role-badge">Administrator</span>
         </div>
 
         <div class="menu-label">Menu Utama</div>
@@ -165,7 +347,10 @@
         <nav class="navbar">
             <div class="nav-left">
                 <button class="toggle-sidebar-btn" onclick="toggleSidebar()"><i class="ph ph-list"></i></button>
-                <div class="brand-identity"><i class="ph ph-certificate"></i> <span>Sertifikat Builder</span></div>
+                <div class="brand-identity">
+                    <i class="ph ph-certificate"></i>
+                    <span>Sertifikat Builder</span>
+                </div>
             </div>
             <div class="nav-right">
                 <button class="theme-toggle" onclick="toggleDarkMode()" title="Ganti Tema">
@@ -236,7 +421,7 @@
                     </div>
 
                     <div class="item-search">
-                        <i class="ph ph-magnifying-glass search-icon-inside"></i>
+                        <i class="ph ph-magnifying-glass search-icon"></i>
                         <input type="text" id="cariPeserta" class="input-modern" placeholder="Cari peserta..." onkeyup="filterPesertaLocal()">
                     </div>
                 </div>
@@ -271,6 +456,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="inId">
+                
                 <div class="full-width">
                     <label class="form-label">Judul Kegiatan</label>
                     <textarea id="inJudul" class="input-modern" rows="1" placeholder="Judul Lengkap..."></textarea>
@@ -279,10 +465,25 @@
                     <label class="form-label">Deskripsi Singkat</label>
                     <textarea id="inDeskripsi" class="input-modern" rows="2" placeholder="Keterangan..."></textarea>
                 </div>
-                <div><label class="form-label">Nama Narasumber</label><input type="text" id="inNaraNama" class="input-modern"></div>
-                <div><label class="form-label">Instansi / Jabatan</label><input type="text" id="inNaraInst" class="input-modern"></div>
-                <div><label class="form-label">Tanggal Mulai</label><input type="date" id="inTglMulai" class="input-modern"></div>
-                <div><label class="form-label">Tanggal Selesai</label><input type="date" id="inTglSelesai" class="input-modern"></div>
+
+                <div>
+                    <label class="form-label">Nama Narasumber</label>
+                    <input type="text" id="inNaraNama" class="input-modern">
+                </div>
+                <div>
+                    <label class="form-label">Instansi / Jabatan</label>
+                    <input type="text" id="inNaraInst" class="input-modern">
+                </div>
+
+                <div>
+                    <label class="form-label">Tanggal Mulai</label>
+                    <input type="date" id="inTglMulai" class="input-modern">
+                </div>
+                <div>
+                    <label class="form-label">Tanggal Selesai</label>
+                    <input type="date" id="inTglSelesai" class="input-modern">
+                </div>
+
                 <div>
                     <label class="form-label">Status Kegiatan</label>
                     <select id="inStatus" class="input-modern">
@@ -290,9 +491,19 @@
                         <option value="Nonaktif">Nonaktif (Draft)</option>
                     </select>
                 </div>
-                <div><label class="form-label">Link Validasi (Website)</label><input type="text" id="inBaseUrl" class="input-modern" placeholder="https://web.com/ceksertifikat.html?id="></div>
-                <div><label class="form-label">Thumbnail Path</label><input type="text" id="inThumb" class="input-modern" value="thumbnail/flyer_seminar1.png"></div>
-                <div><label class="form-label">Link Download Folder</label><input type="text" id="inLink" class="input-modern" placeholder="folder/index.html"></div>
+                <div>
+                    <label class="form-label">Link Validasi (Website)</label>
+                    <input type="text" id="inBaseUrl" class="input-modern" placeholder="https://web.com/ceksertifikat.html?id=">
+                </div>
+
+                <div>
+                    <label class="form-label">Thumbnail Path</label>
+                    <input type="text" id="inThumb" class="input-modern" value="thumbnail/flyer_seminar1.png">
+                </div>
+                <div>
+                    <label class="form-label">Link Download Folder</label>
+                    <input type="text" id="inLink" class="input-modern" placeholder="folder/index.html">
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="closeModal()">Batal</button>
@@ -302,13 +513,15 @@
     </div>
 
     <div id="modalPreview" class="modal-overlay" style="z-index: 220;">
-        <div class="modal-card" style="max-width: 900px; height: 90vh;">
+        <div class="modal-card preview-mode">
             <div class="modal-header">
                 <h3><i class="ph ph-eye"></i> Preview Sertifikat</h3>
                 <button class="close-modal" onclick="closePreviewModal()">&times;</button>
             </div>
-            <div class="modal-body" style="padding: 0; display: block; flex: 1; background: #525659; overflow: hidden;">
-                <iframe id="previewFrame" style="width: 100%; height: 100%; border: none;" src=""></iframe>
+            <div class="modal-body" style="padding: 0; display: block; flex: 1; background: #525659; overflow: hidden; height: 100%;">
+                <div class="iframe-container">
+                    <iframe id="previewFrame" src=""></iframe>
+                </div>
             </div>
         </div>
     </div>
@@ -319,7 +532,7 @@
     </script>
 
     <script>
-        // 1. THEME & SIDEBAR
+        // --- 1. THEME & SIDEBAR ---
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const icon = document.getElementById('themeIcon');
@@ -328,75 +541,101 @@
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         }
         if(localStorage.getItem('theme') === 'dark') toggleDarkMode();
-        function toggleSidebar() { 
+
+        function toggleSidebar() { 
             const sb = document.getElementById('sidebar');
             const ov = document.getElementById('sidebarOverlay');
             sb.classList.toggle('active');
             if(window.innerWidth <= 768) ov.style.display = sb.classList.contains('active') ? 'block' : 'none';
         }
 
-        // 2. DATA HANDLING (LOAD PRIORITY)
-        let localDB = []; // Data aktif di memori
+        // --- 2. VIEW NAVIGATION ---
+        function switchView(view) {
+            document.querySelectorAll('.nav-menu a').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
 
-        window.onload = function() {
-            setTimeout(() => {
-                if (typeof dbSertifikat === 'undefined') {
-                    console.warn("Database server tidak ditemukan, mencoba load local draft...");
-                    const draft = localStorage.getItem('dbSertifikat_draft');
-                    localDB = draft ? JSON.parse(draft) : [];
-                } else {
-                    localDB = dbSertifikat;
-                }
-                renderTable();
-            }, 300);
-        };
+            if (view === 'sertifikat') {
+                document.getElementById('menuSertif').classList.add('active');
+                document.getElementById('viewSertifikat').classList.add('active');
+            } else {
+                document.getElementById('menuPeserta').classList.add('active');
+                document.getElementById('viewPeserta').classList.add('active');
+                initPesertaView();
+            }
+            if (window.innerWidth <= 768) toggleSidebar();
+        }
 
-        // 3. PAGINATION & RENDER (KEGIATAN)
+        // --- 3. CRUD KEGIATAN ---
         let currentPage = 1;
         const itemsPerPage = 5;
 
         function renderTable() {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
-            if (typeof dbSertifikat === 'undefined') { console.error("DB Error"); return; }
-            const total = dbSertifikat.length;
-            const pages = Math.ceil(total / itemsPerPage);
-            if (currentPage > pages && pages > 0) currentPage = pages;
+
+            if (typeof dbSertifikat === 'undefined') {
+                console.error("Database gagal dimuat!");
+                return;
+            }
+
+            const totalItems = dbSertifikat.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
             if (currentPage < 1) currentPage = 1;
+
             const start = (currentPage - 1) * itemsPerPage;
-            const dataToShow = dbSertifikat.slice(start, start + itemsPerPage);
-            document.getElementById('pageInfo').innerText = `Halaman ${currentPage} dari ${pages || 1}`;
+            const end = start + itemsPerPage;
+            const dataToShow = dbSertifikat.slice(start, end);
+
+            document.getElementById('pageInfo').innerText = `Halaman ${currentPage} dari ${totalPages || 1}`;
             
             const btns = document.querySelectorAll('.page-btn');
             btns[0].classList.toggle('disabled', currentPage === 1);
-            btns[1].classList.toggle('disabled', currentPage >= pages);
+            btns[1].classList.toggle('disabled', currentPage >= totalPages);
 
-            if(dataToShow.length === 0) { tbody.innerHTML = '<tr><td colspan="4" align="center" style="padding:40px;">Belum ada data.</td></tr>'; return; }
+            if(dataToShow.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" align="center" style="padding:40px; color:var(--text-muted);">Belum ada data.</td></tr>';
+                return;
+            }
 
             dataToShow.forEach((item, index) => {
                 const tr = document.createElement('tr');
+                const globalIndex = start + index + 1;
                 const statusClass = item.status === "Aktif" ? "status-aktif" : "status-nonaktif";
+                const statusText = item.status || "Nonaktif";
+
                 tr.innerHTML = `
-                    <td style="color:var(--text-muted); font-weight:600;">${start + index + 1}</td>
+                    <td style="color:var(--text-muted); font-weight:600;">${globalIndex}</td>
                     <td class="col-judul">
                         <h4>${item.judul}</h4>
                         <p>${item.deskripsi ? item.deskripsi.substring(0, 70) + '...' : '-'}</p>
                         <strong><i class="ph ph-microphone-stage"></i> ${item.narasumber}</strong>
                     </td>
-                    <td><span class="status-badge ${statusClass}">${item.status || "Nonaktif"}</span></td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                     <td>
                         <div class="action-btn-group">
                             <button class="icon-btn" title="Atur Layout" onclick="window.location.href='setting.html?id=${item.id}'"><i class="ph ph-gear"></i></button>
                             <button class="icon-btn" title="Edit Metadata" onclick="openEditModal('${item.id}')"><i class="ph ph-pencil-simple"></i></button>
                             <button class="icon-btn btn-delete" title="Hapus" onclick="hapusData('${item.id}')"><i class="ph ph-trash"></i></button>
                         </div>
-                    </td>`;
+                    </td>
+                `;
                 tbody.appendChild(tr);
             });
         }
-        function nextPage() { if(currentPage < Math.ceil(dbSertifikat.length/itemsPerPage)) { currentPage++; renderTable(); } }
-        function prevPage() { if(currentPage > 1) { currentPage--; renderTable(); } }
 
+        function nextPage() {
+            const totalPages = Math.ceil(dbSertifikat.length / itemsPerPage);
+            if(currentPage < totalPages) { currentPage++; renderTable(); }
+        }
+        function prevPage() {
+            if(currentPage > 1) { currentPage--; renderTable(); }
+        }
+
+        // --- 4. MODAL KEGIATAN ---
+        function closeModal() { document.getElementById('modalForm').style.display = 'none'; }
+        
         function openCreateModal() {
             document.getElementById('modalForm').style.display = 'flex';
             document.getElementById('modalTitle').innerHTML = '<i class="ph ph-plus-circle"></i> Tambah Kegiatan';
@@ -405,8 +644,9 @@
             document.getElementById('inThumb').value = 'thumbnail/flyer_seminar1.png';
             document.getElementById('inStatus').value = 'Aktif'; 
         }
+
         function openEditModal(id) {
-            const item = localDB.find(x => x.id === id);
+            const item = dbSertifikat.find(x => x.id === id);
             if(!item) return;
             document.getElementById('modalForm').style.display = 'flex';
             document.getElementById('modalTitle').innerHTML = '<i class="ph ph-pencil-simple"></i> Edit Kegiatan';
@@ -422,56 +662,24 @@
             document.getElementById('inStatus').value = item.status || 'Aktif';
             document.getElementById('inBaseUrl').value = item.base_url_validasi || '';
         }
-        function closeModal() { document.getElementById('modalForm').style.display = 'none'; }
-        
+
         function simpanData() {
-            const id = document.getElementById('inId').value;
-            const newData = {
-                id: id || "CERT-" + Date.now(),
-                judul: document.getElementById('inJudul').value,
-                deskripsi: document.getElementById('inDeskripsi').value,
-                narasumber: document.getElementById('inNaraNama').value,
-                instansi_nara: document.getElementById('inNaraInst').value,
-                tgl_mulai: document.getElementById('inTglMulai').value,
-                tgl_selesai: document.getElementById('inTglSelesai').value,
-                thumbnail: document.getElementById('inThumb').value,
-                link_download: document.getElementById('inLink').value,
-                status: document.getElementById('inStatus').value,
-                base_url_validasi: document.getElementById('inBaseUrl').value,
-                template_img: "draf/default.pdf", google_sheet_url: "", layout: [] 
-            };
-            if(!newData.judul || !newData.narasumber) return alert("Mohon lengkapi data!");
-            if (id) {
-                const index = localDB.findIndex(x => x.id === id);
-                if (index !== -1) localDB[index] = { ...localDB[index], ...newData };
-            } else { localDB.push(newData); }
-            saveToDraft(); renderTable(); closeModal();
-            if(!id && confirm("Lanjut atur layout?")) window.location.href = `setting.html?id=${newData.id}`;
-        }
-        function hapusData(id) {
-            if(confirm("Hapus data ini?")) {
-                const idx = localDB.findIndex(x => x.id === id);
-                if(idx > -1) { localDB.splice(idx, 1); saveToDraft(); renderTable(); }
-            }
-        }
-        function saveToDraft() { localStorage.setItem('dbSertifikat_draft', JSON.stringify(localDB)); }
-        
-        // 6. VIEW SWITCHING
-        function switchView(view) {
-            document.querySelectorAll('.nav-menu a').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
-            if(view === 'sertifikat') {
-                document.getElementById('menuSertif').classList.add('active');
-                document.getElementById('viewSertifikat').classList.add('active');
-            } else {
-                document.getElementById('menuPeserta').classList.add('active');
-                document.getElementById('viewPeserta').classList.add('active');
-                initPesertaView();
-            }
-            if(window.innerWidth <= 768) toggleSidebar();
+            // Logic Simpan (Dummy: Karena Static, tidak bisa save permanen tanpa backend)
+            alert("Fungsi Simpan berjalan. (Perlu Backend/Export JSON)");
+            closeModal();
         }
 
-        // 7. DATA PESERTA LOGIC
+        function hapusData(id) {
+            if(confirm("Hapus data ini?")) {
+                const idx = dbSertifikat.findIndex(x => x.id === id);
+                if(idx > -1) {
+                    dbSertifikat.splice(idx, 1);
+                    renderTable();
+                }
+            }
+        }
+
+        // --- 5. LOGIKA DATA PESERTA (DYNAMIC) ---
         let rawPesertaData = [];
         let filteredPeserta = [];
         let pesertaPage = 1;
@@ -482,24 +690,34 @@
         function initPesertaView() {
             const select = document.getElementById('filterKegiatan');
             select.innerHTML = '<option value="">-- Pilih Kegiatan --</option>';
-            localDB.forEach(item => {
+            dbSertifikat.forEach(item => {
                 const opt = document.createElement('option');
                 opt.value = item.id; opt.text = item.judul;
                 select.appendChild(opt);
             });
         }
-        function changeRowsPerPage() { pesertaLimit = parseInt(document.getElementById('rowsPerPage').value); pesertaPage = 1; renderPesertaTable(); }
+
+        function changeRowsPerPage() {
+            pesertaLimit = parseInt(document.getElementById('rowsPerPage').value);
+            pesertaPage = 1;
+            renderPesertaTable();
+        }
+
         async function fetchPesertaCSV() {
             const id = document.getElementById('filterKegiatan').value;
             currentKegiatanId = id;
-            const kegiatan = localDB.find(x => x.id === id);
+            const kegiatan = dbSertifikat.find(x => x.id === id);
             const tbody = document.getElementById('tbodyPeserta');
+            
+            rawPesertaData = []; filteredPeserta = []; pesertaPage = 1;
+
             if(!id || !kegiatan || !kegiatan.google_sheet_url) {
                 document.getElementById('theadPeserta').innerHTML = '<tr><th>Status</th></tr>';
                 tbody.innerHTML = '<tr><td align="center" style="padding:30px;">Link CSV belum diatur.</td></tr>';
                 document.getElementById('paginationPeserta').style.display = 'none';
                 return;
             }
+
             try {
                 tbody.innerHTML = '<tr><td colspan="100%" align="center" style="padding:30px;">Memuat data...</td></tr>';
                 const response = await fetch(kegiatan.google_sheet_url);
@@ -507,86 +725,114 @@
                 parseCSV(text);
             } catch (error) {
                 console.error(error);
-                tbody.innerHTML = '<tr><td colspan="100%" align="center" style="color:red; padding:30px;">Gagal memuat CSV.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="100%" align="center" style="color:red; padding:30px;">Gagal memuat CSV. Pastikan Link Publik.</td></tr>';
             }
         }
+
         function parseCSV(text) {
             const rows = text.trim().split('\n');
-            if(rows.length < 2) { document.getElementById('tbodyPeserta').innerHTML = '<tr><td align="center">Data Kosong.</td></tr>'; return; }
+            if(rows.length < 2) {
+                document.getElementById('tbodyPeserta').innerHTML = '<tr><td align="center">Data Kosong.</td></tr>';
+                return;
+            }
+            // Parse Header
             pesertaHeaders = rows[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            // Parse Rows
             rawPesertaData = rows.slice(1).map(row => {
                 const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 let obj = {};
-                pesertaHeaders.forEach((h, i) => { obj[h] = values[i] ? values[i].trim().replace(/"/g, '') : ''; });
+                pesertaHeaders.forEach((h, i) => {
+                    obj[h] = values[i] ? values[i].trim().replace(/"/g, '') : '';
+                });
                 return obj;
             });
             filteredPeserta = rawPesertaData;
             renderPesertaTable();
         }
+
         function renderPesertaTable() {
             const thead = document.getElementById('theadPeserta');
             const tbody = document.getElementById('tbodyPeserta');
             const pgDiv = document.getElementById('paginationPeserta');
-            
-            // Header
+
+            // 1. Render Header Dinamis
             let headerHTML = '<tr><th width="5%">No</th>';
             pesertaHeaders.forEach(h => headerHTML += `<th>${h}</th>`);
-            headerHTML += '<th width="8%" style="text-align:right;">Aksi</th></tr>';
+            headerHTML += '<th width="8%" style="text-align:right;">Preview</th></tr>';
             thead.innerHTML = headerHTML;
-            
-            // Body
+
+            // 2. Pagination
             const total = filteredPeserta.length;
             const pages = Math.ceil(total / pesertaLimit);
             if(pesertaPage > pages && pages > 0) pesertaPage = pages;
+            
             const start = (pesertaPage - 1) * pesertaLimit;
             const end = start + pesertaLimit;
             const displayData = filteredPeserta.slice(start, end);
-            
+
+            // 3. Render Body
             tbody.innerHTML = '';
             if(displayData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${pesertaHeaders.length + 2}" align="center" style="padding:20px;">Tidak ada data.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${pesertaHeaders.length + 2}" align="center" style="padding:20px;">Data tidak ditemukan.</td></tr>`;
             } else {
                 displayData.forEach((row, i) => {
                     const tr = document.createElement('tr');
                     let rowHTML = `<td style="color:var(--text-muted); font-weight:600;">${start + i + 1}</td>`;
-                    pesertaHeaders.forEach(key => rowHTML += `<td>${row[key] || '-'}</td>`);
                     
-                    // Tombol Preview (Open Modal)
+                    pesertaHeaders.forEach(key => {
+                        rowHTML += `<td>${row[key] || '-'}</td>`;
+                    });
+
+                    // Key Pencarian (Biasanya kolom pertama: Nama/ID)
                     const searchKey = row[pesertaHeaders[0]]; 
+                    
                     rowHTML += `
                         <td style="text-align:right;">
-                            <button class="icon-btn" onclick="openPreviewModal('${currentKegiatanId}', '${encodeURIComponent(searchKey)}')" style="color:var(--primary-green); border-color:var(--primary-green); margin-left:auto;" title="Preview Sertifikat">
+                            <button class="icon-btn" onclick="openPreviewModal('${currentKegiatanId}', '${encodeURIComponent(searchKey)}')" style="color:var(--primary-green); border-color:var(--primary-green); margin-left:auto;" title="Lihat Sertifikat">
                                 <i class="ph ph-eye"></i>
                             </button>
-                        </td>`;
+                        </td>
+                    `;
                     tr.innerHTML = rowHTML;
                     tbody.appendChild(tr);
                 });
             }
+
             pgDiv.style.display = 'flex';
             document.getElementById('pageInfoPeserta').innerText = `Menampilkan ${start+1}-${Math.min(end, total)} dari ${total} data`;
         }
+
         function filterPesertaLocal() {
             const keyword = document.getElementById('cariPeserta').value.toLowerCase();
-            filteredPeserta = rawPesertaData.filter(row => Object.values(row).some(val => String(val).toLowerCase().includes(keyword)));
-            pesertaPage = 1; renderPesertaTable();
+            filteredPeserta = rawPesertaData.filter(row => {
+                return Object.values(row).some(val => String(val).toLowerCase().includes(keyword));
+            });
+            pesertaPage = 1;
+            renderPesertaTable();
         }
-        function nextPagePeserta() { if(pesertaPage < Math.ceil(filteredPeserta.length / pesertaLimit)) { pesertaPage++; renderPesertaTable(); } }
-        function prevPagePeserta() { if(pesertaPage > 1) { pesertaPage--; renderPesertaTable(); } }
 
-        // 8. PREVIEW MODAL LOGIC (IFRAME TO INDEX.HTML)
+        function nextPagePeserta() {
+            if(pesertaPage < Math.ceil(filteredPeserta.length / pesertaLimit)) { pesertaPage++; renderPesertaTable(); }
+        }
+        function prevPagePeserta() {
+            if(pesertaPage > 1) { pesertaPage--; renderPesertaTable(); }
+        }
+
+        // --- 6. PREVIEW MODAL (POPUP) ---
         function openPreviewModal(kegiatanId, searchKey) {
             const modal = document.getElementById('modalPreview');
             const iframe = document.getElementById('previewFrame');
-            // Pastikan index.html mendukung parameter 'preview=true' untuk tampilan yang bersih jika perlu
+            // Mengarahkan ke index.html dengan parameter search
+            // Pastikan index.html logicnya sudah mendukung ?search=...
             iframe.src = `index.html?id=${kegiatanId}&search=${searchKey}&preview=true`;
             modal.style.display = 'flex';
         }
         function closePreviewModal() {
             document.getElementById('modalPreview').style.display = 'none';
-            document.getElementById('previewFrame').src = ''; // Clear source to stop media/memory
+            document.getElementById('previewFrame').src = '';
         }
 
+        setTimeout(renderTable, 100);
     </script>
 </body>
 </html>
