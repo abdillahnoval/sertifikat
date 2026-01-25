@@ -16,20 +16,34 @@
 
         :root {
             /* COLORS */
-            --primary-green: #10b981; --primary-hover: #059669;
-            --bg-body: #f1f5f9; --bg-card: #ffffff;
-            --text-main: #1e293b; --text-muted: #64748b;
-            --input-bg: #f8fafc; --input-border: #e2e8f0; --border-color: #e2e8f0;
-            --sidebar-width: 260px; --navbar-height: 70px;
+            --primary-green: #10b981;
+            --primary-hover: #059669;
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --input-bg: #f8fafc;
+            --input-border: #e2e8f0;
+            --border-color: #e2e8f0;
+            
+            /* DIMENSIONS */
+            --sidebar-width: 260px;
+            --navbar-height: 70px;
+            
+            /* SHADOWS */
             --shadow-sidebar: 4px 0 24px 0 rgba(0,0,0,0.02);
             --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         /* DARK MODE */
         body.dark-mode {
-            --bg-body: #0f172a; --bg-card: #1e293b;
-            --text-main: #f1f5f9; --text-muted: #94a3b8;
-            --input-bg: #334155; --input-border: #475569; --border-color: #334155;
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --input-bg: #334155;
+            --input-border: #475569;
+            --border-color: #334155;
             --shadow-sidebar: 4px 0 24px 0 rgba(0,0,0,0.2);
         }
 
@@ -131,8 +145,8 @@
         .item-search input { padding-left: 32px; width: 100%; }
         .search-icon-inside { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
 
-        /* Preview Modal Style (Fixed) */
-        .modal-card.preview-mode { max-width: 500px; } 
+        /* Preview Modal Style */
+        .modal-card.preview-mode { max-width: 500px; } /* Ukuran mirip gambar */
         .preview-container { 
             background: #f1f5f9; padding: 20px; border-radius: 8px; text-align: center;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -170,7 +184,8 @@
     <div class="sidebar" id="sidebar">
         <div class="logo-area">
             <img src="assets/Logo PGRI.png" alt="PGRI" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/87/Logo_PGRI.svg'">
-            <h2>PGRI Kab. Situbondo</h2> <span class="role-badge">Administrator</span>
+            <h2>PGRI Kab. Situbondo</h2>
+            <span class="role-badge">Administrator</span>
         </div>
 
         <div class="menu-label">Menu Utama</div>
@@ -572,7 +587,7 @@
                         ctx.fillStyle = el.color; ctx.textAlign = el.align; ctx.textBaseline = "middle";
                         ctx.fillText(text, x, y);
                     } else if(el.type === 'qr') {
-                        // QR Code using Qrious (Required script added to head)
+                        // QR Code using Qrious
                         const qr = new QRious({
                             value: (kegiatan.base_url_validasi || "") + (currentPesertaData[pesertaHeaders[0]] || ""),
                             size: size,
