@@ -313,8 +313,11 @@ const defaultData = [
 // --- LOGIKA PEMILIHAN DATA OTOMATIS ---
 var dbSertifikat = defaultData; 
 
-// Pengecualian: Hanya halaman SETTING yang boleh baca LocalStorage (Jembatan Edit)
 if (typeof window !== 'undefined' && window.location.href.indexOf('setting.html') > -1) {
     const local = localStorage.getItem('dbSertifikat_draft');
     if (local) dbSertifikat = JSON.parse(local);
+}
+
+function simpanKeStorage() {
+    localStorage.setItem('dbSertifikat_draft', JSON.stringify(dbSertifikat));
 }
