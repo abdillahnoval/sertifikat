@@ -308,6 +308,22 @@ const defaultData = [
         "google_sheet_url": "",
         "layout": []
     }
+    {
+        "id": "CERT-1779217518799",
+        "judul": "Workshop Pengembangan Pembelajaran Mendalam Melalui Engineering Design Process dan STEM",
+        "deskripsi": "Workshop ini bertujuan untuk meningkatkan kompetensi pendidik dalam merancang pembelajaran mendalam (deep learning) melalui penerapan pendekatan Engineering Design Process (EDP) dan STEM (Science, Technology, Engineering, and Mathematics). Kegiatan ini memberikan pengalaman praktis kepada peserta dalam menyusun pembelajaran yang berpusat pada pemecahan masalah, kreativitas, kolaborasi, serta penguatan keterampilan abad 21 agar proses belajar menjadi lebih bermakna, inovatif, dan kontekstual bagi peserta didik.",
+        "narasumber": "Prof. Drs. H. Dafik, M.Sc., Ph.D.",
+        "instansi_nara": "Guru Besar Universitas Jember",
+        "tgl_mulai": "2026-05-12",
+        "tgl_selesai": "2026-05-20",
+        "status": "Nonaktif",
+        "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
+        "thumbnail": "thumbnail/EDPSTEM.png",
+        "link_download": "unduh.html",
+        "template_img": "draf/default.pdf",
+        "google_sheet_url": "",
+        "layout": []
+    }
 ];
 
 // --- LOGIKA PEMILIHAN DATA OTOMATIS ---
