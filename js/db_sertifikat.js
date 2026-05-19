@@ -320,8 +320,8 @@ const defaultData = [
         "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
         "thumbnail": "thumbnail/EDPSTEM.png",
         "link_download": "unduh.html",
-        "template_img": "draf/default.pdf",
-        "google_sheet_url": "",
+        "template_img": "draf/sertifikat4.pdf",
+        "google_sheet_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vS9gDUJjIA71Gu0jEc5F8k4ApzTO5UKp-Cm_MTMMvxrCXpJUO2ONFlnkpxYPQMrfOSoatkx5CvR50eC/pub?gid=0&single=true&output=csv",
         "layout": []
     }
 ];
