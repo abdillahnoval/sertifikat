@@ -9,7 +9,7 @@ const defaultData = [
         "instansi_nara": "Guru Besar Universitas Jember",
         "tgl_mulai": "2026-05-12",
         "tgl_selesai": "2026-05-20",
-        "status": "Nonaktif",
+        "status": "Aktif",
         "base_url_validasi": "https://sertifikatpgrisitubondo.netlify.app/ceksertifikat.html?id=",
         "thumbnail": "thumbnail/EDPSTEM.png",
         "link_download": "unduh.html",
