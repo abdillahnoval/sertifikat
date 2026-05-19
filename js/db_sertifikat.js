@@ -307,7 +307,7 @@ const defaultData = [
         "template_img": "draf/default.pdf",
         "google_sheet_url": "",
         "layout": []
-    }
+    },
     {
         "id": "CERT-1779217518799",
         "judul": "Workshop Pengembangan Pembelajaran Mendalam Melalui Engineering Design Process dan STEM",
