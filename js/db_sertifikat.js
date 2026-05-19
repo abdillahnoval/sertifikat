@@ -322,7 +322,77 @@ const defaultData = [
         "link_download": "unduh.html",
         "template_img": "draf/sertifikat4.pdf",
         "google_sheet_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vS9gDUJjIA71Gu0jEc5F8k4ApzTO5UKp-Cm_MTMMvxrCXpJUO2ONFlnkpxYPQMrfOSoatkx5CvR50eC/pub?gid=0&single=true&output=csv",
-        "layout": []
+        "layout": [
+            {
+                "id": 1779218248789,
+                "type": "text",
+                "x": 297.75,
+                "y": 324,
+                "size": 25,
+                "color": "#217fd6",
+                "text": "<<Nama Peserta>>",
+                "font": "Poppins",
+                "align": "center",
+                "bold": true,
+                "italic": false,
+                "underline": false,
+                "_hitbox": {
+                    "x": 295.9700439453127,
+                    "y": 521.0500000000002,
+                    "w": 420.409912109375,
+                    "h": 59.50000000000002
+                },
+                "_resizeBox": {
+                    "x": 421.39994049072266,
+                    "y": 341.5,
+                    "size": 10
+                }
+            },
+            {
+                "id": 1779218331063,
+                "type": "text",
+                "x": 297.75,
+                "y": 355,
+                "size": 14,
+                "color": "#000000",
+                "text": "<<Instansi>> - <<Kecamatan>>",
+                "font": "Poppins",
+                "align": "center",
+                "bold": false,
+                "italic": false,
+                "underline": false,
+                "_hitbox": {
+                    "x": 316.7355773925783,
+                    "y": 583.1000000000003,
+                    "w": 378.87884521484375,
+                    "h": 40.80000000000001
+                },
+                "_resizeBox": {
+                    "x": 409.1848678588867,
+                    "y": 367,
+                    "size": 10
+                }
+            },
+            {
+                "id": 1779218387454,
+                "type": "qr",
+                "x": 207,
+                "y": 743,
+                "size": 56,
+                "color": "#000000",
+                "_hitbox": {
+                    "x": 343.40000000000015,
+                    "y": 1254.6000000000004,
+                    "w": 112.20000000000005,
+                    "h": 112.20000000000005
+                },
+                "_resizeBox": {
+                    "x": 455.6000000000002,
+                    "y": 1366.8000000000004,
+                    "size": 17.000000000000007
+                }
+            }
+        ]
     }
 ];
 
